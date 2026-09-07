@@ -67,6 +67,16 @@
                 <button class="btn" data-view="cards" title="Visualização em Cards"><i class="bi bi-view-list"></i></button>
                 <button class="btn active" data-view="table" title="Visualização em Tabela"><i class="bi bi-table"></i></button>
                 <button class="btn border-start ms-2" onclick="openColumnsModal()" title="Configurar Colunas da Tabela"><i class="bi bi-gear"></i></button>
+                <div class="dropdown d-inline-block">
+                    <button class="btn btn-outline-secondary dropdown-toggle border-0" type="button" data-bs-toggle="dropdown" title="Filtrar por Status">
+                        <i class="bi bi-funnel"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" id="statusFilterMenu">
+                        <li><a class="dropdown-item active" href="#" data-status="all">Status: Todos</a></li>
+                        <li><a class="dropdown-item" href="#" data-status="Lido">Lido</a></li>
+                        <li><a class="dropdown-item" href="#" data-status="Wishlist">Wishlist</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -103,6 +113,7 @@
                     <th>Grupo</th>
                     <th>Gênero literário</th>
                     <th>Formato</th>
+                    <th>Status</th>
                     <th>Número de páginas</th>
                     <th>Gênero d(e) autor(e)</th>
                     <th>Indicação</th>
@@ -148,8 +159,9 @@
                 <div class="col-md-6 mb-3"><label>Gênero literário</label><select class="form-select dynamic-select" id="f_genre" data-category="generos_literarios"></select></div>
                 <div class="col-md-6 mb-3"><label>Gênero d(e) autor(e)</label><select class="form-select dynamic-select" id="f_genero_autor" data-category="generos_autor"></select></div>
                 
-                <div class="col-md-6 mb-3"><label>Formato</label><select class="form-select dynamic-select" id="f_formato" data-category="formatos"></select></div>
-                <div class="col-md-6 mb-3"><label>Como adquiri</label><select class="form-select dynamic-select" id="f_como_adquiri" data-category="aquisicoes"></select></div>
+                <div class="col-md-4 mb-3"><label>Formato</label><select class="form-select dynamic-select" id="f_formato" data-category="formatos"></select></div>
+                <div class="col-md-4 mb-3"><label>Status</label><select class="form-select dynamic-select" id="f_status" data-category="status"></select></div>
+                <div class="col-md-4 mb-3"><label>Como adquiri</label><select class="form-select dynamic-select" id="f_como_adquiri" data-category="aquisicoes"></select></div>
 
                 <div class="col-md-6 mb-3"><label>Indicação</label><input type="text" class="form-control" id="f_indicacao"></div>
                 <div class="col-md-6 mb-3"><label>Por que li?</label><select class="form-select dynamic-select" id="f_porque_li" data-category="motivos_leitura"></select></div>
@@ -227,6 +239,7 @@
             <option value="aquisicoes">Aquisições (Como adquiri)</option>
             <option value="meses">Meses</option>
             <option value="anos">Anos</option>
+            <option value="status">Status</option>
         </select>
 
         <div class="input-group mb-3">
@@ -299,6 +312,16 @@
             { data: 'grupo', defaultContent: '' },
             { data: 'genre', defaultContent: '' },
             { data: 'formato', defaultContent: '' },
+            { 
+                data: 'status',
+                defaultContent: '',
+                render: function(data) {
+                    if(!data) return '';
+                    if(data === 'Lido') return '<span class="badge bg-success">Lido</span>';
+                    if(data === 'Wishlist') return '<span class="badge bg-primary">Wishlist</span>';
+                    return `<span class="badge bg-secondary">${data}</span>`;
+                }
+            },
             { 
                 data: 'pages',
                 defaultContent: '',
@@ -422,6 +445,7 @@
 
     let currentView = 'table';
     let currentFilter = 'all';
+    let statusFilter = 'all';
     let allBooksData = [];
     let filteredBooksData = [];
     let coverCache = {};
@@ -431,6 +455,14 @@
         $('#formatFilter .btn').removeClass('active');
         $(this).addClass('active');
         currentFilter = $(this).data('filter');
+        applyFiltersAndRender();
+    });
+
+        $('#statusFilterMenu .dropdown-item').on('click', function(e) {
+        e.preventDefault();
+        $('#statusFilterMenu .dropdown-item').removeClass('active');
+        $(this).addClass('active');
+        statusFilter = $(this).data('status');
         applyFiltersAndRender();
     });
 
@@ -448,11 +480,11 @@
     });
 
     function applyFiltersAndRender() {
-        if(currentFilter === 'all') {
-            filteredBooksData = allBooksData;
-        } else {
-            filteredBooksData = allBooksData.filter(b => b.formato && b.formato.toLowerCase().includes(currentFilter.toLowerCase()));
-        }
+        filteredBooksData = allBooksData.filter(b => {
+            let passFormat = (currentFilter === 'all') || (b.formato && b.formato.toLowerCase().includes(currentFilter.toLowerCase()));
+            let passStatus = (statusFilter === 'all') || (b.status === statusFilter);
+            return passFormat && passStatus;
+        });
 
         $('#resultsCount').text(filteredBooksData.length + ' encontrados');
 
@@ -567,7 +599,7 @@
             settingsRef.set({
                 autores: [], tradutores: [], paises: [], selos: [], grupos: [],
                 generos_literarios: [], formatos: [], generos_autor: [],
-                motivos_leitura: [], aquisicoes: [], meses: [], anos: []
+                motivos_leitura: [], aquisicoes: [], meses: [], anos: [], status: ['Lido', 'Wishlist']
             });
         }
     });
@@ -731,6 +763,7 @@
                 grupo: getRaw(raw, ['Grupo editorial', 'Grupo']),
                 genre: data.genre || '',
                 formato: getRaw(raw, ['Formato']),
+                status: data.status || getRaw(raw, ['Status']) || '',
                 pages: data.pages || '',
                 genero_autor: getRaw(raw, ['Gênero do autor', 'Gênero d(e) autor(e)']),
                 indicacao: getRaw(raw, ['Indicação']),
@@ -790,6 +823,7 @@
         setSelect2Val('#f_grupo', b.grupo, false);
         setSelect2Val('#f_genre', b.genre, false);
         setSelect2Val('#f_formato', b.formato, false);
+        setSelect2Val('#f_status', b.status, false);
         setSelect2Val('#f_genero_autor', b.genero_autor, false);
         setSelect2Val('#f_porque_li', b.porque_li, false);
         setSelect2Val('#f_como_adquiri', b.como_adquiri, false);
@@ -848,6 +882,7 @@
             'Selo': getS2Val('#f_selo'),
             'Grupo editorial': getS2Val('#f_grupo'),
             'Formato': getS2Val('#f_formato'),
+            'Status': getS2Val('#f_status'),
             'Gênero do autor': getS2Val('#f_genero_autor'),
             'Indicação': document.getElementById('f_indicacao').value,
             'Por que li?': getS2Val('#f_porque_li'),
@@ -866,6 +901,7 @@
             publisher: getS2Val('#f_grupo') || getS2Val('#f_selo'),
             pages: document.getElementById('f_pages').value,
             cover_url: document.getElementById('f_cover_url').value,
+            status: getS2Val('#f_status'),
             raw_data: raw
         };
 
