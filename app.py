@@ -38,6 +38,12 @@ def upload_docx():
                             books.append(current_book)
                             current_book = {}
                         
+                        if 'página' in key.lower() or 'pagina' in key.lower():
+                            import re
+                            match = re.search(r'\d+', val)
+                            if match:
+                                val = match.group()
+                        
                         current_book[key] = val
                         
         if current_book and current_book.get('Título'):
