@@ -415,7 +415,7 @@
         
         books.forEach(book => {
             const pagesMatch = String(book.pages).match(/\d+/);
-            const pages = pagesMatch ? pagesMatch[0] + ' páginas' : '';
+            const pages = pagesMatch ? pagesMatch[0] : '';
             
             const card = $(`
                 <div class="col-md-6 col-lg-4">
