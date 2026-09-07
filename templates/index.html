@@ -359,58 +359,64 @@
         ]
     });
 
-    
-    const columnsModal = new bootstrap.Modal(document.getElementById('columnsModal'));
+    const columnsModalElement = document.getElementById('columnsModal');
+    let columnsModal = null;
+    if (columnsModalElement) {
+        columnsModal = new bootstrap.Modal(columnsModalElement);
+    }
 
     function initColumnsSettings() {
-        const savedCols = JSON.parse(localStorage.getItem('tableColsVisible')) || {};
-        
-        // Popula os checkboxes baseados nas colunas da tabela
-        const container = $('#columnsCheckboxes');
-        container.empty();
-        
-        table.columns().every(function (index) {
-            if(index === 0) return; // Não permite ocultar a coluna de ações
-
-            const title = table.column(index).header().textContent;
-            // Verifica se tem configuração salva, senão padrão é true
-            let isVisible = savedCols[index] !== undefined ? savedCols[index] : true;
+        try {
+            const savedCols = JSON.parse(localStorage.getItem('tableColsVisible')) || {};
+            const container = $('#columnsCheckboxes');
+            container.empty();
             
-            // Aplica visibilidade inicial
-            table.column(index).visible(isVisible);
+            table.columns().indexes().each(function (index) {
+                if(index === 0) return; // Não permite ocultar a coluna de ações
 
-            const checkHtml = `
-                <div class="col-6 mb-2">
-                    <div class="form-check form-switch">
-                        <input class="form-check-input col-toggle" type="checkbox" id="col_toggle_${index}" data-col="${index}" ${isVisible ? 'checked' : ''}>
-                        <label class="form-check-label" style="font-size: 0.9rem;" for="col_toggle_${index}">${title}</label>
+                const header = table.column(index).header();
+                if (!header) return;
+                const title = header.textContent;
+                
+                let isVisible = savedCols[index] !== undefined ? savedCols[index] : true;
+                table.column(index).visible(isVisible, false); // false evita redraw custoso em loop
+
+                const checkHtml = `
+                    <div class="col-6 mb-2">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input col-toggle" type="checkbox" id="col_toggle_${index}" data-col="${index}" ${isVisible ? 'checked' : ''}>
+                            <label class="form-check-label" style="font-size: 0.9rem;" for="col_toggle_${index}">${title}</label>
+                        </div>
                     </div>
-                </div>
-            `;
-            container.append(checkHtml);
-        });
+                `;
+                container.append(checkHtml);
+            });
+            table.columns.adjust().draw(false);
 
-        // Evento de change para os checkboxes
-        $('.col-toggle').on('change', function() {
-            const colIdx = $(this).data('col');
-            const isChecked = $(this).is(':checked');
-            
-            table.column(colIdx).visible(isChecked);
-            
-            // Salva no localStorage
-            let currentSaved = JSON.parse(localStorage.getItem('tableColsVisible')) || {};
-            currentSaved[colIdx] = isChecked;
-            localStorage.setItem('tableColsVisible', JSON.stringify(currentSaved));
-        });
+            // Evento de change para os checkboxes
+            $('.col-toggle').off('change').on('change', function() {
+                const colIdx = $(this).data('col');
+                const isChecked = $(this).is(':checked');
+                
+                table.column(colIdx).visible(isChecked);
+                
+                let currentSaved = JSON.parse(localStorage.getItem('tableColsVisible')) || {};
+                currentSaved[colIdx] = isChecked;
+                localStorage.setItem('tableColsVisible', JSON.stringify(currentSaved));
+            });
+        } catch (e) {
+            console.error('Erro ao inicializar colunas:', e);
+        }
     }
 
     function openColumnsModal() {
-        columnsModal.show();
+        if(columnsModal) columnsModal.show();
     }
 
-    // Chama a inicialização após configurar a tabela
-    initColumnsSettings();
-
+    // Chama a inicialização
+    $(document).ready(function() {
+        initColumnsSettings();
+    });
 
     let currentView = 'table';
     let currentFilter = 'all';
