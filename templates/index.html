@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Minha Biblioteca Web</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- DataTables CSS -->
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+    <style>
+        body { padding: 20px; background-color: #f8f9fa; }
+        .table-responsive { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        th, td { white-space: nowrap; vertical-align: middle; }
+        .select2-container { width: 100% !important; }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>📚 Minha Biblioteca</h2>
+        <div>
+            <button class="btn btn-secondary me-2" onclick="openListsModal()">
+                <i class="bi bi-gear"></i> Gerenciar Listas
+            </button>
+            <button class="btn btn-success me-2" onclick="openModal()">
+                <i class="bi bi-plus-lg"></i> Novo Livro
+            </button>
+            <input type="file" id="docxFile" accept=".docx" style="display: none;" onchange="uploadDocx()">
+            <button class="btn btn-primary" onclick="document.getElementById('docxFile').click()">
+                <i class="bi bi-upload"></i> Importar Fichas (.docx)
+            </button>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table id="booksTable" class="table table-striped table-hover" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Ações</th>
+                    <th>ISBN-13</th>
+                    <th>Título</th>
+                    <th>Autor(e)</th>
+                    <th>Tradutor(e)</th>
+                    <th>País</th>
+                    <th>Ano de Publicação</th>
+                    <th>Selo</th>
+                    <th>Grupo</th>
+                    <th>Gênero literário</th>
+                    <th>Formato</th>
+                    <th>Número de páginas</th>
+                    <th>Gênero d(e) autor(e)</th>
+                    <th>Indicação</th>
+                    <th>Por que li?</th>
+                    <th>Como adquiri</th>
+                    <th>Mês de leitura</th>
+                    <th>Ano de Leitura</th>
+                    <th>Releitura?</th>
+                    <th>Nota</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal CRUD Livro -->
+<div class="modal fade" id="bookModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="bookModalLabel">Cadastrar/Editar Livro</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="bookForm">
+            <div class="row">
+                <div class="col-md-6 mb-3"><label>ISBN-13</label><input type="text" class="form-control" id="f_isbn"></div>
+                <div class="col-md-6 mb-3"><label>Título</label><input type="text" class="form-control" id="f_title" required></div>
+                
+                <div class="col-md-6 mb-3"><label>Autor(e)</label><select class="form-select dynamic-select" id="f_authors" data-category="autores" multiple></select></div>
+                <div class="col-md-6 mb-3"><label>Tradutor(e)</label><select class="form-select dynamic-select" id="f_tradutor" data-category="tradutores" multiple></select></div>
+                
+                <div class="col-md-4 mb-3"><label>País</label><select class="form-select dynamic-select" id="f_pais" data-category="paises"></select></div>
+                <div class="col-md-4 mb-3"><label>Ano de Publicação</label><input type="text" class="form-control" id="f_ano_pub"></div>
+                <div class="col-md-4 mb-3"><label>Número de páginas</label><input type="text" class="form-control" id="f_pages"></div>
+                
+                <div class="col-md-6 mb-3"><label>Selo</label><select class="form-select dynamic-select" id="f_selo" data-category="selos"></select></div>
+                <div class="col-md-6 mb-3"><label>Grupo</label><select class="form-select dynamic-select" id="f_grupo" data-category="grupos"></select></div>
+                
+                <div class="col-md-6 mb-3"><label>Gênero literário</label><select class="form-select dynamic-select" id="f_genre" data-category="generos_literarios"></select></div>
+                <div class="col-md-6 mb-3"><label>Gênero d(e) autor(e)</label><select class="form-select dynamic-select" id="f_genero_autor" data-category="generos_autor"></select></div>
+                
+                <div class="col-md-6 mb-3"><label>Formato</label><select class="form-select dynamic-select" id="f_formato" data-category="formatos"></select></div>
+                <div class="col-md-6 mb-3"><label>Como adquiri</label><select class="form-select dynamic-select" id="f_como_adquiri" data-category="aquisicoes"></select></div>
+
+                <div class="col-md-6 mb-3"><label>Indicação</label><input type="text" class="form-control" id="f_indicacao"></div>
+                <div class="col-md-6 mb-3"><label>Por que li?</label><select class="form-select dynamic-select" id="f_porque_li" data-category="motivos_leitura"></select></div>
+                
+                <div class="col-md-4 mb-3"><label>Mês de leitura</label><select class="form-select dynamic-select" id="f_mes_leitura" data-category="meses"></select></div>
+                <div class="col-md-4 mb-3"><label>Ano de Leitura</label><select class="form-select dynamic-select" id="f_ano_leitura" data-category="anos"></select></div>
+                <div class="col-md-4 mb-3"><label>Releitura?</label><input type="text" class="form-control" id="f_releitura"></div>
+
+                <div class="col-md-6 mb-3">
+                    <label>Nota / Ranking</label>
+                    <select class="form-select" id="f_nota">
+                        <option value=""></option>
+                        <option value="S">S — Livros da Vida</option>
+                        <option value="A">A — Essenciais</option>
+                        <option value="B">B — Boas Leituras</option>
+                        <option value="C">C — Passatempo</option>
+                        <option value="D">D — Fracos</option>
+                        <option value="E">E — Esquecíveis</option>
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3"><label>Melhores do ano?</label><input type="text" class="form-control" id="f_melhores"></div>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-success" onclick="saveBook()">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Gerenciar Listas -->
+<div class="modal fade" id="listsModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">⚙️ Gerenciar Listas</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <label>Escolha a categoria que deseja editar:</label>
+        <select class="form-select mb-4" id="listCategorySelector" onchange="renderListManager()">
+            <option value="autores">Autores</option>
+            <option value="tradutores">Tradutores</option>
+            <option value="paises">Países</option>
+            <option value="selos">Selos</option>
+            <option value="grupos">Grupos</option>
+            <option value="generos_literarios">Gêneros Literários</option>
+            <option value="formatos">Formatos</option>
+            <option value="generos_autor">Gêneros do Autor</option>
+            <option value="motivos_leitura">Motivos de Leitura (Por que li?)</option>
+            <option value="aquisicoes">Aquisições (Como adquiri)</option>
+            <option value="meses">Meses</option>
+            <option value="anos">Anos</option>
+        </select>
+
+        <div class="input-group mb-3">
+            <input type="text" id="newListItemInput" class="form-control" placeholder="Adicionar nova opção...">
+            <button class="btn btn-success" onclick="addListOption()"><i class="bi bi-plus"></i> Add</button>
+        </div>
+
+        <ul id="listManagerItems" class="list-group" style="max-height: 400px; overflow-y: auto;">
+            <!-- Itens preenchidos via JS -->
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- jQuery, Bootstrap, DataTables & Select2 JS -->
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<!-- Firebase v9 (compat) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyDQgbc_NtxcSM-xDSxUlDezAIUuilZpL2Q",
+        authDomain: "biblioteca-app-8c0a8.firebaseapp.com",
+        projectId: "biblioteca-app-8c0a8",
+        storageBucket: "biblioteca-app-8c0a8.firebasestorage.app",
+        messagingSenderId: "702914544524",
+        appId: "1:702914544524:web:173a11de9292ecc2404ca9"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    let currentEditingId = null;
+    let cachedBooks = {}; 
+    let globalDropdownLists = {};
+
+    const bookModal = new bootstrap.Modal(document.getElementById('bookModal'));
+    const listsModal = new bootstrap.Modal(document.getElementById('listsModal'));
+
+    // Configurar DataTable
+    let table = $('#booksTable').DataTable({
+        language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json' },
+        scrollX: true,
+        columns: [
+            { 
+                data: 'id',
+                orderable: false,
+                render: function(data, type, row) {
+                    return `
+                        <button class="btn btn-sm btn-outline-primary me-1" onclick="editBook('${data}')"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteBook('${data}')"><i class="bi bi-trash"></i></button>
+                    `;
+                }
+            },
+            { data: 'isbn' },
+            { data: 'title' },
+            { data: 'authors' },
+            { data: 'tradutor' },
+            { data: 'pais' },
+            { data: 'ano_pub' },
+            { data: 'selo' },
+            { data: 'grupo' },
+            { data: 'genre' },
+            { data: 'formato' },
+            { 
+                data: 'pages',
+                render: function(data, type, row) {
+                    if (!data) return '';
+                    
+                    // Tenta extrair apenas os números (ex: "224 páginas" -> 224)
+                    let match = String(data).match(/\d+/);
+                    if (!match) return data; 
+                    
+                    let num = parseInt(match[0], 10);
+                    let badgeClass = '';
+                    
+                    if (num < 100) badgeClass = 'bg-light text-dark border';
+                    else if (num < 200) badgeClass = 'bg-info text-dark';
+                    else if (num < 300) badgeClass = 'bg-success';
+                    else if (num < 400) badgeClass = 'bg-primary';
+                    else if (num < 500) badgeClass = 'bg-warning text-dark';
+                    else badgeClass = 'bg-danger'; // >= 500
+
+                    return `<span class="badge ${badgeClass}" style="font-size: 13px;">${data}</span>`;
+                }
+            },
+            { data: 'genero_autor' },
+            { data: 'indicacao' },
+            { data: 'porque_li' },
+            { data: 'como_adquiri' },
+            { data: 'mes_leitura' },
+            { data: 'ano_leitura' },
+            { data: 'releitura' },
+            { 
+                data: 'nota',
+                render: function(data, type, row) {
+                    if (!data) return '';
+                    let letter = data.charAt(0).toUpperCase();
+                    let badgeClass = 'bg-secondary';
+                    let style = 'font-size: 13px;';
+
+                    if (letter === 'S') { badgeClass = 'text-dark'; style += ' background-color: #ffd700 !important; font-weight: bold;'; }
+                    else if (letter === 'A') badgeClass = 'bg-success';
+                    else if (letter === 'B') badgeClass = 'bg-primary';
+                    else if (letter === 'C') badgeClass = 'bg-info text-dark';
+                    else if (letter === 'D') badgeClass = 'bg-warning text-dark';
+                    else if (letter === 'E') badgeClass = 'bg-danger';
+                    else return data; // Retorna texto normal se for estrelas (★★★★★) ou outro formato antigo
+
+                    // Se for no formato resumido "S", converte pro texto completo para visualização na tabela
+                    let displayText = data;
+                    if (data === 'S') displayText = 'S — Livros da Vida';
+                    if (data === 'A') displayText = 'A — Essenciais';
+                    if (data === 'B') displayText = 'B — Boas Leituras';
+                    if (data === 'C') displayText = 'C — Passatempo';
+                    if (data === 'D') displayText = 'D — Fracos';
+                    if (data === 'E') displayText = 'E — Esquecíveis';
+
+                    return `<span class="badge ${badgeClass}" style="${style}">${displayText}</span>`;
+                }
+            }
+        ]
+    });
+
+    // ----- LOGICA DE CONFIGURAÇÕES DE DROPDOWN (SETTINGS) -----
+    const settingsRef = db.collection('settings').doc('dropdown_lists');
+
+    // Inicializar o banco de configurações se não existir
+    settingsRef.get().then(doc => {
+        if (!doc.exists) {
+            settingsRef.set({
+                autores: [], tradutores: [], paises: [], selos: [], grupos: [],
+                generos_literarios: [], formatos: [], generos_autor: [],
+                motivos_leitura: [], aquisicoes: [], meses: [], anos: []
+            });
+        }
+    });
+
+    // Escutar mudanças nas listas
+    settingsRef.onSnapshot(snapshot => {
+        if (snapshot.exists) {
+            globalDropdownLists = snapshot.data();
+            updateAllSelectsUI();
+            if ($('#listsModal').is(':visible')) {
+                renderListManager();
+            }
+        }
+    });
+
+    // Atualiza o HTML dos combos Select2 no formulário
+    function updateAllSelectsUI() {
+        $('.dynamic-select').each(function() {
+            const cat = $(this).data('category');
+            const currentValue = $(this).val(); // preservar valor selecionado
+            
+            $(this).empty();
+            if (!$(this).prop('multiple')) {
+                $(this).append(new Option('', '', false, false)); // Opção vazia para selects simples
+            }
+
+            if (globalDropdownLists[cat]) {
+                const sortedList = [...globalDropdownLists[cat]].sort();
+                sortedList.forEach(item => {
+                    $(this).append(new Option(item, item, false, false));
+                });
+            }
+            
+            $(this).val(currentValue).trigger('change');
+        });
+    }
+
+    // Função auxiliar que adiciona um novo item na lista do Firestore
+    async function saveNewListOption(category, value) {
+        if (!value || value.trim() === '') return;
+        value = value.trim();
+        
+        let currentArray = globalDropdownLists[category] || [];
+        if (!currentArray.includes(value)) {
+            currentArray.push(value);
+            await settingsRef.update({ [category]: currentArray });
+        }
+    }
+
+    // Inicializar Select2 nos campos
+    $(document).ready(function() {
+        $('.dynamic-select').select2({
+            theme: 'bootstrap-5',
+            tags: true, // PERMITE DIGITAR VALOR NOVO
+            dropdownParent: $('#bookModal'),
+            placeholder: 'Selecione ou digite novo...',
+            allowClear: true
+        });
+
+        // Quando o usuário digitar algo novo e selecionar, interceptamos para salvar na lista global
+        $('.dynamic-select').on('select2:select', function (e) {
+            const cat = $(this).data('category');
+            const data = e.params.data;
+            // Se não houver id, ou se o id for igual ao texto novo (Select2 trata tags assim) e não estiver na lista:
+            const exists = (globalDropdownLists[cat] || []).includes(data.text);
+            if (!exists) {
+                saveNewListOption(cat, data.text);
+            }
+        });
+    });
+
+    // ----- LOGICA DO GERENCIADOR DE LISTAS (MODAL) -----
+    function openListsModal() {
+        $('#listCategorySelector').val('autores');
+        renderListManager();
+        listsModal.show();
+    }
+
+    function renderListManager() {
+        const cat = $('#listCategorySelector').val();
+        const listUl = $('#listManagerItems');
+        listUl.empty();
+
+        let items = globalDropdownLists[cat] || [];
+        items = [...items].sort();
+
+        items.forEach(item => {
+            const li = $(`
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="item-text">${item}</span>
+                    <div>
+                        <button class="btn btn-sm btn-outline-secondary me-1" onclick="editListOption('${cat}', '${item.replace(/'/g, "\\'")}')"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteListOption('${cat}', '${item.replace(/'/g, "\\'")}')"><i class="bi bi-trash"></i></button>
+                    </div>
+                </li>
+            `);
+            listUl.append(li);
+        });
+    }
+
+    async function addListOption() {
+        const cat = $('#listCategorySelector').val();
+        const val = $('#newListItemInput').val();
+        if(val) {
+            await saveNewListOption(cat, val);
+            $('#newListItemInput').val('');
+        }
+    }
+
+    async function deleteListOption(cat, val) {
+        if(confirm(`Tem certeza que deseja apagar "${val}" da lista?`)) {
+            let currentArray = globalDropdownLists[cat] || [];
+            currentArray = currentArray.filter(i => i !== val);
+            await settingsRef.update({ [cat]: currentArray });
+        }
+    }
+
+    async function editListOption(cat, oldVal) {
+        let newVal = prompt("Digite o novo nome:", oldVal);
+        if (newVal && newVal.trim() !== '' && newVal !== oldVal) {
+            newVal = newVal.trim();
+            let currentArray = globalDropdownLists[cat] || [];
+            currentArray = currentArray.filter(i => i !== oldVal);
+            if (!currentArray.includes(newVal)) currentArray.push(newVal);
+            await settingsRef.update({ [cat]: currentArray });
+            
+            // Opcional futuro: Percorrer todos os livros que tinham oldVal e substituir por newVal (Update em massa)
+        }
+    }
+
+    // ----- LOGICA DE LIVROS -----
+    function getRaw(raw, possibleKeys) {
+        if (!raw) return '';
+        for (let key of possibleKeys) {
+            if (raw[key]) return raw[key];
+        }
+        return '';
+    }
+
+    db.collection('books').orderBy('addedAt', 'desc').onSnapshot(snapshot => {
+        let booksData = [];
+        cachedBooks = {};
+        
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            let authors = data.authors || '';
+            if (Array.isArray(authors)) authors = authors.join(', ');
+            
+            let raw = data.raw_data || {};
+
+            const bookObj = {
+                id: doc.id,
+                melhores: getRaw(raw, ['Melhores do ano?', 'Melhores do ano']),
+                title: data.title || 'Sem Título',
+                isbn: data.isbn || '',
+                authors: authors,
+                tradutor: getRaw(raw, ['Tradutor', 'Tradutor(e)']),
+                pais: getRaw(raw, ['País de publicação da obra original', 'País']),
+                ano_pub: getRaw(raw, ['Ano de Publicação', 'Ano']),
+                selo: getRaw(raw, ['Selo']),
+                grupo: getRaw(raw, ['Grupo editorial', 'Grupo']),
+                genre: data.genre || '',
+                formato: getRaw(raw, ['Formato']),
+                pages: data.pages || '',
+                genero_autor: getRaw(raw, ['Gênero do autor', 'Gênero d(e) autor(e)']),
+                indicacao: getRaw(raw, ['Indicação']),
+                porque_li: getRaw(raw, ['Por que li?']),
+                como_adquiri: getRaw(raw, ['Como adquiri']),
+                mes_leitura: getRaw(raw, ['Mês de leitura']),
+                ano_leitura: getRaw(raw, ['Ano de Leitura']),
+                releitura: getRaw(raw, ['Releitura?']),
+                nota: getRaw(raw, ['Nota'])
+            };
+            
+            cachedBooks[doc.id] = bookObj;
+            booksData.push(bookObj);
+        });
+        table.clear().rows.add(booksData).draw();
+    });
+
+    function openModal() {
+        currentEditingId = null;
+        document.getElementById('bookForm').reset();
+        $('.dynamic-select').val(null).trigger('change');
+        document.getElementById('bookModalLabel').innerText = 'Novo Livro';
+        bookModal.show();
+    }
+
+    function editBook(id) {
+        currentEditingId = id;
+        document.getElementById('bookModalLabel').innerText = 'Editar Livro';
+        const b = cachedBooks[id];
+        if(!b) return;
+
+        document.getElementById('f_isbn').value = b.isbn;
+        document.getElementById('f_title').value = b.title;
+        document.getElementById('f_ano_pub').value = b.ano_pub;
+        document.getElementById('f_pages').value = b.pages;
+        document.getElementById('f_indicacao').value = b.indicacao;
+        document.getElementById('f_releitura').value = b.releitura;
+        document.getElementById('f_melhores').value = b.melhores;
+        
+        // Extrai apenas a letra (S, A, B...) para selecionar no Dropdown caso tenha vindo texto longo
+        let notaVal = b.nota ? b.nota.charAt(0).toUpperCase() : '';
+        if (['S', 'A', 'B', 'C', 'D', 'E'].includes(notaVal)) {
+            document.getElementById('f_nota').value = notaVal;
+        } else {
+            document.getElementById('f_nota').value = '';
+        }
+
+        // Tratar selects múltiplos e simples (garantir que as opções existam localmente antes de setar)
+        setSelect2Val('#f_authors', b.authors, true);
+        setSelect2Val('#f_tradutor', b.tradutor, true);
+        
+        setSelect2Val('#f_pais', b.pais, false);
+        setSelect2Val('#f_selo', b.selo, false);
+        setSelect2Val('#f_grupo', b.grupo, false);
+        setSelect2Val('#f_genre', b.genre, false);
+        setSelect2Val('#f_formato', b.formato, false);
+        setSelect2Val('#f_genero_autor', b.genero_autor, false);
+        setSelect2Val('#f_porque_li', b.porque_li, false);
+        setSelect2Val('#f_como_adquiri', b.como_adquiri, false);
+        setSelect2Val('#f_mes_leitura', b.mes_leitura, false);
+        setSelect2Val('#f_ano_leitura', b.ano_leitura, false);
+
+        bookModal.show();
+    }
+
+    // Auxiliar para popular o Select2 dinamicamente
+    function setSelect2Val(selector, valStr, isMultiple) {
+        const el = $(selector);
+        if (!valStr) {
+            el.val(null).trigger('change');
+            return;
+        }
+
+        let values = isMultiple ? valStr.split(',').map(s => s.trim()) : [valStr.trim()];
+        
+        values.forEach(v => {
+            if (v && el.find("option[value='" + v + "']").length === 0) {
+                // Adiciona opção provisória se ainda não existir na lista geral
+                el.append(new Option(v, v, true, true));
+            }
+        });
+
+        el.val(isMultiple ? values : values[0]).trigger('change');
+    }
+
+    async function deleteBook(id) {
+        if(confirm('Tem certeza que deseja apagar este livro?')) {
+            try {
+                await db.collection('books').doc(id).delete();
+            } catch (e) {
+                alert('Erro ao apagar: ' + e.message);
+            }
+        }
+    }
+
+    async function saveBook() {
+        const title = document.getElementById('f_title').value;
+        if (!title) { alert('O Título é obrigatório!'); return; }
+
+        // Pegar valores dos Select2
+        const getS2Val = (id, multi=false) => {
+            const v = $(id).val();
+            if (!v) return '';
+            return multi ? v.join(', ') : v;
+        };
+
+        const raw = {
+            'Melhores do ano?': document.getElementById('f_melhores').value,
+            'Tradutor': getS2Val('#f_tradutor', true),
+            'País de publicação da obra original': getS2Val('#f_pais'),
+            'Ano de Publicação': document.getElementById('f_ano_pub').value,
+            'Selo': getS2Val('#f_selo'),
+            'Grupo editorial': getS2Val('#f_grupo'),
+            'Formato': getS2Val('#f_formato'),
+            'Gênero do autor': getS2Val('#f_genero_autor'),
+            'Indicação': document.getElementById('f_indicacao').value,
+            'Por que li?': getS2Val('#f_porque_li'),
+            'Como adquiri': getS2Val('#f_como_adquiri'),
+            'Mês de leitura': getS2Val('#f_mes_leitura'),
+            'Ano de Leitura': getS2Val('#f_ano_leitura'),
+            'Releitura?': document.getElementById('f_releitura').value,
+            'Nota': document.getElementById('f_nota').value,
+        };
+
+        const payload = {
+            title: title,
+            isbn: document.getElementById('f_isbn').value,
+            authors: getS2Val('#f_authors', true),
+            genre: getS2Val('#f_genre'),
+            publisher: getS2Val('#f_grupo') || getS2Val('#f_selo'),
+            pages: document.getElementById('f_pages').value,
+            raw_data: raw
+        };
+
+        try {
+            if (currentEditingId) {
+                await db.collection('books').doc(currentEditingId).update(payload);
+            } else {
+                payload.addedAt = firebase.firestore.FieldValue.serverTimestamp();
+                await db.collection('books').add(payload);
+            }
+            bookModal.hide();
+        } catch (e) {
+            alert('Erro ao salvar: ' + e.message);
+        }
+    }
+
+    async function uploadDocx() {
+        const fileInput = document.getElementById('docxFile');
+        const file = fileInput.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            alert('Processando arquivo... Aguarde.');
+            const response = await fetch('/api/upload-docx', { method: 'POST', body: formData });
+            const result = await response.json();
+            
+            if (result.success && result.books) {
+                let count = 0;
+                for (let book of result.books) {
+                    
+                    // Extrair e salvar possíveis novas opções nas listas dinâmicas durante a importação
+                    saveNewListOption('autores', getRaw(book, ['Nome do autor', 'Autor(e)', 'Autor']));
+                    saveNewListOption('tradutores', getRaw(book, ['Tradutor', 'Tradutor(e)']));
+                    saveNewListOption('paises', getRaw(book, ['País de publicação da obra original', 'País']));
+                    saveNewListOption('selos', getRaw(book, ['Selo']));
+                    saveNewListOption('grupos', getRaw(book, ['Grupo editorial', 'Grupo']));
+                    saveNewListOption('generos_literarios', getRaw(book, ['Gênero literário / Classificação', 'Gênero literário']));
+                    saveNewListOption('formatos', getRaw(book, ['Formato']));
+                    saveNewListOption('generos_autor', getRaw(book, ['Gênero do autor', 'Gênero d(e) autor(e)']));
+                    saveNewListOption('motivos_leitura', getRaw(book, ['Por que li?']));
+                    saveNewListOption('aquisicoes', getRaw(book, ['Como adquiri']));
+                    saveNewListOption('meses', getRaw(book, ['Mês de leitura']));
+                    saveNewListOption('anos', getRaw(book, ['Ano de Leitura']));
+
+                    await db.collection('books').add({
+                        title: getRaw(book, ['Título']),
+                        isbn: getRaw(book, ['ISBN', 'ISBN-13']),
+                        authors: getRaw(book, ['Nome do autor', 'Autor(e)', 'Autor']),
+                        genre: getRaw(book, ['Gênero literário / Classificação', 'Gênero literário']),
+                        publisher: getRaw(book, ['Grupo editorial', 'Selo']),
+                        pages: getRaw(book, ['Número de páginas', 'Páginas']),
+                        raw_data: book,
+                        addedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    count++;
+                }
+                alert(`${count} livro(s) importado(s) com sucesso!`);
+            } else {
+                alert('Erro: ' + (result.error || 'Falha ao processar arquivo'));
+            }
+        } catch (error) {
+            alert('Erro ao enviar o arquivo.');
+        } finally {
+            fileInput.value = '';
+        }
+    }
+</script>
+
+</body>
+</html>
