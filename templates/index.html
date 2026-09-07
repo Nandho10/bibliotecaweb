@@ -17,14 +17,60 @@
         .table-responsive { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         th, td { white-space: nowrap; vertical-align: middle; }
         .select2-container { width: 100% !important; }
+    
+        /* View specific styles */
+        .card-view .card { border-radius: 12px; border: none; box-shadow: 0 2px 8px rgba(0,0,0,0.05); height: 100%; display: flex; flex-direction: row; overflow: hidden; background: white;}
+        .card-view .card-img-container { width: 120px; flex-shrink: 0; background: #e9ecef; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;}
+        .card-view .card-img-container img { width: 100%; height: 100%; object-fit: cover; }
+        .card-view .card-body { padding: 15px; display: flex; flex-direction: column; flex-grow: 1;}
+        .card-view .card-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 5px; }
+        .card-view .card-author { font-size: 0.9rem; color: #6c757d; margin-bottom: 10px; }
+        .card-view .card-footer-info { margin-top: auto; display: flex; gap: 10px; font-size: 0.8rem; color: #6c757d; align-items: center;}
+        
+        .cover-view .card { border-radius: 8px; border: none; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer; transition: transform 0.2s;}
+        .cover-view .card:hover { transform: scale(1.05); }
+        .cover-view .card-img-container { width: 100%; aspect-ratio: 2/3; background: #e9ecef; position: relative; }
+        .cover-view .card-img-container img { width: 100%; height: 100%; object-fit: cover; }
+        .fallback-cover { text-align: center; padding: 10px; background: linear-gradient(135deg, #6e8efb, #a777e3); color: white; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .fallback-cover .ftitle { font-weight: bold; font-size: 14px; margin-bottom: 5px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;}
+        .fallback-cover .fauthor { font-size: 11px; opacity: 0.8;}
+        
+        /* Filter Tabs */
+        .format-tabs { display: flex; background: white; border-radius: 30px; padding: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .format-tabs .btn { border-radius: 25px; border: none; padding: 8px 20px; font-weight: 500; color: #6c757d; }
+        .format-tabs .btn.active { background-color: #0d6efd; color: white; }
+        
+        /* View Toggles */
+        .view-toggles { display: flex; gap: 10px; align-items: center; margin-left: 20px;}
+        .view-toggles .btn { border: none; background: transparent; font-size: 1.2rem; color: #6c757d; padding: 5px; }
+        .view-toggles .btn.active { color: #0d6efd; }
+
     </style>
 </head>
 <body>
 
 <div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
         <h2>📚 Minha Biblioteca</h2>
-        <div>
+        <div class="format-tabs" id="formatFilter">
+            <button class="btn active" data-filter="all">Todos</button>
+            <button class="btn" data-filter="Brochura"><i class="bi bi-book"></i> Brochura</button>
+            <button class="btn" data-filter="Capa Dura"><i class="bi bi-journal-album"></i> Capa Dura</button>
+            <button class="btn" data-filter="E-book"><i class="bi bi-tablet"></i> E-book</button>
+        </div>
+
+        <div class="d-flex align-items-center">
+            <span class="text-muted me-3" id="resultsCount">0 encontrados</span>
+            
+            <div class="view-toggles" id="viewToggles">
+                <button class="btn" data-view="covers" title="Visualização em Capas"><i class="bi bi-grid-fill"></i></button>
+                <button class="btn" data-view="cards" title="Visualização em Cards"><i class="bi bi-view-list"></i></button>
+                <button class="btn active" data-view="table" title="Visualização em Tabela"><i class="bi bi-table"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-4 text-end">
             <button class="btn btn-secondary me-2" onclick="openListsModal()">
                 <i class="bi bi-gear"></i> Gerenciar Listas
             </button>
@@ -38,7 +84,11 @@
         </div>
     </div>
 
-    <div class="table-responsive">
+    
+    <div id="cardsContainer" class="row g-4 card-view" style="display: none;"></div>
+    <div id="coversContainer" class="row g-3 cover-view" style="display: none;"></div>
+
+    <div class="table-responsive" id="tableContainer">
         <table id="booksTable" class="table table-striped table-hover" style="width:100%">
             <thead>
                 <tr>
@@ -285,6 +335,144 @@
         ]
     });
 
+    
+    let currentView = 'table';
+    let currentFilter = 'all';
+    let allBooksData = [];
+    let filteredBooksData = [];
+    let coverCache = {};
+
+    // Setup toggles
+    $('#formatFilter .btn').on('click', function() {
+        $('#formatFilter .btn').removeClass('active');
+        $(this).addClass('active');
+        currentFilter = $(this).data('filter');
+        applyFiltersAndRender();
+    });
+
+    $('#viewToggles .btn').on('click', function() {
+        $('#viewToggles .btn').removeClass('active');
+        $(this).addClass('active');
+        currentView = $(this).data('view');
+        
+        $('#tableContainer, #cardsContainer, #coversContainer').hide();
+        if(currentView === 'table') $('#tableContainer').show();
+        if(currentView === 'cards') $('#cardsContainer').show();
+        if(currentView === 'covers') $('#coversContainer').show();
+        
+        applyFiltersAndRender();
+    });
+
+    function applyFiltersAndRender() {
+        if(currentFilter === 'all') {
+            filteredBooksData = allBooksData;
+        } else {
+            filteredBooksData = allBooksData.filter(b => b.formato && b.formato.toLowerCase().includes(currentFilter.toLowerCase()));
+        }
+
+        $('#resultsCount').text(filteredBooksData.length + ' encontrados');
+
+        if(currentView === 'table') {
+            table.clear().rows.add(filteredBooksData).draw();
+        } else if (currentView === 'cards') {
+            renderCardsView(filteredBooksData);
+        } else if (currentView === 'covers') {
+            renderCoversView(filteredBooksData);
+        }
+    }
+
+    async function fetchCover(book) {
+        if (coverCache[book.id]) return coverCache[book.id];
+        
+        let query = '';
+        if (book.isbn) query = `isbn:${book.isbn.replace(/\D/g, '')}`;
+        else query = `intitle:${book.title}+inauthor:${book.authors.split(',')[0]}`;
+        
+        try {
+            let res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}&maxResults=1`);
+            let data = await res.json();
+            if (data.items && data.items.length > 0 && data.items[0].volumeInfo.imageLinks) {
+                let img = data.items[0].volumeInfo.imageLinks.thumbnail || data.items[0].volumeInfo.imageLinks.smallThumbnail;
+                if(img) img = img.replace('http:', 'https:');
+                coverCache[book.id] = img;
+                return img;
+            }
+        } catch(e) {}
+        
+        coverCache[book.id] = 'fallback';
+        return 'fallback';
+    }
+
+    function getFallbackCoverHtml(book) {
+        return `<div class="fallback-cover"><div class="ftitle">${book.title}</div><div class="fauthor">${book.authors}</div></div>`;
+    }
+
+    function renderCardsView(books) {
+        const container = $('#cardsContainer');
+        container.empty();
+        
+        books.forEach(book => {
+            const pagesMatch = String(book.pages).match(/\d+/);
+            const pages = pagesMatch ? pagesMatch[0] + ' páginas' : '';
+            
+            const card = $(`
+                <div class="col-md-6 col-lg-4">
+                    <div class="card">
+                        <div class="card-img-container" id="img-card-${book.id}">
+                            <div class="spinner-border spinner-border-sm text-secondary m-auto" role="status"></div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title text-truncate" title="${book.title}">${book.title}</h5>
+                            <p class="card-author text-truncate">${book.authors}</p>
+                            <div class="card-footer-info">
+                                <span><i class="bi bi-building"></i> ${book.selo || book.grupo || 'Sem editora'}</span>
+                                ${pages ? `<span><i class="bi bi-file-earmark-text"></i> ${pages}</span>` : ''}
+                            </div>
+                            <div class="mt-2 text-end">
+                                <button class="btn btn-sm btn-light rounded-circle" onclick="editBook('${book.id}')"><i class="bi bi-three-dots"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `);
+            container.append(card);
+            
+            fetchCover(book).then(url => {
+                if(url === 'fallback') {
+                    $(`#img-card-${book.id}`).html(getFallbackCoverHtml(book));
+                } else {
+                    $(`#img-card-${book.id}`).html(`<img src="${url}" alt="Capa">`);
+                }
+            });
+        });
+    }
+
+    function renderCoversView(books) {
+        const container = $('#coversContainer');
+        container.empty();
+        
+        books.forEach(book => {
+            const card = $(`
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="card" onclick="editBook('${book.id}')" title="${book.title}">
+                        <div class="card-img-container" id="img-cover-${book.id}">
+                            <div class="spinner-border spinner-border-sm text-secondary m-auto d-block mt-5" role="status"></div>
+                        </div>
+                    </div>
+                </div>
+            `);
+            container.append(card);
+            
+            fetchCover(book).then(url => {
+                if(url === 'fallback') {
+                    $(`#img-cover-${book.id}`).html(getFallbackCoverHtml(book));
+                } else {
+                    $(`#img-cover-${book.id}`).html(`<img src="${url}" alt="Capa">`);
+                }
+            });
+        });
+    }
+
     // ----- LOGICA DE CONFIGURAÇÕES DE DROPDOWN (SETTINGS) -----
     const settingsRef = db.collection('settings').doc('dropdown_lists');
 
@@ -472,7 +660,8 @@
             cachedBooks[doc.id] = bookObj;
             booksData.push(bookObj);
         });
-        table.clear().rows.add(booksData).draw();
+        allBooksData = booksData;
+        applyFiltersAndRender();
     });
 
     function openModal() {
