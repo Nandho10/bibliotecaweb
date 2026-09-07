@@ -66,6 +66,7 @@
                 <button class="btn" data-view="covers" title="Visualização em Capas"><i class="bi bi-grid-fill"></i></button>
                 <button class="btn" data-view="cards" title="Visualização em Cards"><i class="bi bi-view-list"></i></button>
                 <button class="btn active" data-view="table" title="Visualização em Tabela"><i class="bi bi-table"></i></button>
+                <button class="btn border-start ms-2" onclick="openColumnsModal()" title="Configurar Colunas da Tabela"><i class="bi bi-gear"></i></button>
             </div>
         </div>
     </div>
@@ -177,6 +178,28 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
         <button type="button" class="btn btn-success" onclick="saveBook()">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Configurar Colunas -->
+<div class="modal fade" id="columnsModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">⚙️ Colunas da Tabela</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-muted small">Marque as colunas que deseja exibir na visualização de Grade (Tabela):</p>
+        <div id="columnsCheckboxes" class="row">
+            <!-- Preenchido via JS -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Concluir</button>
       </div>
     </div>
   </div>
@@ -337,6 +360,58 @@
     });
 
     
+    const columnsModal = new bootstrap.Modal(document.getElementById('columnsModal'));
+
+    function initColumnsSettings() {
+        const savedCols = JSON.parse(localStorage.getItem('tableColsVisible')) || {};
+        
+        // Popula os checkboxes baseados nas colunas da tabela
+        const container = $('#columnsCheckboxes');
+        container.empty();
+        
+        table.columns().every(function (index) {
+            if(index === 0) return; // Não permite ocultar a coluna de ações
+
+            const title = table.column(index).header().textContent;
+            // Verifica se tem configuração salva, senão padrão é true
+            let isVisible = savedCols[index] !== undefined ? savedCols[index] : true;
+            
+            // Aplica visibilidade inicial
+            table.column(index).visible(isVisible);
+
+            const checkHtml = `
+                <div class="col-6 mb-2">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input col-toggle" type="checkbox" id="col_toggle_${index}" data-col="${index}" ${isVisible ? 'checked' : ''}>
+                        <label class="form-check-label" style="font-size: 0.9rem;" for="col_toggle_${index}">${title}</label>
+                    </div>
+                </div>
+            `;
+            container.append(checkHtml);
+        });
+
+        // Evento de change para os checkboxes
+        $('.col-toggle').on('change', function() {
+            const colIdx = $(this).data('col');
+            const isChecked = $(this).is(':checked');
+            
+            table.column(colIdx).visible(isChecked);
+            
+            // Salva no localStorage
+            let currentSaved = JSON.parse(localStorage.getItem('tableColsVisible')) || {};
+            currentSaved[colIdx] = isChecked;
+            localStorage.setItem('tableColsVisible', JSON.stringify(currentSaved));
+        });
+    }
+
+    function openColumnsModal() {
+        columnsModal.show();
+    }
+
+    // Chama a inicialização após configurar a tabela
+    initColumnsSettings();
+
+
     let currentView = 'table';
     let currentFilter = 'all';
     let allBooksData = [];
