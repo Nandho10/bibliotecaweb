@@ -83,7 +83,6 @@
                 <i class="bi bi-upload"></i> Importar Fichas (.docx)
             </button>
         </div>
-    </div>
 
     
     <div id="cardsContainer" class="row g-4 card-view" style="display: none;"></div>
@@ -282,6 +281,7 @@
             { 
                 data: 'id',
                 orderable: false,
+                defaultContent: '',
                 render: function(data, type, row) {
                     return `
                         <button class="btn btn-sm btn-outline-primary me-1" onclick="editBook('${data}')"><i class="bi bi-pencil"></i></button>
@@ -289,18 +289,19 @@
                     `;
                 }
             },
-            { data: 'isbn' },
-            { data: 'title' },
-            { data: 'authors' },
-            { data: 'tradutor' },
-            { data: 'pais' },
-            { data: 'ano_pub' },
-            { data: 'selo' },
-            { data: 'grupo' },
-            { data: 'genre' },
-            { data: 'formato' },
+            { data: 'isbn', defaultContent: '' },
+            { data: 'title', defaultContent: '' },
+            { data: 'authors', defaultContent: '' },
+            { data: 'tradutor', defaultContent: '' },
+            { data: 'pais', defaultContent: '' },
+            { data: 'ano_pub', defaultContent: '' },
+            { data: 'selo', defaultContent: '' },
+            { data: 'grupo', defaultContent: '' },
+            { data: 'genre', defaultContent: '' },
+            { data: 'formato', defaultContent: '' },
             { 
                 data: 'pages',
+                defaultContent: '',
                 render: function(data, type, row) {
                     if (!data) return '';
                     
@@ -321,18 +322,19 @@
                     return `<span class="badge ${badgeClass}" style="font-size: 13px;">${num}</span>`;
                 }
             },
-            { data: 'genero_autor' },
-            { data: 'indicacao' },
-            { data: 'porque_li' },
-            { data: 'como_adquiri' },
-            { data: 'mes_leitura' },
-            { data: 'ano_leitura' },
-            { data: 'releitura' },
+            { data: 'genero_autor', defaultContent: '' },
+            { data: 'indicacao', defaultContent: '' },
+            { data: 'porque_li', defaultContent: '' },
+            { data: 'como_adquiri', defaultContent: '' },
+            { data: 'mes_leitura', defaultContent: '' },
+            { data: 'ano_leitura', defaultContent: '' },
+            { data: 'releitura', defaultContent: '' },
             { 
                 data: 'nota',
+                defaultContent: '',
                 render: function(data, type, row) {
                     if (!data) return '';
-                    let letter = data.charAt(0).toUpperCase();
+                    let letter = String(data).charAt(0).toUpperCase();
                     let badgeClass = 'bg-secondary';
                     let style = 'font-size: 13px;';
 
@@ -432,8 +434,8 @@
         applyFiltersAndRender();
     });
 
-    $('#viewToggles .btn').on('click', function() {
-        $('#viewToggles .btn').removeClass('active');
+    $('#viewToggles .btn[data-view]').on('click', function() {
+        $('#viewToggles .btn[data-view]').removeClass('active');
         $(this).addClass('active');
         currentView = $(this).data('view');
         
