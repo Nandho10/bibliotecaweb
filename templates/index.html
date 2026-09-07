@@ -133,6 +133,7 @@
             <div class="row">
                 <div class="col-md-6 mb-3"><label>ISBN-13</label><input type="text" class="form-control" id="f_isbn"></div>
                 <div class="col-md-6 mb-3"><label>Título</label><input type="text" class="form-control" id="f_title" required></div>
+                <div class="col-12 mb-3"><label>URL da Capa (Ex: Amazon)</label><input type="url" class="form-control" id="f_cover_url" placeholder="https://..."></div>
                 
                 <div class="col-md-6 mb-3"><label>Autor(e)</label><select class="form-select dynamic-select" id="f_authors" data-category="autores" multiple></select></div>
                 <div class="col-md-6 mb-3"><label>Tradutor(e)</label><select class="form-select dynamic-select" id="f_tradutor" data-category="tradutores" multiple></select></div>
@@ -382,6 +383,7 @@
     }
 
     async function fetchCover(book) {
+        if (book.cover_url) return book.cover_url;
         if (coverCache[book.id]) return coverCache[book.id];
         
         let query = '';
@@ -654,7 +656,8 @@
                 mes_leitura: getRaw(raw, ['Mês de leitura']),
                 ano_leitura: getRaw(raw, ['Ano de Leitura']),
                 releitura: getRaw(raw, ['Releitura?']),
-                nota: getRaw(raw, ['Nota'])
+                nota: getRaw(raw, ['Nota']),
+                cover_url: data.cover_url || ''
             };
             
             cachedBooks[doc.id] = bookObj;
@@ -685,6 +688,7 @@
         document.getElementById('f_indicacao').value = b.indicacao;
         document.getElementById('f_releitura').value = b.releitura;
         document.getElementById('f_melhores').value = b.melhores;
+        document.getElementById('f_cover_url').value = b.cover_url || '';
         
         // Extrai apenas a letra (S, A, B...) para selecionar no Dropdown caso tenha vindo texto longo
         let notaVal = b.nota ? b.nota.charAt(0).toUpperCase() : '';
@@ -778,6 +782,7 @@
             genre: getS2Val('#f_genre'),
             publisher: getS2Val('#f_grupo') || getS2Val('#f_selo'),
             pages: document.getElementById('f_pages').value,
+            cover_url: document.getElementById('f_cover_url').value,
             raw_data: raw
         };
 
