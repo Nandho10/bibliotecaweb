@@ -7,6 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- DataTables CSS -->
     <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/rowgroup/1.4.0/css/rowGroup.bootstrap5.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Select2 CSS -->
@@ -82,18 +83,30 @@
     </div>
 
     <div class="mb-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
-        <div class="d-flex align-items-center">
-            <i class="bi bi-sort-down me-2 text-muted"></i>
-            <select class="form-select form-select-sm" id="sortSelect" onchange="applyFiltersAndRender()" style="width: 200px;">
-                <option value="recentes">Mais recentes (Adição)</option>
-                <option value="antigos">Mais antigos (Adição)</option>
-                <option value="pub_nova">Mais novos (Publicação)</option>
-                <option value="pub_antiga">Mais antigos (Publicação)</option>
-                <option value="az">A-Z (Título)</option>
-                <option value="za">Z-A (Título)</option>
-                <option value="mais_paginas">Mais páginas</option>
-                <option value="menos_paginas">Menos páginas</option>
-            </select>
+        <div class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-sort-down me-2 text-muted" title="Ordenar"></i>
+                <select class="form-select form-select-sm" id="sortSelect" onchange="applyFiltersAndRender()" style="width: 200px;">
+                    <option value="recentes">Mais recentes (Adição)</option>
+                    <option value="antigos">Mais antigos (Adição)</option>
+                    <option value="pub_nova">Mais novos (Publicação)</option>
+                    <option value="pub_antiga">Mais antigos (Publicação)</option>
+                    <option value="az">A-Z (Título)</option>
+                    <option value="za">Z-A (Título)</option>
+                    <option value="mais_paginas">Mais páginas</option>
+                    <option value="menos_paginas">Menos páginas</option>
+                </select>
+            </div>
+            <div class="d-flex align-items-center">
+                <i class="bi bi-collection me-2 text-muted" title="Agrupar por"></i>
+                <select class="form-select form-select-sm" id="groupSelect" onchange="applyFiltersAndRender()" style="width: 150px;">
+                    <option value="none">Sem Agrupamento</option>
+                    <option value="authors">Autor</option>
+                    <option value="selo">Selo/Editora</option>
+                    <option value="colecao">Coleção</option>
+                    <option value="formato">Formato</option>
+                </select>
+            </div>
         </div>
         <div class="text-end">
             <button class="btn btn-secondary me-2" onclick="openListsModal()">
@@ -126,6 +139,7 @@
                     <th>Ano de Publicação</th>
                     <th>Selo</th>
                     <th>Grupo</th>
+                    <th>Coleção</th>
                     <th>Gênero literário</th>
                     <th>Formato</th>
                     <th>Status</th>
@@ -168,8 +182,9 @@
                 <div class="col-md-4 mb-3"><label>Ano de Publicação</label><input type="text" class="form-control" id="f_ano_pub"></div>
                 <div class="col-md-4 mb-3"><label>Número de páginas</label><input type="text" class="form-control" id="f_pages"></div>
                 
-                <div class="col-md-6 mb-3"><label>Selo</label><select class="form-select dynamic-select" id="f_selo" data-category="selos"></select></div>
-                <div class="col-md-6 mb-3"><label>Grupo</label><select class="form-select dynamic-select" id="f_grupo" data-category="grupos"></select></div>
+                <div class="col-md-4 mb-3"><label>Selo</label><select class="form-select dynamic-select" id="f_selo" data-category="selos"></select></div>
+                <div class="col-md-4 mb-3"><label>Grupo</label><select class="form-select dynamic-select" id="f_grupo" data-category="grupos"></select></div>
+                <div class="col-md-4 mb-3"><label>Coleção</label><select class="form-select dynamic-select" id="f_colecao" data-category="colecoes"></select></div>
                 
                 <div class="col-md-6 mb-3"><label>Gênero literário</label><select class="form-select dynamic-select" id="f_genre" data-category="generos_literarios"></select></div>
                 <div class="col-md-6 mb-3"><label>Gênero d(e) autor(e)</label><select class="form-select dynamic-select" id="f_genero_autor" data-category="generos_autor"></select></div>
@@ -247,6 +262,7 @@
             <option value="paises">Países</option>
             <option value="selos">Selos</option>
             <option value="grupos">Grupos</option>
+            <option value="colecoes">Coleções</option>
             <option value="generos_literarios">Gêneros Literários</option>
             <option value="formatos">Formatos</option>
             <option value="generos_autor">Gêneros do Autor</option>
@@ -275,6 +291,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/rowgroup/1.4.0/js/dataTables.rowGroup.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <!-- Firebase v9 (compat) -->
@@ -305,6 +322,10 @@
     let table = $('#booksTable').DataTable({
         language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json' },
         scrollX: true,
+        rowGroup: {
+            enable: false,
+            dataSrc: 'authors'
+        },
         columns: [
             { 
                 data: 'id',
@@ -325,6 +346,7 @@
             { data: 'ano_pub', defaultContent: '' },
             { data: 'selo', defaultContent: '' },
             { data: 'grupo', defaultContent: '' },
+            { data: 'colecao', defaultContent: '' },
             { data: 'genre', defaultContent: '' },
             { data: 'formato', defaultContent: '' },
             { 
@@ -540,13 +562,21 @@
         }
 
         $('#resultsCount').text(filteredBooksData.length + ' encontrados');
+        
+        const groupVal = $('#groupSelect').val() || 'none';
 
         if(currentView === 'table') {
+            if (groupVal !== 'none') {
+                table.rowGroup().dataSrc(groupVal);
+                table.rowGroup().enable();
+            } else {
+                table.rowGroup().disable();
+            }
             table.clear().rows.add(filteredBooksData).draw();
         } else if (currentView === 'cards') {
-            renderCardsView(filteredBooksData);
+            renderCardsView(filteredBooksData, groupVal);
         } else if (currentView === 'covers') {
-            renderCoversView(filteredBooksData);
+            renderCoversView(filteredBooksData, groupVal);
         }
     }
 
@@ -577,68 +607,105 @@
         return `<div class="fallback-cover"><div class="ftitle">${book.title}</div><div class="fauthor">${book.authors}</div></div>`;
     }
 
-    function renderCardsView(books) {
+    function renderCardsView(books, groupField = 'none') {
         const container = $('#cardsContainer');
         container.empty();
         
-        books.forEach(book => {
-            const pagesMatch = String(book.pages).match(/\d+/);
-            const pages = pagesMatch ? pagesMatch[0] : '';
+        let groups = { 'none': books };
+        if (groupField !== 'none') {
+            groups = {};
+            books.forEach(b => {
+                let key = b[groupField] || 'Não Informado';
+                if (!groups[key]) groups[key] = [];
+                groups[key].push(b);
+            });
+        }
+
+        const keys = Object.keys(groups).sort();
+        keys.forEach(k => {
+            if (groupField !== 'none') {
+                container.append(`<div class="col-12 mt-4 mb-1"><h5 class="border-bottom pb-2 text-secondary">${k} <span class="badge bg-light text-dark border ms-2">${groups[k].length}</span></h5></div>`);
+            }
             
-            const card = $(`
-                <div class="col-md-6 col-lg-4">
-                    <div class="card">
-                        <div class="card-img-container" id="img-card-${book.id}">
-                            <div class="spinner-border spinner-border-sm text-secondary m-auto" role="status"></div>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title text-truncate" title="${book.title}">${book.title}</h5>
-                            <p class="card-author text-truncate">${book.authors}</p>
-                            <div class="card-footer-info">
-                                <span><i class="bi bi-building"></i> ${book.selo || book.grupo || 'Sem editora'}</span>
-                                ${pages ? `<span><i class="bi bi-file-earmark-text"></i> ${pages}</span>` : ''}
+            groups[k].forEach(book => {
+                const pagesMatch = String(book.pages).match(/\d+/);
+                const pages = pagesMatch ? pagesMatch[0] : '';
+                
+                const cardId = 'img-card-' + Math.random().toString(36).substr(2, 9);
+                
+                const card = $(`
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card">
+                            <div class="card-img-container" id="${cardId}">
+                                <div class="spinner-border spinner-border-sm text-secondary m-auto" role="status"></div>
                             </div>
-                            <div class="mt-2 text-end">
-                                <button class="btn btn-sm btn-light rounded-circle" onclick="editBook('${book.id}')"><i class="bi bi-three-dots"></i></button>
+                            <div class="card-body">
+                                <h5 class="card-title text-truncate" title="${book.title}">${book.title}</h5>
+                                <p class="card-author text-truncate">${book.authors}</p>
+                                <div class="card-footer-info">
+                                    <span><i class="bi bi-building"></i> ${book.selo || book.grupo || 'Sem editora'}</span>
+                                    ${pages ? `<span><i class="bi bi-file-earmark-text"></i> ${pages}</span>` : ''}
+                                </div>
+                                <div class="mt-2 text-end">
+                                    <button class="btn btn-sm btn-light rounded-circle" onclick="editBook('${book.id}')"><i class="bi bi-three-dots"></i></button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            `);
-            container.append(card);
-            
-            fetchCover(book).then(url => {
-                if(url === 'fallback') {
-                    $(`#img-card-${book.id}`).html(getFallbackCoverHtml(book));
-                } else {
-                    $(`#img-card-${book.id}`).html(`<img src="${url}" alt="Capa">`);
-                }
+                `);
+                container.append(card);
+                
+                fetchCover(book).then(url => {
+                    if(url === 'fallback') {
+                        $(`#${cardId}`).html(getFallbackCoverHtml(book));
+                    } else {
+                        $(`#${cardId}`).html(`<img src="${url}" alt="Capa">`);
+                    }
+                });
             });
         });
     }
 
-    function renderCoversView(books) {
+    function renderCoversView(books, groupField = 'none') {
         const container = $('#coversContainer');
         container.empty();
         
-        books.forEach(book => {
-            const card = $(`
-                <div class="col-6 col-md-4 col-lg-2">
-                    <div class="card" onclick="editBook('${book.id}')" title="${book.title}">
-                        <div class="card-img-container" id="img-cover-${book.id}">
-                            <div class="spinner-border spinner-border-sm text-secondary m-auto d-block mt-5" role="status"></div>
+        let groups = { 'none': books };
+        if (groupField !== 'none') {
+            groups = {};
+            books.forEach(b => {
+                let key = b[groupField] || 'Não Informado';
+                if (!groups[key]) groups[key] = [];
+                groups[key].push(b);
+            });
+        }
+
+        const keys = Object.keys(groups).sort();
+        keys.forEach(k => {
+            if (groupField !== 'none') {
+                container.append(`<div class="col-12 mt-4 mb-1"><h5 class="border-bottom pb-2 text-secondary">${k} <span class="badge bg-light text-dark border ms-2">${groups[k].length}</span></h5></div>`);
+            }
+            
+            groups[k].forEach(book => {
+                const coverId = 'img-cover-' + Math.random().toString(36).substr(2, 9);
+                const card = $(`
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <div class="card" onclick="editBook('${book.id}')" title="${book.title}">
+                            <div class="card-img-container" id="${coverId}">
+                                <div class="spinner-border spinner-border-sm text-secondary m-auto d-block mt-5" role="status"></div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `);
-            container.append(card);
-            
-            fetchCover(book).then(url => {
-                if(url === 'fallback') {
-                    $(`#img-cover-${book.id}`).html(getFallbackCoverHtml(book));
-                } else {
-                    $(`#img-cover-${book.id}`).html(`<img src="${url}" alt="Capa">`);
-                }
+                `);
+                container.append(card);
+                
+                fetchCover(book).then(url => {
+                    if(url === 'fallback') {
+                        $(`#${coverId}`).html(getFallbackCoverHtml(book));
+                    } else {
+                        $(`#${coverId}`).html(`<img src="${url}" alt="Capa">`);
+                    }
+                });
             });
         });
     }
@@ -650,7 +717,7 @@
     settingsRef.get().then(doc => {
         if (!doc.exists) {
             settingsRef.set({
-                autores: [], tradutores: [], paises: [], selos: [], grupos: [],
+                autores: [], tradutores: [], paises: [], selos: [], grupos: [], colecoes: [],
                 generos_literarios: [], formatos: [], generos_autor: [],
                 motivos_leitura: [], aquisicoes: [], meses: [], anos: [], status: ['Lido', 'Wishlist']
             });
@@ -814,6 +881,7 @@
                 ano_pub: getRaw(raw, ['Ano de Publicação', 'Ano']),
                 selo: getRaw(raw, ['Selo']),
                 grupo: getRaw(raw, ['Grupo editorial', 'Grupo']),
+                colecao: data.colecao || getRaw(raw, ['Coleção', 'Colecao', 'Coleções']) || '',
                 genre: data.genre || '',
                 formato: getRaw(raw, ['Formato']),
                 status: data.status || getRaw(raw, ['Status']) || '',
@@ -874,6 +942,7 @@
         setSelect2Val('#f_pais', b.pais, false);
         setSelect2Val('#f_selo', b.selo, false);
         setSelect2Val('#f_grupo', b.grupo, false);
+        setSelect2Val('#f_colecao', b.colecao, false);
         setSelect2Val('#f_genre', b.genre, false);
         setSelect2Val('#f_formato', b.formato, false);
         setSelect2Val('#f_status', b.status, false);
@@ -934,6 +1003,7 @@
             'Ano de Publicação': document.getElementById('f_ano_pub').value,
             'Selo': getS2Val('#f_selo'),
             'Grupo editorial': getS2Val('#f_grupo'),
+            'Coleção': getS2Val('#f_colecao'),
             'Formato': getS2Val('#f_formato'),
             'Status': getS2Val('#f_status'),
             'Gênero do autor': getS2Val('#f_genero_autor'),
@@ -952,6 +1022,7 @@
             authors: getS2Val('#f_authors', true),
             genre: getS2Val('#f_genre'),
             publisher: getS2Val('#f_grupo') || getS2Val('#f_selo'),
+            colecao: getS2Val('#f_colecao'),
             pages: document.getElementById('f_pages').value,
             cover_url: document.getElementById('f_cover_url').value,
             status: getS2Val('#f_status'),
