@@ -119,6 +119,9 @@
             <button class="btn btn-primary" onclick="document.getElementById('docxFile').click()">
                 <i class="bi bi-upload"></i> Importar Fichas (.docx)
             </button>
+            <button class="btn btn-outline-dark ms-2" onclick="exportCSV()">
+                <i class="bi bi-filetype-csv"></i> Exportar CSV
+            </button>
         </div>
     </div>
 
@@ -1110,6 +1113,55 @@
         }).catch(err => {
             console.error('Failed to copy: ', err);
         });
+    }
+
+    function exportCSV() {
+        if (!allBooksData || allBooksData.length === 0) {
+            alert('Nenhum livro para exportar.');
+            return;
+        }
+
+        const columns = [
+            'ID', 'ISBN', 'Título', 'Autor(es)', 'Tradutor(es)', 
+            'País', 'Ano de Publicação', 'Selo', 'Grupo Editorial', 'Coleção',
+            'Gênero Literário', 'Formato', 'Status', 'Gênero do Autor', 
+            'Indicação', 'Por que li?', 'Como adquiri', 'Mês de leitura', 
+            'Ano de leitura', 'Releitura?', 'Nota', 'Páginas'
+        ];
+
+        let csvContent = '\uFEFF'; 
+        csvContent += columns.join(';') + '\n';
+
+        allBooksData.forEach(b => {
+            let row = [
+                b.id, b.isbn, b.title, b.authors, b.tradutor, b.pais, 
+                b.ano_pub, b.selo, b.grupo, b.colecao, b.genre, b.formato, 
+                b.status, b.genero_autor, b.indicacao, b.porque_li, 
+                b.como_adquiri, b.mes_leitura, b.ano_leitura, b.releitura, 
+                b.nota, b.pages
+            ];
+
+            let csvRow = row.map(cell => {
+                if (cell === null || cell === undefined) return '';
+                let cellStr = String(cell);
+                if (cellStr.includes(';') || cellStr.includes('"') || cellStr.includes('\n')) {
+                    cellStr = '"' + cellStr.replace(/"/g, '""') + '"';
+                }
+                return cellStr;
+            });
+
+            csvContent += csvRow.join(';') + '\n';
+        });
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'minha_biblioteca.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 </script>
 
