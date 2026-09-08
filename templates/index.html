@@ -122,6 +122,10 @@
             <button class="btn btn-outline-dark ms-2" onclick="exportCSV()">
                 <i class="bi bi-filetype-csv"></i> Exportar CSV
             </button>
+            <input type="file" id="csvFileInput" accept=".csv" style="display: none;" onchange="processCSVUpdate()">
+            <button class="btn btn-warning ms-2" onclick="document.getElementById('csvFileInput').click()" title="Atualizar Base via CSV">
+                <i class="bi bi-arrow-clockwise"></i> Atualizar via CSV
+            </button>
         </div>
     </div>
 
@@ -1162,6 +1166,106 @@
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+    }
+
+    function parseCSVLine(text) {
+        let ret = [], inQuote = false, value = '';
+        for (let i = 0; i < text.length; i++) {
+            let c = text[i];
+            if (inQuote) {
+                if (c === '"') {
+                    if (i + 1 < text.length && text[i + 1] === '"') {
+                        value += '"';
+                        i++;
+                    } else {
+                        inQuote = false;
+                    }
+                } else {
+                    value += c;
+                }
+            } else {
+                if (c === '"') {
+                    inQuote = true;
+                } else if (c === ';') {
+                    ret.push(value);
+                    value = '';
+                } else {
+                    value += c;
+                }
+            }
+        }
+        ret.push(value);
+        return ret;
+    }
+
+    function processCSVUpdate() {
+        const fileInput = document.getElementById('csvFileInput');
+        const file = fileInput.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+            const text = e.target.result;
+            const lines = text.split('\n');
+            let updatedCount = 0;
+            
+            let start = 0;
+            if (lines[0].includes('ID;') || lines[0].charCodeAt(0) === 0xFEFF) {
+                start = 1;
+            }
+
+            alert('Iniciando atualização... Isso pode levar alguns segundos.');
+
+            for (let i = start; i < lines.length; i++) {
+                if (lines[i].trim() === '') continue;
+                let cols = parseCSVLine(lines[i].trim());
+                if (cols.length < 22) continue;
+                
+                let id = cols[0];
+                if (!id) continue;
+                
+                let payload = {
+                    isbn: cols[1] || '',
+                    title: cols[2] || 'Sem Título',
+                    authors: cols[3] || '',
+                    pages: cols[21] || '',
+                    status: cols[12] || '',
+                    genre: cols[10] || '',
+                    publisher: cols[8] || cols[7] || '',
+                    colecao: cols[9] || ''
+                };
+
+                let raw = {
+                    'Tradutor': cols[4] || '',
+                    'País de publicação da obra original': cols[5] || '',
+                    'Ano de Publicação': cols[6] || '',
+                    'Selo': cols[7] || '',
+                    'Grupo editorial': cols[8] || '',
+                    'Coleção': cols[9] || '',
+                    'Formato': cols[11] || '',
+                    'Status': cols[12] || '',
+                    'Gênero do autor': cols[13] || '',
+                    'Indicação': cols[14] || '',
+                    'Por que li?': cols[15] || '',
+                    'Como adquiri': cols[16] || '',
+                    'Mês de leitura': cols[17] || '',
+                    'Ano de Leitura': cols[18] || '',
+                    'Releitura?': cols[19] || '',
+                    'Nota': cols[20] || ''
+                };
+                payload.raw_data = raw;
+                
+                try {
+                    await db.collection('books').doc(id).update(payload);
+                    updatedCount++;
+                } catch(err) {
+                    console.error("Erro ao atualizar " + id, err);
+                }
+            }
+            alert(updatedCount + ' livros atualizados com sucesso via CSV!');
+            fileInput.value = '';
+        };
+        reader.readAsText(file);
     }
 </script>
 
