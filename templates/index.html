@@ -67,6 +67,7 @@
                 <button class="btn" data-view="covers" title="Visualização em Capas"><i class="bi bi-grid-fill"></i></button>
                 <button class="btn" data-view="cards" title="Visualização em Cards"><i class="bi bi-view-list"></i></button>
                 <button class="btn active" data-view="table" title="Visualização em Tabela"><i class="bi bi-table"></i></button>
+                <button class="btn" data-view="stats" title="Estatísticas"><i class="bi bi-bar-chart-fill"></i></button>
                 <button class="btn border-start ms-2" onclick="openColumnsModal()" title="Configurar Colunas da Tabela"><i class="bi bi-gear"></i></button>
                 <div class="dropdown d-inline-block">
                     <button class="btn btn-outline-secondary dropdown-toggle border-0" type="button" data-bs-toggle="dropdown" title="Filtrar por Status">
@@ -132,6 +133,7 @@
     
     <div id="cardsContainer" class="row g-4 card-view" style="display: none;"></div>
     <div id="coversContainer" class="row g-3 cover-view" style="display: none;"></div>
+    <div id="statsContainer" class="row g-4 p-2" style="display: none;"></div>
 
     <div class="table-responsive" id="tableContainer">
         <table id="booksTable" class="table table-striped table-hover" style="width:100%">
@@ -515,10 +517,11 @@
         $(this).addClass('active');
         currentView = $(this).data('view');
         
-        $('#tableContainer, #cardsContainer, #coversContainer').hide();
+        $('#tableContainer, #cardsContainer, #coversContainer, #statsContainer').hide();
         if(currentView === 'table') $('#tableContainer').show();
         if(currentView === 'cards') $('#cardsContainer').show();
         if(currentView === 'covers') $('#coversContainer').show();
+        if(currentView === 'stats') $('#statsContainer').show();
         
         applyFiltersAndRender();
     });
@@ -584,6 +587,8 @@
             renderCardsView(filteredBooksData, groupVal);
         } else if (currentView === 'covers') {
             renderCoversView(filteredBooksData, groupVal);
+        } else if (currentView === 'stats') {
+            renderStatsView(filteredBooksData);
         }
     }
 
@@ -723,6 +728,102 @@
                 });
             });
         });
+    }
+
+    function renderStatsView(books) {
+        const container = $('#statsContainer');
+        container.empty();
+
+        let totalPages = 0, readPages = 0, unreadPages = 0;
+        let totalBooks = books.length, readBooks = 0, unreadBooks = 0, readingBooks = 0;
+        let maleAuthors = 0, femaleAuthors = 0, unknownAuthors = 0;
+        let literatureCounts = {};
+
+        books.forEach(b => {
+            let p = parseInt(String(b.pages).match(/\d+/) || [0], 10) || 0;
+            totalPages += p;
+            if (b.status === 'Lido') { readPages += p; readBooks++; }
+            else if (b.status === 'Lendo') { unreadPages += p; readingBooks++; }
+            else { unreadPages += p; unreadBooks++; }
+
+            let g = (b.genero_autor || '').toLowerCase();
+            if (g.includes('masculino') || g.includes('homem')) maleAuthors++;
+            else if (g.includes('feminino') || g.includes('mulher')) femaleAuthors++;
+            else unknownAuthors++;
+
+            let lit = b.genre || 'Não Classificado';
+            literatureCounts[lit] = (literatureCounts[lit] || 0) + 1;
+        });
+
+        let litHtml = '';
+        Object.entries(literatureCounts).sort((a,b) => b[1] - a[1]).forEach(([k,v]) => {
+            litHtml += `<li class="list-group-item d-flex justify-content-between align-items-center">${k} <span class="badge bg-primary rounded-pill">${v}</span></li>`;
+        });
+
+        const html = `
+            <div class="col-md-6 col-lg-3">
+                <div class="card bg-primary text-white h-100 shadow-sm border-0">
+                    <div class="card-body">
+                        <h6 class="card-title text-uppercase fw-bold"><i class="bi bi-book-half"></i> Paginômetro</h6>
+                        <h2 class="display-5 fw-bold mb-0">${totalPages.toLocaleString('pt-BR')}</h2>
+                        <div class="mt-3 small" style="opacity: 0.9;">
+                            <div>Lidas: ${readPages.toLocaleString('pt-BR')}</div>
+                            <div>Não lidas: ${unreadPages.toLocaleString('pt-BR')}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="card bg-success text-white h-100 shadow-sm border-0">
+                    <div class="card-body">
+                        <h6 class="card-title text-uppercase fw-bold"><i class="bi bi-collection"></i> Livros</h6>
+                        <h2 class="display-5 fw-bold mb-0">${totalBooks.toLocaleString('pt-BR')}</h2>
+                        <div class="mt-3 small" style="opacity: 0.9;">
+                            <div>Lidos: ${readBooks}</div>
+                            <div>Lendo: ${readingBooks}</div>
+                            <div>Aguardando/Wishlist: ${unreadBooks}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="card bg-info text-white h-100 shadow-sm border-0">
+                    <div class="card-body">
+                        <h6 class="card-title text-uppercase fw-bold"><i class="bi bi-people"></i> Autores</h6>
+                        <h2 class="display-5 fw-bold mb-0">${maleAuthors + femaleAuthors + unknownAuthors}</h2>
+                        <div class="mt-3 small" style="opacity: 0.9;">
+                            <div>Masculino: ${maleAuthors}</div>
+                            <div>Feminino: ${femaleAuthors}</div>
+                            ${unknownAuthors > 0 ? `<div>Não especificado: ${unknownAuthors}</div>` : ''}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="card bg-warning text-dark h-100 shadow-sm border-0">
+                    <div class="card-body">
+                        <h6 class="card-title text-uppercase fw-bold"><i class="bi bi-bookmark-star"></i> Literatura Top</h6>
+                        <h2 class="display-5 fw-bold mb-0">${Object.keys(literatureCounts).length} <span class="fs-6 fw-normal">Gêneros</span></h2>
+                        <div class="mt-3 small" style="opacity: 0.9; max-height: 80px; overflow-y: auto;">
+                            ${Object.entries(literatureCounts).sort((a,b)=>b[1]-a[1]).slice(0, 3).map(([k,v]) => `<div>${k}: <b>${v}</b></div>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 mt-4">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-white fw-bold"><i class="bi bi-list-stars"></i> Quantidade por Literatura</div>
+                    <ul class="list-group list-group-flush">
+                        ${litHtml}
+                    </ul>
+                </div>
+            </div>
+        `;
+        container.html(html);
     }
 
     // ----- LOGICA DE CONFIGURAÇÕES DE DROPDOWN (SETTINGS) -----
