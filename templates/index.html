@@ -81,7 +81,21 @@
         </div>
     </div>
 
-    <div class="mb-4 text-end">
+    <div class="mb-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-sort-down me-2 text-muted"></i>
+            <select class="form-select form-select-sm" id="sortSelect" onchange="applyFiltersAndRender()" style="width: 200px;">
+                <option value="recentes">Mais recentes (Adição)</option>
+                <option value="antigos">Mais antigos (Adição)</option>
+                <option value="pub_nova">Mais novos (Publicação)</option>
+                <option value="pub_antiga">Mais antigos (Publicação)</option>
+                <option value="az">A-Z (Título)</option>
+                <option value="za">Z-A (Título)</option>
+                <option value="mais_paginas">Mais páginas</option>
+                <option value="menos_paginas">Menos páginas</option>
+            </select>
+        </div>
+        <div class="text-end">
             <button class="btn btn-secondary me-2" onclick="openListsModal()">
                 <i class="bi bi-gear"></i> Gerenciar Listas
             </button>
@@ -93,6 +107,7 @@
                 <i class="bi bi-upload"></i> Importar Fichas (.docx)
             </button>
         </div>
+    </div>
 
     
     <div id="cardsContainer" class="row g-4 card-view" style="display: none;"></div>
@@ -486,6 +501,44 @@
             return passFormat && passStatus;
         });
 
+        const sortVal = $('#sortSelect').val() || 'recentes';
+        if (sortVal === 'antigos') {
+            filteredBooksData.reverse();
+        } else if (sortVal === 'pub_nova') {
+            filteredBooksData.sort((a, b) => {
+                let yA = parseInt(String(a.ano_pub).match(/\d{4}/) || [0], 10) || 0;
+                let yB = parseInt(String(b.ano_pub).match(/\d{4}/) || [0], 10) || 0;
+                return yB - yA;
+            });
+        } else if (sortVal === 'pub_antiga') {
+            filteredBooksData.sort((a, b) => {
+                let yA = parseInt(String(a.ano_pub).match(/\d{4}/) || [0], 10) || 0;
+                let yB = parseInt(String(b.ano_pub).match(/\d{4}/) || [0], 10) || 0;
+                // Coloca itens sem ano no final
+                if(yA === 0 && yB !== 0) return 1;
+                if(yB === 0 && yA !== 0) return -1;
+                return yA - yB;
+            });
+        } else if (sortVal === 'az') {
+            filteredBooksData.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+        } else if (sortVal === 'za') {
+            filteredBooksData.sort((a, b) => (b.title || '').localeCompare(a.title || ''));
+        } else if (sortVal === 'mais_paginas') {
+            filteredBooksData.sort((a, b) => {
+                let pA = parseInt(String(a.pages).match(/\d+/) || [0], 10) || 0;
+                let pB = parseInt(String(b.pages).match(/\d+/) || [0], 10) || 0;
+                return pB - pA;
+            });
+        } else if (sortVal === 'menos_paginas') {
+            filteredBooksData.sort((a, b) => {
+                let pA = parseInt(String(a.pages).match(/\d+/) || [0], 10) || 0;
+                let pB = parseInt(String(b.pages).match(/\d+/) || [0], 10) || 0;
+                if(pA === 0 && pB !== 0) return 1;
+                if(pB === 0 && pA !== 0) return -1;
+                return pA - pB;
+            });
+        }
+
         $('#resultsCount').text(filteredBooksData.length + ' encontrados');
 
         if(currentView === 'table') {
@@ -807,7 +860,7 @@
         document.getElementById('f_cover_url').value = b.cover_url || '';
         
         // Extrai apenas a letra (S, A, B...) para selecionar no Dropdown caso tenha vindo texto longo
-        let notaVal = b.nota ? b.nota.charAt(0).toUpperCase() : '';
+        let notaVal = b.nota ? String(b.nota).charAt(0).toUpperCase() : '';
         if (['S', 'A', 'B', 'C', 'D', 'E'].includes(notaVal)) {
             document.getElementById('f_nota').value = notaVal;
         } else {
@@ -841,7 +894,7 @@
             return;
         }
 
-        let values = isMultiple ? valStr.split(',').map(s => s.trim()) : [valStr.trim()];
+        let values = isMultiple ? String(valStr).split(',').map(s => s.trim()) : [String(valStr).trim()];
         
         values.forEach(v => {
             if (v && el.find("option[value='" + v + "']").length === 0) {
