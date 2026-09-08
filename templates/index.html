@@ -9,7 +9,7 @@
     <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/rowgroup/1.4.0/css/rowGroup.bootstrap5.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <!-- Select2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
@@ -642,15 +642,19 @@
                             <div class="card-img-container" id="${cardId}">
                                 <div class="spinner-border spinner-border-sm text-secondary m-auto" role="status"></div>
                             </div>
-                            <div class="card-body">
+                            <div class="card-body d-flex flex-column">
                                 <h5 class="card-title text-truncate" title="${book.title}">${book.title}</h5>
-                                <p class="card-author text-truncate">${book.authors}</p>
-                                <div class="card-footer-info">
+                                <p class="card-author text-truncate mb-1">${book.authors}</p>
+                                <div class="card-footer-info mb-1">
                                     <span><i class="bi bi-building"></i> ${book.selo || book.grupo || 'Sem editora'}</span>
                                     ${pages ? `<span class="ms-2"><i class="bi bi-file-earmark-text"></i> ${pages}</span>` : ''}
                                     ${anoStr}
                                 </div>
-                                <div class="mt-2 text-end">
+                                ${book.isbn ? `<div class="mb-2" style="font-size: 0.8rem; color: #6c757d;"><i class="bi bi-upc-scan"></i> <span style="cursor:pointer;" class="text-primary text-decoration-underline" onclick="copyISBN('${book.isbn}')" title="Copiar ISBN">${book.isbn}</span></div>` : '<div class="mb-2" style="font-size: 0.8rem; color: transparent;">&nbsp;</div>'}
+                                <div class="mt-auto d-flex justify-content-between align-items-end">
+                                    <div>
+                                        ${book.isbn ? `<a href="https://www.amazon.com.br/s?k=${book.isbn.replace(/[^0-9X]/gi, '')}" target="_blank" class="btn btn-sm text-dark border-0 shadow-sm" title="Buscar ISBN na Amazon" style="background-color: #ff9900; padding: 2px 8px;"><i class="bi bi-amazon"></i></a>` : `<a href="https://www.amazon.com.br/s?k=${encodeURIComponent(book.title + ' ' + book.authors)}" target="_blank" class="btn btn-sm text-dark border-0 shadow-sm" title="Buscar Título na Amazon" style="background-color: #ff9900; padding: 2px 8px;"><i class="bi bi-amazon"></i></a>`}
+                                    </div>
                                     <button class="btn btn-sm btn-light rounded-circle" onclick="editBook('${book.id}')"><i class="bi bi-three-dots"></i></button>
                                 </div>
                             </div>
@@ -1098,6 +1102,14 @@
         } finally {
             fileInput.value = '';
         }
+    }
+
+    function copyISBN(isbn) {
+        navigator.clipboard.writeText(isbn).then(() => {
+            alert('Código ISBN ' + isbn + ' copiado!');
+        }).catch(err => {
+            console.error('Failed to copy: ', err);
+        });
     }
 </script>
 
