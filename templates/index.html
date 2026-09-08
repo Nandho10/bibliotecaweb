@@ -1209,51 +1209,135 @@
             const lines = text.split('\n');
             let updatedCount = 0;
             
-            let start = 0;
-            if (lines[0].includes('ID;') || lines[0].charCodeAt(0) === 0xFEFF) {
-                start = 1;
+            let delimiter = lines[0].includes(';') ? ';' : ',';
+
+            function parseCSV(t) {
+                let ret = [], inQuote = false, value = '';
+                for (let i = 0; i < t.length; i++) {
+                    let c = t[i];
+                    if (inQuote) {
+                        if (c === '"') {
+                            if (i + 1 < t.length && t[i + 1] === '"') {
+                                value += '"';
+                                i++;
+                            } else {
+                                inQuote = false;
+                            }
+                        } else {
+                            value += c;
+                        }
+                    } else {
+                        if (c === '"') {
+                            inQuote = true;
+                        } else if (c === delimiter) {
+                            ret.push(value);
+                            value = '';
+                        } else {
+                            value += c;
+                        }
+                    }
+                }
+                ret.push(value);
+                return ret;
             }
 
             alert('Iniciando atualização... Isso pode levar alguns segundos.');
 
-            for (let i = start; i < lines.length; i++) {
+            for (let i = 1; i < lines.length; i++) {
                 if (lines[i].trim() === '') continue;
-                let cols = parseCSVLine(lines[i].trim());
-                if (cols.length < 22) continue;
+                let cols = parseCSV(lines[i].trim());
+                if (cols.length < 2) continue; // Precisa pelo menos ter título
                 
-                let id = cols[0];
+                // Como não sabemos se é o CSV gerado pelo sistema (com ID) ou um CSV externo,
+                // vamos checar se a primeira coluna é ID ou ISBN.
+                let isSystemCSV = lines[0].toLowerCase().includes('id;');
+                
+                let id = null;
+                let isbn = '', title = '', pages = '', publisher = '', genre = '';
+                let authors = '', status = '', colecao = '', raw = {};
+
+                if (isSystemCSV) {
+                    id = cols[0];
+                    if (!id) continue;
+                    isbn = cols[1];
+                    title = cols[2];
+                    authors = cols[3];
+                    pages = cols[21];
+                    status = cols[12];
+                    genre = cols[10];
+                    publisher = cols[8] || cols[7];
+                    colecao = cols[9];
+                    
+                    raw = {
+                        'Tradutor': cols[4] || '',
+                        'País de publicação da obra original': cols[5] || '',
+                        'Ano de Publicação': cols[6] || '',
+                        'Selo': cols[7] || '',
+                        'Grupo editorial': cols[8] || '',
+                        'Coleção': cols[9] || '',
+                        'Formato': cols[11] || '',
+                        'Status': cols[12] || '',
+                        'Gênero do autor': cols[13] || '',
+                        'Indicação': cols[14] || '',
+                        'Por que li?': cols[15] || '',
+                        'Como adquiri': cols[16] || '',
+                        'Mês de leitura': cols[17] || '',
+                        'Ano de Leitura': cols[18] || '',
+                        'Releitura?': cols[19] || '',
+                        'Nota': cols[20] || ''
+                    };
+                } else {
+                    // Planilha enviada pelo usuário
+                    isbn = cols[0];
+                    title = cols[1];
+                    authors = cols[2];
+                    pages = cols[20];
+                    status = cols[11];
+                    genre = cols[9];
+                    publisher = cols[7] || cols[6];
+                    colecao = cols[8];
+                    
+                    // Achar ID pelo título ou ISBN
+                    let matchedBook = allBooksData.find(b => b.title && b.title.trim().toLowerCase() === (title || '').trim().toLowerCase());
+                    if (!matchedBook && isbn) {
+                        matchedBook = allBooksData.find(b => b.isbn === isbn);
+                    }
+                    if (!matchedBook) continue; // Pula se não achar o livro na base
+                    id = matchedBook.id;
+                    
+                    raw = {
+                        'Tradutor': cols[3] || '',
+                        'País de publicação da obra original': cols[4] || '',
+                        'Ano de Publicação': cols[5] || '',
+                        'Selo': cols[6] || '',
+                        'Grupo editorial': cols[7] || '',
+                        'Coleção': cols[8] || '',
+                        'Formato': cols[10] || '',
+                        'Status': cols[11] || '',
+                        'Gênero do autor': cols[12] || '',
+                        'Indicação': cols[13] || '',
+                        'Por que li?': cols[14] || '',
+                        'Como adquiri': cols[15] || '',
+                        'Mês de leitura': cols[16] || '',
+                        'Ano de Leitura': cols[17] || '',
+                        'Releitura?': cols[18] || '',
+                        'Nota': cols[19] || ''
+                    };
+                }
+
                 if (!id) continue;
                 
                 let payload = {
-                    isbn: cols[1] || '',
-                    title: cols[2] || 'Sem Título',
-                    authors: cols[3] || '',
-                    pages: cols[21] || '',
-                    status: cols[12] || '',
-                    genre: cols[10] || '',
-                    publisher: cols[8] || cols[7] || '',
-                    colecao: cols[9] || ''
+                    isbn: isbn || '',
+                    title: title || 'Sem Título',
+                    authors: authors || '',
+                    pages: pages || '',
+                    status: status || '',
+                    genre: genre || '',
+                    publisher: publisher || '',
+                    colecao: colecao || '',
+                    raw_data: raw
                 };
-
-                let raw = {
-                    'Tradutor': cols[4] || '',
-                    'País de publicação da obra original': cols[5] || '',
-                    'Ano de Publicação': cols[6] || '',
-                    'Selo': cols[7] || '',
-                    'Grupo editorial': cols[8] || '',
-                    'Coleção': cols[9] || '',
-                    'Formato': cols[11] || '',
-                    'Status': cols[12] || '',
-                    'Gênero do autor': cols[13] || '',
-                    'Indicação': cols[14] || '',
-                    'Por que li?': cols[15] || '',
-                    'Como adquiri': cols[16] || '',
-                    'Mês de leitura': cols[17] || '',
-                    'Ano de Leitura': cols[18] || '',
-                    'Releitura?': cols[19] || '',
-                    'Nota': cols[20] || ''
-                };
-                payload.raw_data = raw;
                 
                 try {
                     await db.collection('books').doc(id).update(payload);
@@ -1265,7 +1349,8 @@
             alert(updatedCount + ' livros atualizados com sucesso via CSV!');
             fileInput.value = '';
         };
-        reader.readAsText(file);
+        // Lendo com encode compatível com o Excel (ISO) para evitar caracteres estranhos
+        reader.readAsText(file, 'windows-1252');
     }
 </script>
 
