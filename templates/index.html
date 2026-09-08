@@ -1298,7 +1298,20 @@
                     colecao = cols[8];
                     
                     // Achar ID pelo título ou ISBN
-                    let matchedBook = allBooksData.find(b => b.title && b.title.trim().toLowerCase() === (title || '').trim().toLowerCase());
+                    let matchedBook = allBooksData.find(b => {
+                        if (!b.title) return false;
+                        let t = b.title.trim().toLowerCase();
+                        let tTarget = (title || '').trim().toLowerCase();
+                        if (t === tTarget) return true;
+                        
+                        // Fallback para recuperar caso o título atual esteja corrompido (duplo enconding)
+                        try {
+                            let fixedTitle = decodeURIComponent(escape(b.title)).trim().toLowerCase();
+                            if (fixedTitle === tTarget) return true;
+                        } catch(e) {}
+                        
+                        return false;
+                    });
                     if (!matchedBook && isbn) {
                         matchedBook = allBooksData.find(b => b.isbn === isbn);
                     }
@@ -1349,8 +1362,8 @@
             alert(updatedCount + ' livros atualizados com sucesso via CSV!');
             fileInput.value = '';
         };
-        // Lendo com encode compatível com o Excel (ISO) para evitar caracteres estranhos
-        reader.readAsText(file, 'windows-1252');
+        // O Excel CSV geralmente usa UTF-8 agora. Ler como UTF-8 padrão.
+        reader.readAsText(file);
     }
 </script>
 
