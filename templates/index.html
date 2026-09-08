@@ -332,6 +332,7 @@
     let table = $('#booksTable').DataTable({
         language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json' },
         scrollX: true,
+        order: [], // Preserva a ordem original do array enviada pelo nosso Javascript
         rowGroup: {
             enable: false,
             dataSrc: 'authors'
@@ -576,6 +577,15 @@
         
         const groupVal = $('#groupSelect').val() || 'none';
 
+        if (groupVal !== 'none') {
+            // Ordenação estável pelo agrupamento para manter a ordenação secundária do usuário
+            filteredBooksData.sort((a, b) => {
+                let valA = (a[groupVal] || 'Não Classificado').toLowerCase();
+                let valB = (b[groupVal] || 'Não Classificado').toLowerCase();
+                return valA.localeCompare(valB);
+            });
+        }
+
         if(currentView === 'table') {
             if (groupVal !== 'none') {
                 table.rowGroup().dataSrc(groupVal);
@@ -583,6 +593,8 @@
             } else {
                 table.rowGroup().disable();
             }
+            // Força a tabela a respeitar a nossa ordenação do JavaScript e ignora a interna
+            table.order([]);
             table.clear().rows.add(filteredBooksData).draw();
         } else if (currentView === 'cards') {
             renderCardsView(filteredBooksData, groupVal);
