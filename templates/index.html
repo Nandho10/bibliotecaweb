@@ -229,10 +229,7 @@
             <button class="btn btn-success me-2" onclick="openModal()">
                 <i class="bi bi-plus-lg"></i> Novo Livro
             </button>
-            <input type="file" id="docxFile" accept=".docx" style="display: none;" onchange="uploadDocx()">
-            <button class="btn btn-primary" onclick="document.getElementById('docxFile').click()">
-                <i class="bi bi-upload"></i> Importar Fichas (.docx)
-            </button>
+
             <button class="btn btn-outline-dark ms-2" onclick="exportCSV()">
                 <i class="bi bi-filetype-csv"></i> Exportar CSV
             </button>
@@ -1491,59 +1488,6 @@
         }
     }
 
-    async function uploadDocx() {
-        const fileInput = document.getElementById('docxFile');
-        const file = fileInput.files[0];
-        if (!file) return;
-
-        const formData = new FormData();
-        formData.append('file', file);
-
-        try {
-            alert('Processando arquivo... Aguarde.');
-            const response = await fetch('/api/upload-docx', { method: 'POST', body: formData });
-            const result = await response.json();
-            
-            if (result.success && result.books) {
-                let count = 0;
-                for (let book of result.books) {
-                    
-                    // Extrair e salvar possíveis novas opções nas listas dinâmicas durante a importação
-                    saveNewListOption('autores', getRaw(book, ['Nome do autor', 'Autor(e)', 'Autor']));
-                    saveNewListOption('tradutores', getRaw(book, ['Tradutor', 'Tradutor(e)']));
-                    saveNewListOption('paises', getRaw(book, ['País de publicação da obra original', 'País']));
-                    saveNewListOption('selos', getRaw(book, ['Selo']));
-                    saveNewListOption('grupos', getRaw(book, ['Grupo editorial', 'Grupo']));
-                    saveNewListOption('generos_literarios', getRaw(book, ['Gênero literário / Classificação', 'Gênero literário']));
-                    saveNewListOption('formatos', getRaw(book, ['Formato']));
-                    saveNewListOption('generos_autor', getRaw(book, ['Gênero do autor', 'Gênero d(e) autor(e)']));
-                    saveNewListOption('motivos_leitura', getRaw(book, ['Por que li?']));
-                    saveNewListOption('aquisicoes', getRaw(book, ['Como adquiri']));
-                    saveNewListOption('meses', getRaw(book, ['Mês de leitura']));
-                    saveNewListOption('anos', getRaw(book, ['Ano de Leitura']));
-
-                    await db.collection('books').add({
-                        title: getRaw(book, ['Título']),
-                        isbn: getRaw(book, ['ISBN', 'ISBN-13']),
-                        authors: getRaw(book, ['Nome do autor', 'Autor(e)', 'Autor']),
-                        genre: getRaw(book, ['Gênero literário / Classificação', 'Gênero literário']),
-                        publisher: getRaw(book, ['Grupo editorial', 'Selo']),
-                        pages: getRaw(book, ['Número de páginas', 'Páginas']),
-                        raw_data: book,
-                        addedAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                    count++;
-                }
-                alert(`${count} livro(s) importado(s) com sucesso!`);
-            } else {
-                alert('Erro: ' + (result.error || 'Falha ao processar arquivo'));
-            }
-        } catch (error) {
-            alert('Erro ao enviar o arquivo.');
-        } finally {
-            fileInput.value = '';
-        }
-    }
 
     function copyISBN(isbn) {
         navigator.clipboard.writeText(isbn).then(() => {
