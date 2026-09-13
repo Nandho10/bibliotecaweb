@@ -291,50 +291,147 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <form id="bookForm">
-            <div class="row">
-                <div class="col-md-6 mb-3"><label>ISBN-13</label><input type="text" class="form-control" id="f_isbn"></div>
-                <div class="col-md-6 mb-3"><label>Título</label><input type="text" class="form-control" id="f_title" required></div>
-                <div class="col-12 mb-3"><label>URL da Capa (Ex: Amazon)</label><input type="url" class="form-control" id="f_cover_url" placeholder="https://..."></div>
-                
-                <div class="col-md-6 mb-3"><label>Autor(e)</label><select class="form-select dynamic-select" id="f_authors" data-category="autores" multiple></select></div>
-                <div class="col-md-6 mb-3"><label>Tradutor(e)</label><select class="form-select dynamic-select" id="f_tradutor" data-category="tradutores" multiple></select></div>
-                
-                <div class="col-md-4 mb-3"><label>País</label><select class="form-select dynamic-select" id="f_pais" data-category="paises"></select></div>
-                <div class="col-md-4 mb-3"><label>Ano de Publicação</label><input type="text" class="form-control" id="f_ano_pub"></div>
-                <div class="col-md-4 mb-3"><label>Número de páginas</label><input type="text" class="form-control" id="f_pages"></div>
-                
-                <div class="col-md-4 mb-3"><label>Selo</label><select class="form-select dynamic-select" id="f_selo" data-category="selos"></select></div>
-                <div class="col-md-4 mb-3"><label>Grupo</label><select class="form-select dynamic-select" id="f_grupo" data-category="grupos"></select></div>
-                <div class="col-md-4 mb-3"><label>Coleção</label><select class="form-select dynamic-select" id="f_colecao" data-category="colecoes"></select></div>
-                
-                <div class="col-md-6 mb-3"><label>Gênero literário</label><select class="form-select dynamic-select" id="f_genre" data-category="generos_literarios"></select></div>
-                <div class="col-md-6 mb-3"><label>Gênero d(e) autor(e)</label><select class="form-select dynamic-select" id="f_genero_autor" data-category="generos_autor"></select></div>
-                
-                <div class="col-md-4 mb-3"><label>Formato</label><select class="form-select dynamic-select" id="f_formato" data-category="formatos"></select></div>
-                <div class="col-md-4 mb-3"><label>Status</label><select class="form-select dynamic-select" id="f_status" data-category="status"></select></div>
-                <div class="col-md-4 mb-3"><label>Como adquiri</label><select class="form-select dynamic-select" id="f_como_adquiri" data-category="aquisicoes"></select></div>
-
-                <div class="col-md-6 mb-3"><label>Indicação</label><input type="text" class="form-control" id="f_indicacao"></div>
-                <div class="col-md-6 mb-3"><label>Por que li?</label><select class="form-select dynamic-select" id="f_porque_li" data-category="motivos_leitura"></select></div>
-                
-                <div class="col-md-4 mb-3"><label>Mês de leitura</label><select class="form-select dynamic-select" id="f_mes_leitura" data-category="meses"></select></div>
-                <div class="col-md-4 mb-3"><label>Ano de Leitura</label><select class="form-select dynamic-select" id="f_ano_leitura" data-category="anos"></select></div>
-                <div class="col-md-4 mb-3"><label>Releitura?</label><input type="text" class="form-control" id="f_releitura"></div>
-
-                <div class="col-md-6 mb-3">
-                    <label>Nota / Ranking</label>
-                    <select class="form-select" id="f_nota">
-                        <option value=""></option>
-                        <option value="S">S — Livros da Vida</option>
-                        <option value="A">A — Essenciais</option>
-                        <option value="B">B — Boas Leituras</option>
-                        <option value="C">C — Passatempo</option>
-                        <option value="D">D — Fracos</option>
-                        <option value="E">E — Esquecíveis</option>
-                    </select>
+        <form id="bookForm" class="needs-validation" novalidate>
+            <!-- Informações Básicas -->
+            <div class="card mb-3 shadow-sm border-0">
+                <div class="card-header bg-light text-primary fw-bold">
+                    <i class="bi bi-book me-2"></i>Informações Básicas
                 </div>
-                <div class="col-md-6 mb-3"><label>Melhores do ano?</label><input type="text" class="form-control" id="f_melhores"></div>
+                <div class="card-body row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">ISBN-13 <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="f_isbn" required>
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label fw-semibold">Título <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="f_title" required>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Autor(e) <span class="text-danger">*</span></label>
+                        <select class="form-select dynamic-select" id="f_authors" data-category="autores" multiple required></select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Tradutor(e)</label>
+                        <select class="form-select dynamic-select" id="f_tradutor" data-category="tradutores" multiple></select>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-semibold">URL da Capa (Ex: Amazon)</label>
+                        <input type="url" class="form-control" id="f_cover_url" placeholder="https://...">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Editoração -->
+            <div class="card mb-3 shadow-sm border-0">
+                <div class="card-header bg-light text-primary fw-bold">
+                    <i class="bi bi-building me-2"></i>Editoração e Publicação
+                </div>
+                <div class="card-body row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Grupo <span class="text-danger">*</span></label>
+                        <select class="form-select dynamic-select" id="f_grupo" data-category="grupos" required></select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Selo <span class="text-danger">*</span></label>
+                        <select class="form-select dynamic-select" id="f_selo" data-category="selos" required></select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Coleção <span class="text-danger">*</span></label>
+                        <select class="form-select dynamic-select" id="f_colecao" data-category="colecoes" required></select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">País</label>
+                        <select class="form-select dynamic-select" id="f_pais" data-category="paises"></select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Ano de Publicação</label>
+                        <input type="text" class="form-control" id="f_ano_pub">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Número de páginas <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" id="f_pages" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detalhes do Livro -->
+            <div class="card mb-3 shadow-sm border-0">
+                <div class="card-header bg-light text-primary fw-bold">
+                    <i class="bi bi-tags me-2"></i>Classificação
+                </div>
+                <div class="card-body row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Gênero literário</label>
+                        <select class="form-select dynamic-select" id="f_genre" data-category="generos_literarios"></select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Gênero d(e) autor(e)</label>
+                        <select class="form-select dynamic-select" id="f_genero_autor" data-category="generos_autor"></select>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Formato <span class="text-danger">*</span></label>
+                        <select class="form-select dynamic-select" id="f_formato" data-category="formatos" required></select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Status</label>
+                        <select class="form-select dynamic-select" id="f_status" data-category="status"></select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Como adquiri</label>
+                        <select class="form-select dynamic-select" id="f_como_adquiri" data-category="aquisicoes"></select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leitura e Avaliação -->
+            <div class="card mb-0 shadow-sm border-0">
+                <div class="card-header bg-light text-primary fw-bold">
+                    <i class="bi bi-star me-2"></i>Leitura e Avaliação
+                </div>
+                <div class="card-body row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Indicação</label>
+                        <input type="text" class="form-control" id="f_indicacao">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Por que li?</label>
+                        <select class="form-select dynamic-select" id="f_porque_li" data-category="motivos_leitura"></select>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Mês de leitura</label>
+                        <select class="form-select dynamic-select" id="f_mes_leitura" data-category="meses"></select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Ano de Leitura</label>
+                        <select class="form-select dynamic-select" id="f_ano_leitura" data-category="anos"></select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Releitura?</label>
+                        <input type="text" class="form-control" id="f_releitura">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Nota / Ranking</label>
+                        <select class="form-select" id="f_nota">
+                            <option value=""></option>
+                            <option value="S">S — Livros da Vida</option>
+                            <option value="A">A — Essenciais</option>
+                            <option value="B">B — Boas Leituras</option>
+                            <option value="C">C — Passatempo</option>
+                            <option value="D">D — Fracos</option>
+                            <option value="E">E — Esquecíveis</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Melhores do ano?</label>
+                        <input type="text" class="form-control" id="f_melhores">
+                    </div>
+                </div>
             </div>
         </form>
       </div>
@@ -998,25 +1095,31 @@
         }
     });
 
+    function updateSingleSelectUI(element) {
+        const cat = element.data('category');
+        const currentValue = element.val();
+        
+        element.empty();
+        if (!element.prop('multiple')) {
+            element.append(new Option('', '', false, false));
+        }
+
+        if (globalDropdownLists[cat]) {
+            const sortedList = [...globalDropdownLists[cat]].sort();
+            sortedList.forEach(item => {
+                element.append(new Option(item, item, false, false));
+            });
+        }
+        
+        element.val(currentValue).trigger('change.select2');
+    }
+
     // Atualiza o HTML dos combos Select2 no formulário
     function updateAllSelectsUI() {
         $('.dynamic-select').each(function() {
-            const cat = $(this).data('category');
-            const currentValue = $(this).val(); // preservar valor selecionado
-            
-            $(this).empty();
-            if (!$(this).prop('multiple')) {
-                $(this).append(new Option('', '', false, false)); // Opção vazia para selects simples
-            }
-
-            if (globalDropdownLists[cat]) {
-                const sortedList = [...globalDropdownLists[cat]].sort();
-                sortedList.forEach(item => {
-                    $(this).append(new Option(item, item, false, false));
-                });
-            }
-            
-            $(this).val(currentValue).trigger('change');
+            // Não sobrescrever as opções em cascata caso já estejam filtradas e não estejamos abrindo o modal.
+            // Para simplificar e evitar loops de eventos, usamos .trigger('change.select2')
+            updateSingleSelectUI($(this));
         });
     }
 
@@ -1046,10 +1149,77 @@
         $('.dynamic-select').on('select2:select', function (e) {
             const cat = $(this).data('category');
             const data = e.params.data;
-            // Se não houver id, ou se o id for igual ao texto novo (Select2 trata tags assim) e não estiver na lista:
             const exists = (globalDropdownLists[cat] || []).includes(data.text);
             if (!exists) {
                 saveNewListOption(cat, data.text);
+            }
+        });
+
+        // Filtro em cascata: Grupo -> Selo -> Coleção
+        $('#f_grupo').on('change', function() {
+            const grupoSelecionado = $(this).val();
+            if (!grupoSelecionado) {
+                updateSingleSelectUI($('#f_selo'));
+                return;
+            }
+
+            const selosDoGrupo = new Set();
+            if (allBooksData) {
+                allBooksData.forEach(b => {
+                    if (b.grupo === grupoSelecionado && b.selo) {
+                        selosDoGrupo.add(b.selo);
+                    }
+                });
+            }
+
+            if (selosDoGrupo.size > 0) {
+                const currentVal = $('#f_selo').val();
+                $('#f_selo').empty().append(new Option('', '', false, false));
+                [...selosDoGrupo].sort().forEach(item => {
+                    $('#f_selo').append(new Option(item, item, false, false));
+                });
+                
+                // Add any globally defined selo that matches the currently selected value if it's missing (to avoid losing value)
+                if (currentVal && !selosDoGrupo.has(currentVal)) {
+                     $('#f_selo').append(new Option(currentVal, currentVal, false, false));
+                }
+
+                $('#f_selo').val(currentVal).trigger('change.select2');
+            } else {
+                updateSingleSelectUI($('#f_selo'));
+            }
+        });
+
+        $('#f_selo').on('change', function() {
+            const seloSelecionado = $(this).val();
+            if (!seloSelecionado) {
+                updateSingleSelectUI($('#f_colecao'));
+                return;
+            }
+
+            const colecoesDoSelo = new Set();
+            if (allBooksData) {
+                allBooksData.forEach(b => {
+                    if (b.selo === seloSelecionado && b.colecao) {
+                        colecoesDoSelo.add(b.colecao);
+                    }
+                });
+            }
+
+            if (colecoesDoSelo.size > 0) {
+                const currentVal = $('#f_colecao').val();
+                $('#f_colecao').empty().append(new Option('', '', false, false));
+                [...colecoesDoSelo].sort().forEach(item => {
+                    $('#f_colecao').append(new Option(item, item, false, false));
+                });
+
+                if (currentVal && !colecoesDoSelo.has(currentVal)) {
+                     $('#f_colecao').append(new Option(currentVal, currentVal, false, false));
+                }
+
+                $('#f_colecao').val(currentVal).trigger('change.select2');
+            } else {
+                updateSingleSelectUI($('#f_colecao'));
             }
         });
     });
@@ -1249,8 +1419,10 @@
     }
 
     async function saveBook() {
-        const title = document.getElementById('f_title').value;
-        if (!title) { alert('O Título é obrigatório!'); return; }
+        const form = document.getElementById('bookForm');
+        
+        // Manual validation trigger for visual feedback
+        form.classList.add('was-validated');
 
         // Pegar valores dos Select2
         const getS2Val = (id, multi=false) => {
@@ -1258,6 +1430,20 @@
             if (!v) return '';
             return multi ? v.join(', ') : v;
         };
+
+        const title = document.getElementById('f_title').value;
+        const isbn = document.getElementById('f_isbn').value;
+        const pages = document.getElementById('f_pages').value;
+        const authors = getS2Val('#f_authors', true);
+        const grupo = getS2Val('#f_grupo');
+        const selo = getS2Val('#f_selo');
+        const colecao = getS2Val('#f_colecao');
+        const formato = getS2Val('#f_formato');
+
+        if (!title || !isbn || !pages || !authors || !grupo || !selo || !colecao || !formato) {
+            alert('Por favor, preencha todos os campos obrigatórios (marcados com *).');
+            return;
+        }
 
         const raw = {
             'Melhores do ano?': document.getElementById('f_melhores').value,
