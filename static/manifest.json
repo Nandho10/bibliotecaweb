@@ -1,0 +1,15 @@
+{
+  "name": "Minha Biblioteca Web",
+  "short_name": "Biblioteca",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f7fa",
+  "theme_color": "#2b3a4a",
+  "icons": [
+    {
+      "src": "/static/img/icon.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png"
+    }
+  ]
+}
