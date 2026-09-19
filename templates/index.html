@@ -287,7 +287,7 @@
 </div>
 
 <!-- Modal CRUD Livro -->
-<div class="modal fade" id="bookModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="bookModal" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -1144,7 +1144,7 @@
         $('.dynamic-select').select2({
             theme: 'bootstrap-5',
             tags: true, // PERMITE DIGITAR VALOR NOVO
-            dropdownParent: $('#bookModal'),
+            dropdownParent: $('#bookModal .modal-content'),
             placeholder: 'Selecione ou digite novo...',
             allowClear: true
         });
