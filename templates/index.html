@@ -320,7 +320,11 @@
                         <select class="form-select dynamic-select" id="f_tradutor" data-category="tradutores" multiple></select>
                     </div>
 
-                    <div class="col-12">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Situação (Acervo) <span class="text-danger">*</span></label>
+                        <select class="form-select dynamic-select" id="f_aquisicao" data-category="aquisicoes_status" required></select>
+                    </div>
+                    <div class="col-md-6">
                         <label class="form-label fw-semibold">URL da Capa (Ex: Amazon)</label>
                         <input type="url" class="form-control" id="f_cover_url" placeholder="https://...">
                     </div>
@@ -1331,6 +1335,7 @@
                 ano_leitura: getRaw(raw, ['Ano de Leitura']),
                 releitura: getRaw(raw, ['Releitura?']),
                 nota: getRaw(raw, ['Nota']),
+                aquisicao: data.aquisicao || getRaw(raw, ['Aquisição', 'Aquisicao', 'Situação']) || '',
                 cover_url: data.cover_url || ''
             };
             
@@ -1388,6 +1393,7 @@
         setSelect2Val('#f_como_adquiri', b.como_adquiri, false);
         setSelect2Val('#f_mes_leitura', b.mes_leitura, false);
         setSelect2Val('#f_ano_leitura', b.ano_leitura, false);
+        setSelect2Val('#f_aquisicao', b.aquisicao, false);
 
         bookModal.show();
     }
@@ -1443,8 +1449,9 @@
         const selo = getS2Val('#f_selo');
         const colecao = getS2Val('#f_colecao');
         const formato = getS2Val('#f_formato');
+        const aquisicao = getS2Val('#f_aquisicao');
 
-        if (!title || !isbn || !pages || !authors || !grupo || !selo || !colecao || !formato) {
+        if (!title || !isbn || !pages || !authors || !grupo || !selo || !colecao || !formato || !aquisicao) {
             alert('Por favor, preencha todos os campos obrigatórios (marcados com *).');
             return;
         }
@@ -1459,6 +1466,7 @@
             'Coleção': getS2Val('#f_colecao'),
             'Formato': getS2Val('#f_formato'),
             'Status': getS2Val('#f_status'),
+            'Aquisição': aquisicao,
             'Gênero do autor': getS2Val('#f_genero_autor'),
             'Indicação': document.getElementById('f_indicacao').value,
             'Por que li?': getS2Val('#f_porque_li'),
@@ -1479,8 +1487,10 @@
             pages: document.getElementById('f_pages').value,
             cover_url: document.getElementById('f_cover_url').value,
             status: getS2Val('#f_status'),
+            aquisicao: aquisicao,
             raw_data: raw
         };
+
 
         try {
             if (currentEditingId) {
@@ -1513,7 +1523,7 @@
         const columns = [
             'ID', 'ISBN', 'Título', 'Autor(es)', 'Tradutor(es)', 
             'País', 'Ano de Publicação', 'Selo', 'Grupo Editorial', 'Coleção',
-            'Gênero Literário', 'Formato', 'Status', 'Gênero do Autor', 
+            'Gênero Literário', 'Formato', 'Status', 'Aquisição', 'Gênero do Autor', 
             'Indicação', 'Por que li?', 'Como adquiri', 'Mês de leitura', 
             'Ano de leitura', 'Releitura?', 'Nota', 'Páginas'
         ];
@@ -1525,7 +1535,7 @@
             let row = [
                 b.id, b.isbn, b.title, b.authors, b.tradutor, b.pais, 
                 b.ano_pub, b.selo, b.grupo, b.colecao, b.genre, b.formato, 
-                b.status, b.genero_autor, b.indicacao, b.porque_li, 
+                b.status, b.aquisicao, b.genero_autor, b.indicacao, b.porque_li, 
                 b.como_adquiri, b.mes_leitura, b.ano_leitura, b.releitura, 
                 b.nota, b.pages
             ];
@@ -1627,11 +1637,11 @@
             let imgHtml = coverUrl !== 'fallback' ? `<img src="${coverUrl}" class="cover-img">` : `<div class="no-cover">Sem Capa</div>`;
             
             // Lógica simples para definir se adquirido ou wishlist baseada no status atual do usuário
-            let isAcquired = b.status === 'Lido' || b.status === 'Lendo' || (b.status || '').toLowerCase().includes('comprado') || (b.como_adquiri && b.como_adquiri.length > 0);
-            let isWishlist = b.status === 'Wishlist';
+            let isAcquired = b.aquisicao === 'Adquirido' || (!b.aquisicao && (b.status === 'Lido' || b.status === 'Lendo' || (b.status || '').toLowerCase().includes('comprado') || (b.como_adquiri && b.como_adquiri.length > 0)));
+            let isWishlist = b.aquisicao === 'Lista de Desejos' || b.status === 'Wishlist';
             
             let statusClass = isAcquired ? 'status-acquired' : (isWishlist ? 'status-wishlist' : 'status-other');
-            let statusText = isAcquired ? 'Adquirido' : (isWishlist ? 'Lista de Desejos' : (b.status || '-'));
+            let statusText = b.aquisicao || (isAcquired ? 'Adquirido' : (isWishlist ? 'Lista de Desejos' : '-'));
 
             html += `
                 <tr>
@@ -1751,7 +1761,7 @@
                 
                 let id = null;
                 let isbn = '', title = '', pages = '', publisher = '', genre = '';
-                let authors = '', status = '', colecao = '', raw = {};
+                let authors = '', status = '', aquisicao = '', colecao = '', raw = {};
 
                 if (isSystemCSV) {
                     id = cols[0];
@@ -1759,8 +1769,9 @@
                     isbn = cols[1];
                     title = cols[2];
                     authors = cols[3];
-                    pages = cols[21];
+                    pages = cols[22];
                     status = cols[12];
+                    aquisicao = cols[13];
                     genre = cols[10];
                     publisher = cols[8] || cols[7];
                     colecao = cols[9];
@@ -1774,14 +1785,15 @@
                         'Coleção': cols[9] || '',
                         'Formato': cols[11] || '',
                         'Status': cols[12] || '',
-                        'Gênero do autor': cols[13] || '',
-                        'Indicação': cols[14] || '',
-                        'Por que li?': cols[15] || '',
-                        'Como adquiri': cols[16] || '',
-                        'Mês de leitura': cols[17] || '',
-                        'Ano de Leitura': cols[18] || '',
-                        'Releitura?': cols[19] || '',
-                        'Nota': cols[20] || ''
+                        'Aquisição': cols[13] || '',
+                        'Gênero do autor': cols[14] || '',
+                        'Indicação': cols[15] || '',
+                        'Por que li?': cols[16] || '',
+                        'Como adquiri': cols[17] || '',
+                        'Mês de leitura': cols[18] || '',
+                        'Ano de Leitura': cols[19] || '',
+                        'Releitura?': cols[20] || '',
+                        'Nota': cols[21] || ''
                     };
                 } else {
                     // Planilha enviada pelo usuário
@@ -1848,6 +1860,11 @@
                     colecao: colecao || '',
                     raw_data: raw
                 };
+                
+                // Só atualiza aquisição se for CSV do sistema, para evitar quebrar importação externa
+                if (isSystemCSV) {
+                    payload.aquisicao = aquisicao || '';
+                }
                 
                 try {
                     await db.collection('books').doc(id).update(payload);
