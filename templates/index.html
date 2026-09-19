@@ -1624,7 +1624,7 @@
 
         for (let b of filteredBooksData) {
             let coverUrl = await fetchCover(b);
-            let imgHtml = coverUrl !== 'fallback' ? \`<img src="\${coverUrl}" class="cover-img">\` : \`<div class="no-cover">Sem Capa</div>\`;
+            let imgHtml = coverUrl !== 'fallback' ? `<img src="${coverUrl}" class="cover-img">` : `<div class="no-cover">Sem Capa</div>`;
             
             // Lógica simples para definir se adquirido ou wishlist baseada no status atual do usuário
             let isAcquired = b.status === 'Lido' || b.status === 'Lendo' || (b.status || '').toLowerCase().includes('comprado') || (b.como_adquiri && b.como_adquiri.length > 0);
@@ -1633,29 +1633,29 @@
             let statusClass = isAcquired ? 'status-acquired' : (isWishlist ? 'status-wishlist' : 'status-other');
             let statusText = isAcquired ? 'Adquirido' : (isWishlist ? 'Lista de Desejos' : (b.status || '-'));
 
-            html += \`
+            html += `
                 <tr>
-                    <td class="cover-cell">\${imgHtml}</td>
-                    <td><strong>\${b.title}</strong></td>
-                    <td>\${b.authors || '-'}</td>
-                    <td>\${b.grupo || '-'}</td>
-                    <td>\${b.selo || '-'}</td>
-                    <td><span class="status-badge \${statusClass}">\${statusText}</span></td>
+                    <td class="cover-cell">${imgHtml}</td>
+                    <td><strong>${b.title}</strong></td>
+                    <td>${b.authors || '-'}</td>
+                    <td>${b.grupo || '-'}</td>
+                    <td>${b.selo || '-'}</td>
+                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
                 </tr>
-            \`;
+            `;
         }
 
-        html += \`
+        html += `
                     </tbody>
                 </table>
                 <script>
                     window.onload = function() {
                         setTimeout(function() { window.print(); }, 1500); // Aguarda capas carregarem
                     }
-                </script>
+                <\/script>
             </body>
             </html>
-        \`;
+        `;
 
         printWindow.document.open();
         printWindow.document.write(html);
