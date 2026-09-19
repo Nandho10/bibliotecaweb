@@ -216,6 +216,15 @@
                 </select>
             </div>
         </div>
+
+        <!-- Barra de Pesquisa -->
+        <div class="flex-grow-1 mx-lg-4 my-2 my-lg-0" style="max-width: 600px; min-width: 250px;">
+            <div class="input-group input-group-sm shadow-sm rounded-pill overflow-hidden border">
+                <span class="input-group-text bg-white border-0 ps-3"><i class="bi bi-search text-muted"></i></span>
+                <input type="text" class="form-control border-0 shadow-none" id="searchInput" placeholder="Buscar por título ou ISBN..." oninput="applyFiltersAndRender()">
+            </div>
+        </div>
+
         <div class="text-end">
             <button class="btn btn-secondary me-2" onclick="openListsModal()">
                 <i class="bi bi-gear"></i> Gerenciar Listas
@@ -839,6 +848,8 @@
     });
 
     function applyFiltersAndRender() {
+        let searchText = ($('#searchInput').val() || '').toLowerCase().trim();
+        
         filteredBooksData = allBooksData.filter(b => {
             let passFormat = (currentFilter === 'all') || (b.formato && b.formato.toLowerCase().includes(currentFilter.toLowerCase()));
             
@@ -851,7 +862,14 @@
                 passAutor = sidebarState.autores.some(a => (b.authors||'').includes(a));
             }
             
-            return passFormat && passStatus && passAq && passSelo && passAutor;
+            let passSearch = true;
+            if (searchText) {
+                let title = (b.title || '').toLowerCase();
+                let isbn = (b.isbn || '').toLowerCase();
+                passSearch = title.includes(searchText) || isbn.includes(searchText);
+            }
+            
+            return passFormat && passStatus && passAq && passSelo && passAutor && passSearch;
         });
 
         const sortVal = $('#sortSelect').val() || 'recentes';
