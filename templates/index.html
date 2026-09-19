@@ -237,6 +237,9 @@
             <button class="btn btn-outline-dark ms-2" onclick="exportCSV()">
                 <i class="bi bi-filetype-csv"></i> Exportar CSV
             </button>
+            <button class="btn btn-outline-danger ms-2" onclick="exportPDF()" id="btnExportPdf">
+                <i class="bi bi-filetype-pdf"></i> Exportar PDF
+            </button>
             <input type="file" id="csvFileInput" accept=".csv" style="display: none;" onchange="processCSVUpdate()">
             <button class="btn btn-warning ms-2" onclick="document.getElementById('csvFileInput').click()" title="Atualizar Base via CSV">
                 <i class="bi bi-arrow-clockwise"></i> Atualizar via CSV
@@ -1548,6 +1551,118 @@
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+    }
+
+    async function exportPDF() {
+        if (!filteredBooksData || filteredBooksData.length === 0) {
+            alert('Nenhum livro para exportar.');
+            return;
+        }
+
+        const btn = document.getElementById('btnExportPdf');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Aguarde...';
+        btn.disabled = true;
+
+        // Abrir janela antes dos awaits para evitar bloqueador de pop-ups
+        const printWindow = window.open('', '_blank');
+        if (!printWindow) {
+            alert('Por favor, permita pop-ups para gerar o PDF.');
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            return;
+        }
+        
+        printWindow.document.write('<div style="font-family:sans-serif; padding: 20px;">Carregando capas dos livros e gerando documento, por favor aguarde...</div>');
+
+        let html = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Meu Acervo - Biblioteca Web</title>
+                <style>
+                    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; color: #333; }
+                    h1 { text-align: center; color: #2b3a4a; margin-bottom: 20px; border-bottom: 2px solid #edf2f7; padding-bottom: 10px; }
+                    table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
+                    th, td { border: 1px solid #dee2e6; padding: 12px; text-align: left; vertical-align: middle; }
+                    th { background-color: #f8f9fa; color: #2b3a4a; font-weight: 600; text-transform: uppercase; font-size: 12px; }
+                    tr:nth-child(even) { background-color: #fafafa; }
+                    .cover-cell { text-align: center; width: 80px; }
+                    .cover-img { max-width: 60px; max-height: 80px; object-fit: cover; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+                    .no-cover { width: 60px; height: 80px; background: #eee; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #999; border-radius: 4px; margin: 0 auto; text-align: center; }
+                    .status-badge { padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; text-transform: uppercase; white-space: nowrap; }
+                    .status-acquired { background-color: #e6f4ea; color: #1e8e3e; border: 1px solid #1e8e3e; }
+                    .status-wishlist { background-color: #e8f0fe; color: #1a73e8; border: 1px solid #1a73e8; }
+                    .status-other { background-color: #f1f3f4; color: #5f6368; border: 1px solid #5f6368; }
+                    @media print {
+                        body { padding: 0; }
+                        .no-print { display: none !important; }
+                        table { page-break-inside: auto; }
+                        tr { page-break-inside: avoid; page-break-after: auto; }
+                    }
+                </style>
+            </head>
+            <body>
+                <h1>Meu Acervo</h1>
+                <div class="no-print" style="text-align: right; margin-bottom: 10px;">
+                    <button onclick="window.print()" style="padding: 10px 20px; background: #2b3a4a; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">🖨️ Salvar como PDF / Imprimir</button>
+                    <p style="font-size: 12px; color: #666; margin-top: 5px;">*No menu de impressão, escolha a opção "Salvar como PDF"</p>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Capa</th>
+                            <th>Título</th>
+                            <th>Autor(es)</th>
+                            <th>Grupo</th>
+                            <th>Selo</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        `;
+
+        for (let b of filteredBooksData) {
+            let coverUrl = await fetchCover(b);
+            let imgHtml = coverUrl !== 'fallback' ? \`<img src="\${coverUrl}" class="cover-img">\` : \`<div class="no-cover">Sem Capa</div>\`;
+            
+            // Lógica simples para definir se adquirido ou wishlist baseada no status atual do usuário
+            let isAcquired = b.status === 'Lido' || b.status === 'Lendo' || (b.status || '').toLowerCase().includes('comprado') || (b.como_adquiri && b.como_adquiri.length > 0);
+            let isWishlist = b.status === 'Wishlist';
+            
+            let statusClass = isAcquired ? 'status-acquired' : (isWishlist ? 'status-wishlist' : 'status-other');
+            let statusText = isAcquired ? 'Adquirido' : (isWishlist ? 'Lista de Desejos' : (b.status || '-'));
+
+            html += \`
+                <tr>
+                    <td class="cover-cell">\${imgHtml}</td>
+                    <td><strong>\${b.title}</strong></td>
+                    <td>\${b.authors || '-'}</td>
+                    <td>\${b.grupo || '-'}</td>
+                    <td>\${b.selo || '-'}</td>
+                    <td><span class="status-badge \${statusClass}">\${statusText}</span></td>
+                </tr>
+            \`;
+        }
+
+        html += \`
+                    </tbody>
+                </table>
+                <script>
+                    window.onload = function() {
+                        setTimeout(function() { window.print(); }, 1500); // Aguarda capas carregarem
+                    }
+                </script>
+            </body>
+            </html>
+        \`;
+
+        printWindow.document.open();
+        printWindow.document.write(html);
+        printWindow.document.close();
+
+        btn.innerHTML = originalText;
+        btn.disabled = false;
     }
 
     function parseCSVLine(text) {
