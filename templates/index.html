@@ -1555,6 +1555,15 @@
             return;
         }
 
+        const isbnToCheck = isbn.trim();
+        if (isbnToCheck) {
+            const duplicate = allBooksData.find(b => (b.isbn || '').trim() === isbnToCheck && b.id !== currentEditingId);
+            if (duplicate) {
+                alert('Atenção: Já existe um livro cadastrado com este ISBN ("' + duplicate.title + '"). Não é possível salvar livros duplicados.');
+                return;
+            }
+        }
+
         const raw = {
             'Melhores do ano?': document.getElementById('f_melhores').value,
             'Tradutor': getS2Val('#f_tradutor', true),
