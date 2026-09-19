@@ -185,16 +185,6 @@
                 <button class="btn" data-view="table" title="Visualização em Tabela"><i class="bi bi-table"></i></button>
                 <button class="btn" data-view="stats" title="Estatísticas"><i class="bi bi-bar-chart-fill"></i></button>
                 <button class="btn border-start ms-2" onclick="openColumnsModal()" title="Configurar Colunas da Tabela"><i class="bi bi-gear"></i></button>
-                <div class="dropdown d-inline-block">
-                    <button class="btn btn-outline-secondary dropdown-toggle border-0" type="button" data-bs-toggle="dropdown" title="Filtrar por Status">
-                        <i class="bi bi-funnel"></i>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end" id="statusFilterMenu">
-                        <li><a class="dropdown-item active" href="#" data-status="all">Status: Todos</a></li>
-                        <li><a class="dropdown-item" href="#" data-status="Lido">Lido</a></li>
-                        <li><a class="dropdown-item" href="#" data-status="Wishlist">Wishlist</a></li>
-                    </ul>
-                </div>
             </div>
         </div>
     </div>
@@ -248,41 +238,59 @@
     </div>
 
     
-    <div id="cardsContainer" class="row g-4 card-view"></div>
-    <div id="coversContainer" class="row g-3 cover-view" style="display: none;"></div>
-    <div id="statsContainer" class="row g-4 p-2" style="display: none;"></div>
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-lg-2 col-md-3 mb-4">
+            <div class="card shadow-sm border-0 sticky-top" style="top: 20px; max-height: calc(100vh - 40px); overflow-y: auto;">
+                <div class="card-header bg-light fw-bold d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-funnel"></i> Filtros</span>
+                    <button class="btn btn-sm btn-link text-decoration-none p-0" onclick="clearSidebarFilters()">Limpar</button>
+                </div>
+                <div class="card-body p-3" id="sidebarFiltersContent">
+                    <!-- Javascript will populate this -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="col-lg-10 col-md-9">
+            <div id="cardsContainer" class="row g-4 card-view"></div>
+            <div id="coversContainer" class="row g-3 cover-view" style="display: none;"></div>
+            <div id="statsContainer" class="row g-4 p-2" style="display: none;"></div>
 
-    <div class="table-responsive" id="tableContainer" style="display: none;">
-        <table id="booksTable" class="table table-striped table-hover" style="width:100%">
-            <thead>
-                <tr>
-                    <th>Ações</th>
-                    <th>ISBN-13</th>
-                    <th>Título</th>
-                    <th>Autor(e)</th>
-                    <th>Tradutor(e)</th>
-                    <th>País</th>
-                    <th>Ano de Publicação</th>
-                    <th>Selo</th>
-                    <th>Grupo</th>
-                    <th>Coleção</th>
-                    <th>Gênero literário</th>
-                    <th>Formato</th>
-                    <th>Status</th>
-                    <th>Número de páginas</th>
-                    <th>Gênero d(e) autor(e)</th>
-                    <th>Indicação</th>
-                    <th>Por que li?</th>
-                    <th>Como adquiri</th>
-                    <th>Mês de leitura</th>
-                    <th>Ano de Leitura</th>
-                    <th>Releitura?</th>
-                    <th>Nota</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+            <div class="table-responsive" id="tableContainer" style="display: none;">
+                <table id="booksTable" class="table table-striped table-hover" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Ações</th>
+                            <th>ISBN-13</th>
+                            <th>Título</th>
+                            <th>Autor(e)</th>
+                            <th>Tradutor(e)</th>
+                            <th>País</th>
+                            <th>Ano de Publicação</th>
+                            <th>Selo</th>
+                            <th>Grupo</th>
+                            <th>Coleção</th>
+                            <th>Gênero literário</th>
+                            <th>Formato</th>
+                            <th>Status</th>
+                            <th>Número de páginas</th>
+                            <th>Gênero d(e) autor(e)</th>
+                            <th>Indicação</th>
+                            <th>Por que li?</th>
+                            <th>Como adquiri</th>
+                            <th>Mês de leitura</th>
+                            <th>Ano de Leitura</th>
+                            <th>Releitura?</th>
+                            <th>Nota</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -731,25 +739,88 @@
     });
 
     let currentView = 'cards';
-    let currentFilter = 'all';
-    let statusFilter = 'all';
+    let currentFilter = 'all'; // Formato (top buttons)
+    
+    // Sidebar filters state
+    let sidebarState = {
+        status: [],
+        aquisicao: [],
+        selos: [],
+        autores: []
+    };
+
     let allBooksData = [];
     let filteredBooksData = [];
     let coverCache = {};
+
+    function clearSidebarFilters() {
+        sidebarState = { status: [], aquisicao: [], selos: [], autores: [] };
+        $('.sidebar-filter-checkbox').prop('checked', false);
+        applyFiltersAndRender();
+    }
+
+    function renderSidebarFilters() {
+        if (!allBooksData) return;
+
+        // Extract unique values
+        const uStatus = [...new Set(allBooksData.map(b => b.status).filter(Boolean))].sort();
+        const uAq = [...new Set(allBooksData.map(b => b.aquisicao).filter(Boolean))].sort();
+        const uSelos = [...new Set(allBooksData.map(b => b.selo).filter(Boolean))].sort();
+        
+        let allAuthors = new Set();
+        allBooksData.forEach(b => {
+            if(b.authors) {
+                b.authors.split(',').forEach(a => allAuthors.add(a.trim()));
+            }
+        });
+        const uAutores = [...allAuthors].sort();
+
+        const buildCheckboxes = (title, items, key) => {
+            if(items.length === 0) return '';
+            let html = `<div class="mb-3">
+                <h6 class="fw-bold mb-2" style="font-size:13px; text-transform:uppercase; color:var(--primary-color)">${title}</h6>
+                <div style="max-height: 150px; overflow-y: auto; font-size: 13px;">`;
+            
+            items.forEach(item => {
+                let isChecked = sidebarState[key].includes(item) ? 'checked' : '';
+                html += `
+                    <div class="form-check">
+                        <input class="form-check-input sidebar-filter-checkbox" type="checkbox" value="${item.replace(/"/g, '&quot;')}" data-key="${key}" ${isChecked}>
+                        <label class="form-check-label text-truncate d-block" title="${item.replace(/"/g, '&quot;')}">
+                            ${item}
+                        </label>
+                    </div>
+                `;
+            });
+            html += `</div></div>`;
+            return html;
+        };
+
+        let contentHtml = '';
+        contentHtml += buildCheckboxes('Situação (Acervo)', uAq, 'aquisicao');
+        contentHtml += buildCheckboxes('Status (Leitura)', uStatus, 'status');
+        contentHtml += buildCheckboxes('Selos/Editoras', uSelos, 'selos');
+        contentHtml += buildCheckboxes('Autores', uAutores, 'autores');
+
+        $('#sidebarFiltersContent').html(contentHtml);
+
+        $('.sidebar-filter-checkbox').on('change', function() {
+            const key = $(this).data('key');
+            const val = $(this).val();
+            if ($(this).is(':checked')) {
+                if(!sidebarState[key].includes(val)) sidebarState[key].push(val);
+            } else {
+                sidebarState[key] = sidebarState[key].filter(v => v !== val);
+            }
+            applyFiltersAndRender();
+        });
+    }
 
     // Setup toggles
     $('#formatFilter .btn').on('click', function() {
         $('#formatFilter .btn').removeClass('active');
         $(this).addClass('active');
         currentFilter = $(this).data('filter');
-        applyFiltersAndRender();
-    });
-
-        $('#statusFilterMenu .dropdown-item').on('click', function(e) {
-        e.preventDefault();
-        $('#statusFilterMenu .dropdown-item').removeClass('active');
-        $(this).addClass('active');
-        statusFilter = $(this).data('status');
         applyFiltersAndRender();
     });
 
@@ -770,8 +841,17 @@
     function applyFiltersAndRender() {
         filteredBooksData = allBooksData.filter(b => {
             let passFormat = (currentFilter === 'all') || (b.formato && b.formato.toLowerCase().includes(currentFilter.toLowerCase()));
-            let passStatus = (statusFilter === 'all') || (b.status === statusFilter);
-            return passFormat && passStatus;
+            
+            let passStatus = sidebarState.status.length === 0 || sidebarState.status.includes(b.status);
+            let passAq = sidebarState.aquisicao.length === 0 || sidebarState.aquisicao.includes(b.aquisicao);
+            let passSelo = sidebarState.selos.length === 0 || sidebarState.selos.includes(b.selo);
+            
+            let passAutor = true;
+            if (sidebarState.autores.length > 0) {
+                passAutor = sidebarState.autores.some(a => (b.authors||'').includes(a));
+            }
+            
+            return passFormat && passStatus && passAq && passSelo && passAutor;
         });
 
         const sortVal = $('#sortSelect').val() || 'recentes';
@@ -1343,6 +1423,7 @@
             booksData.push(bookObj);
         });
         allBooksData = booksData;
+        renderSidebarFilters();
         applyFiltersAndRender();
     });
 
