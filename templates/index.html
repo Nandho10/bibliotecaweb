@@ -320,29 +320,29 @@
                 </div>
                 <div class="card-body row g-3">
                     <div class="col-md-4">
-                        <label class="form-label fw-semibold text-danger">ISBN-13 *</label>
+                        <label class="form-label fw-semibold text-danger" for="f_isbn">ISBN-13 *</label>
                         <input type="text" class="form-control" id="f_isbn" required>
                     </div>
                     <div class="col-md-8">
-                        <label class="form-label fw-semibold text-danger">Título *</label>
+                        <label class="form-label fw-semibold text-danger" for="f_title">Título *</label>
                         <input type="text" class="form-control" id="f_title" required>
                     </div>
                     
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold text-danger">Autor(e) *</label>
+                        <label class="form-label fw-semibold text-danger" for="f_authors">Autor(e) *</label>
                         <select class="form-select dynamic-select" id="f_authors" data-category="autores" multiple required></select>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold">Tradutor(e)</label>
+                        <label class="form-label fw-semibold" for="f_tradutor">Tradutor(e)</label>
                         <select class="form-select dynamic-select" id="f_tradutor" data-category="tradutores" multiple></select>
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold text-danger">Situação (Acervo) *</label>
+                        <label class="form-label fw-semibold text-danger" for="f_aquisicao">Situação (Acervo) *</label>
                         <select class="form-select dynamic-select" id="f_aquisicao" data-category="aquisicoes_status" required></select>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold">URL da Capa (Ex: Amazon)</label>
+                        <label class="form-label fw-semibold" for="f_cover_url">URL da Capa (Ex: Amazon)</label>
                         <input type="url" class="form-control" id="f_cover_url" placeholder="https://...">
                     </div>
                 </div>
@@ -355,28 +355,28 @@
                 </div>
                 <div class="card-body row g-3">
                     <div class="col-md-4">
-                        <label class="form-label fw-semibold text-danger">Grupo *</label>
+                        <label class="form-label fw-semibold text-danger" for="f_grupo">Grupo *</label>
                         <select class="form-select dynamic-select" id="f_grupo" data-category="grupos" required></select>
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label fw-semibold text-danger">Selo *</label>
+                        <label class="form-label fw-semibold text-danger" for="f_selo">Selo *</label>
                         <select class="form-select dynamic-select" id="f_selo" data-category="selos" required></select>
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label fw-semibold text-danger">Coleção *</label>
+                        <label class="form-label fw-semibold text-danger" for="f_colecao">Coleção *</label>
                         <select class="form-select dynamic-select" id="f_colecao" data-category="colecoes" required></select>
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label fw-semibold">País</label>
+                        <label class="form-label fw-semibold" for="f_pais">País</label>
                         <select class="form-select dynamic-select" id="f_pais" data-category="paises"></select>
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label fw-semibold">Ano de Publicação</label>
+                        <label class="form-label fw-semibold" for="f_ano_pub">Ano de Publicação</label>
                         <input type="text" class="form-control" id="f_ano_pub">
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label fw-semibold text-danger">Número de páginas *</label>
+                        <label class="form-label fw-semibold text-danger" for="f_pages">Número de páginas *</label>
                         <input type="number" class="form-control" id="f_pages" required>
                     </div>
                 </div>
@@ -398,7 +398,7 @@
                     </div>
                     
                     <div class="col-md-4">
-                        <label class="form-label fw-semibold text-danger">Formato *</label>
+                        <label class="form-label fw-semibold text-danger" for="f_formato">Formato *</label>
                         <select class="form-select dynamic-select" id="f_formato" data-category="formatos" required></select>
                     </div>
                     <div class="col-md-4">
@@ -1328,7 +1328,49 @@
                 updateSingleSelectUI($('#f_colecao'));
             }
         });
+
+        // Monitorar preenchimento dos campos obrigatórios em tempo real
+        $('#bookForm').on('input change', '[required]', function() {
+            updateRequiredFieldLabel($(this));
+        });
+
+        $('#bookForm select[required]').on('change select2:select select2:unselect select2:clear', function() {
+            updateRequiredFieldLabel($(this));
+        });
+
+        $('#bookModal').on('shown.bs.modal', function() {
+            updateAllRequiredLabels();
+        });
     });
+
+    function updateRequiredFieldLabel(el) {
+        const id = el.attr('id');
+        let label = id ? $(`label[for="${id}"]`) : null;
+        if (!label || label.length === 0) {
+            label = el.closest('div').find('label');
+        }
+
+        let hasValue = false;
+        if (el.is('select') && el.prop('multiple')) {
+            const v = el.val();
+            hasValue = Array.isArray(v) && v.length > 0;
+        } else {
+            const v = el.val();
+            hasValue = v !== null && v !== undefined && String(v).trim() !== '';
+        }
+
+        if (hasValue) {
+            label.removeClass('text-danger');
+        } else {
+            label.addClass('text-danger');
+        }
+    }
+
+    function updateAllRequiredLabels() {
+        $('#bookForm [required]').each(function() {
+            updateRequiredFieldLabel($(this));
+        });
+    }
 
     // ----- LOGICA DO GERENCIADOR DE LISTAS (MODAL) -----
     function openListsModal() {
@@ -1447,14 +1489,19 @@
 
     function openModal() {
         currentEditingId = null;
-        document.getElementById('bookForm').reset();
+        const form = document.getElementById('bookForm');
+        form.reset();
+        form.classList.remove('was-validated');
         $('.dynamic-select').val(null).trigger('change');
         document.getElementById('bookModalLabel').innerText = 'Novo Livro';
+        updateAllRequiredLabels();
         bookModal.show();
     }
 
     function editBook(id) {
         currentEditingId = id;
+        const form = document.getElementById('bookForm');
+        form.classList.remove('was-validated');
         document.getElementById('bookModalLabel').innerText = 'Editar Livro';
         const b = cachedBooks[id];
         if(!b) return;
@@ -1494,6 +1541,7 @@
         setSelect2Val('#f_ano_leitura', b.ano_leitura, false);
         setSelect2Val('#f_aquisicao', b.aquisicao, false);
 
+        updateAllRequiredLabels();
         bookModal.show();
     }
 
