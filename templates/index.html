@@ -321,7 +321,13 @@
                 <div class="card-body row g-3">
                     <div class="col-md-4">
                         <label class="form-label fw-semibold text-danger" for="f_isbn">ISBN-13 *</label>
-                        <input type="text" class="form-control" id="f_isbn" required>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="f_isbn" placeholder="Digite ou escaneie..." required>
+                            <button class="btn btn-outline-primary" type="button" id="btnSearchIsbn" onclick="fetchIsbnMetadata()" title="Buscar dados automaticamente pelo ISBN">
+                                <i class="bi bi-search" id="iconSearchIsbn"></i>
+                                <span class="spinner-border spinner-border-sm d-none" id="spinnerSearchIsbn" role="status" aria-hidden="true"></span>
+                            </button>
+                        </div>
                     </div>
                     <div class="col-md-8">
                         <label class="form-label fw-semibold text-danger" for="f_title">Título *</label>
@@ -1338,6 +1344,22 @@
             updateRequiredFieldLabel($(this));
         });
 
+        // Atalho: Buscar dados ao pressionar Enter no campo de ISBN
+        $('#f_isbn').on('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                fetchIsbnMetadata();
+            }
+        });
+
+        // Buscar dados ao sair do campo se tiver 10 ou 13 dígitos e o título ainda estiver vazio
+        $('#f_isbn').on('blur', function() {
+            const val = $(this).val().replace(/[^0-9X]/gi, '');
+            if ((val.length === 10 || val.length === 13) && !$('#f_title').val()) {
+                fetchIsbnMetadata();
+            }
+        });
+
         $('#bookModal').on('shown.bs.modal', function() {
             updateAllRequiredLabels();
         });
@@ -1370,6 +1392,144 @@
         $('#bookForm [required]').each(function() {
             updateRequiredFieldLabel($(this));
         });
+    }
+
+    // Busca automática e combinada de metadados de livros por ISBN (BrasilAPI + Google Books + OpenLibrary)
+    async function fetchIsbnMetadata() {
+        const rawIsbn = $('#f_isbn').val() || '';
+        const cleanIsbn = rawIsbn.replace(/[^0-9X]/gi, '').trim();
+
+        if (!cleanIsbn || (cleanIsbn.length !== 10 && cleanIsbn.length !== 13)) {
+            alert('Por favor, informe um ISBN válido com 10 ou 13 dígitos.');
+            return;
+        }
+
+        const btn = $('#btnSearchIsbn');
+        const icon = $('#iconSearchIsbn');
+        const spinner = $('#spinnerSearchIsbn');
+
+        btn.prop('disabled', true);
+        icon.addClass('d-none');
+        spinner.removeClass('d-none');
+
+        try {
+            // Consulta combinada e paralela em APIs públicas gratuitas
+            const [resBrasil, resGoogle, resOL] = await Promise.all([
+                fetch(`https://brasilapi.com.br/api/isbn/v1/${cleanIsbn}`).then(r => r.ok ? r.json() : null).catch(() => null),
+                fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${cleanIsbn}`).then(r => r.ok ? r.json() : null).catch(() => null),
+                fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${cleanIsbn}&jscmd=data&format=json`).then(r => r.ok ? r.json() : null).catch(() => null)
+            ]);
+
+            const googleInfo = resGoogle && resGoogle.items && resGoogle.items.length > 0 ? resGoogle.items[0].volumeInfo : null;
+            const olInfo = resOL ? resOL[`ISBN:${cleanIsbn}`] : null;
+
+            if (!resBrasil && !googleInfo && !olInfo) {
+                alert('Nenhuma informação encontrada para este ISBN nas bases de dados gratuitas consultadas (BrasilAPI, Google Books e OpenLibrary).');
+                return;
+            }
+
+            // 1. TÍTULO
+            const rawTitle = resBrasil?.title || googleInfo?.title || olInfo?.title;
+            if (rawTitle) {
+                let fullTitle = rawTitle;
+                const subtitle = resBrasil?.subtitle || googleInfo?.subtitle;
+                if (subtitle && !fullTitle.toLowerCase().includes(subtitle.toLowerCase())) {
+                    fullTitle = `${fullTitle}: ${subtitle}`;
+                }
+                $('#f_title').val(fullTitle);
+            }
+
+            // 2. AUTOR(ES) E TRADUTOR(ES)
+            let authors = [];
+            let translators = [];
+
+            if (googleInfo?.authors && googleInfo.authors.length > 0) {
+                authors = googleInfo.authors;
+                // No BrasilAPI (CBL), muitas vezes tradutores aparecem misturados nos autores
+                if (resBrasil?.authors && resBrasil.authors.length > authors.length) {
+                    translators = resBrasil.authors.filter(a => !authors.some(ga => ga.toLowerCase().includes(a.toLowerCase()) || a.toLowerCase().includes(ga.toLowerCase())));
+                }
+            } else if (resBrasil?.authors && resBrasil.authors.length > 0) {
+                authors = resBrasil.authors;
+            } else if (olInfo?.authors && olInfo.authors.length > 0) {
+                authors = olInfo.authors.map(a => a.name);
+            }
+
+            if (authors.length > 0) {
+                setSelect2Val('#f_authors', authors.join(', '), true);
+            }
+            if (translators.length > 0) {
+                setSelect2Val('#f_tradutor', translators.join(', '), true);
+            }
+
+            // 3. EDITORA / SELO / GRUPO
+            const publisher = resBrasil?.publisher || googleInfo?.publisher || (olInfo?.publishers && olInfo.publishers[0]?.name);
+            if (publisher) {
+                setSelect2Val('#f_selo', publisher, false);
+                if (!$('#f_grupo').val()) {
+                    setSelect2Val('#f_grupo', publisher, false);
+                }
+            }
+
+            // 4. NÚMERO DE PÁGINAS
+            const pages = resBrasil?.page_count || googleInfo?.pageCount || olInfo?.number_of_pages;
+            if (pages) {
+                $('#f_pages').val(pages);
+            }
+
+            // 5. ANO DE PUBLICAÇÃO
+            let year = resBrasil?.year;
+            if (!year && googleInfo?.publishedDate) {
+                const match = String(googleInfo.publishedDate).match(/\d{4}/);
+                if (match) year = match[0];
+            }
+            if (!year && olInfo?.publish_date) {
+                const match = String(olInfo.publish_date).match(/\d{4}/);
+                if (match) year = match[0];
+            }
+            if (year) {
+                $('#f_ano_pub').val(year);
+            }
+
+            // 6. GÊNERO LITERÁRIO
+            let genres = [];
+            if (resBrasil?.subjects && resBrasil.subjects.length > 0) genres = resBrasil.subjects;
+            else if (googleInfo?.categories && googleInfo.categories.length > 0) genres = googleInfo.categories;
+            else if (olInfo?.subjects && olInfo.subjects.length > 0) genres = olInfo.subjects.map(s => s.name);
+
+            if (genres && genres.length > 0) {
+                const mainGenre = genres[0];
+                setSelect2Val('#f_genre', mainGenre, false);
+            }
+
+            // 7. FORMATO (Brochura, Capa Dura, E-book)
+            let detectedFormat = 'Brochura';
+            const rawFormat = (resBrasil?.format || '').toUpperCase();
+            const rawDesc = (resBrasil?.synopsis || googleInfo?.description || '').toLowerCase();
+
+            if (rawFormat === 'DIGITAL' || rawFormat.includes('EBOOK') || rawDesc.includes('ebook') || rawDesc.includes('e-book')) {
+                detectedFormat = 'E-book';
+            } else if (rawFormat.includes('HARDCOVER') || rawDesc.includes('capa dura')) {
+                detectedFormat = 'Capa Dura';
+            }
+            setSelect2Val('#f_formato', detectedFormat, false);
+
+            // 8. PAÍS
+            if (resBrasil || googleInfo?.language === 'pt') {
+                setSelect2Val('#f_pais', 'Brasil', false);
+            }
+
+            // Atualiza cores dos labels obrigatórios que foram preenchidos
+            updateAllRequiredLabels();
+
+        } catch (error) {
+            console.error('Erro ao buscar dados do ISBN:', error);
+            alert('Ocorreu um erro ao consultar as APIs do ISBN. Tente novamente ou preencha manualmente.');
+        } finally {
+            btn.prop('disabled', false);
+            icon.removeClass('d-none');
+            spinner.addClass('d-none');
+        }
     }
 
     // ----- LOGICA DO GERENCIADOR DE LISTAS (MODAL) -----
