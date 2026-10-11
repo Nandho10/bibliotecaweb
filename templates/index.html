@@ -194,13 +194,14 @@
         <div class="d-flex align-items-center">
             <span class="text-muted me-3" id="resultsCount">0 encontrados</span>
             
-            <div class="view-toggles" id="viewToggles">
+            <div class="view-toggles me-3" id="viewToggles">
                 <button class="btn" data-view="covers" title="Visualização em Capas"><i class="bi bi-grid-fill"></i></button>
                 <button class="btn active" data-view="cards" title="Visualização em Cards"><i class="bi bi-view-list"></i></button>
                 <button class="btn" data-view="table" title="Visualização em Tabela"><i class="bi bi-table"></i></button>
                 <button class="btn" data-view="stats" title="Estatísticas"><i class="bi bi-bar-chart-fill"></i></button>
                 <button class="btn border-start ms-2" onclick="openColumnsModal()" title="Configurar Colunas da Tabela"><i class="bi bi-gear"></i></button>
             </div>
+            <div id="authContainer"></div>
         </div>
     </div>
 
@@ -240,24 +241,41 @@
             </div>
         </div>
 
-        <div class="text-end">
-            <button class="btn btn-secondary me-2" onclick="openListsModal()">
-                <i class="bi bi-gear"></i> Gerenciar Listas
+        <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-success shadow-sm d-flex align-items-center gap-2" onclick="openModal()">
+                <i class="bi bi-plus-lg"></i> <span>Novo Livro</span>
             </button>
-            <button class="btn btn-success me-2" onclick="openModal()">
-                <i class="bi bi-plus-lg"></i> Novo Livro
-            </button>
-
-            <button class="btn btn-outline-dark ms-2" onclick="exportCSV()">
-                <i class="bi bi-filetype-csv"></i> Exportar CSV
-            </button>
-            <button class="btn btn-outline-danger ms-2" onclick="exportPDF()" id="btnExportPdf">
-                <i class="bi bi-filetype-pdf"></i> Exportar PDF
-            </button>
+            
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1 shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-three-dots-vertical"></i> <span>Ações</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                    <li>
+                        <a class="dropdown-item" href="javascript:void(0)" onclick="openListsModal()">
+                            <i class="bi bi-gear me-2 text-secondary"></i> Gerenciar Listas
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item" href="javascript:void(0)" onclick="exportCSV()">
+                            <i class="bi bi-filetype-csv me-2 text-success"></i> Exportar CSV
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="javascript:void(0)" onclick="exportPDF()" id="btnExportPdf">
+                            <i class="bi bi-filetype-pdf me-2 text-danger"></i> Exportar PDF
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item" href="javascript:void(0)" onclick="document.getElementById('csvFileInput').click()">
+                            <i class="bi bi-arrow-clockwise me-2 text-warning"></i> Atualizar via CSV
+                        </a>
+                    </li>
+                </ul>
+            </div>
             <input type="file" id="csvFileInput" accept=".csv" style="display: none;" onchange="processCSVUpdate()">
-            <button class="btn btn-warning ms-2" onclick="document.getElementById('csvFileInput').click()" title="Atualizar Base via CSV">
-                <i class="bi bi-arrow-clockwise"></i> Atualizar via CSV
-            </button>
         </div>
     </div>
 
@@ -338,6 +356,9 @@
                         <label class="form-label fw-semibold text-danger" for="f_isbn">ISBN-13 *</label>
                         <div class="input-group">
                             <input type="text" class="form-control" id="f_isbn" placeholder="Digite ou escaneie..." required>
+                            <button class="btn btn-outline-secondary" type="button" id="btnScanBarcode" onclick="openBarcodeScannerModal()" title="Escanear código de barras com a câmera">
+                                <i class="bi bi-camera"></i>
+                            </button>
                             <button class="btn btn-outline-primary" type="button" id="btnSearchIsbn" onclick="fetchIsbnMetadata()" title="Buscar dados automaticamente pelo ISBN">
                                 <i class="bi bi-search" id="iconSearchIsbn"></i>
                                 <span class="spinner-border spinner-border-sm d-none" id="spinnerSearchIsbn" role="status" aria-hidden="true"></span>
@@ -423,7 +444,7 @@
                         <select class="form-select dynamic-select" id="f_formato" data-category="formatos" required></select>
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label fw-semibold">Status</label>
+                        <label class="form-label fw-semibold">Status de Leitura</label>
                         <select class="form-select dynamic-select" id="f_status" data-category="status"></select>
                     </div>
                     <div class="col-md-4">
@@ -535,7 +556,7 @@
             <option value="aquisicoes">Aquisições (Como adquiri)</option>
             <option value="meses">Meses</option>
             <option value="anos">Anos</option>
-            <option value="status">Status</option>
+            <option value="status">Status de Leitura</option>
             <option value="aquisicoes_status">Situação (Acervo)</option>
         </select>
 
@@ -552,6 +573,31 @@
   </div>
 </div>
 
+<!-- Modal Scanner de Código de Barras -->
+<div class="modal fade" id="barcodeScannerModal" tabindex="-1" aria-labelledby="barcodeScannerModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title d-flex align-items-center gap-2" id="barcodeScannerModalLabel">
+          <i class="bi bi-upc-scan"></i> Escanear Código de Barras
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar" onclick="stopBarcodeScanner()"></button>
+      </div>
+      <div class="modal-body text-center p-3">
+        <p class="text-muted small mb-3">Aponte a câmera para o código de barras (ISBN) na contracapa do livro.</p>
+        <div id="barcodeReaderContainer" style="width: 100%; min-height: 260px; border-radius: 8px; overflow: hidden; background: #000;" class="d-flex align-items-center justify-content-center text-white">
+          <div id="barcodeReader" style="width: 100%;"></div>
+        </div>
+        <div id="barcodeScannerFeedback" class="mt-3 small text-muted">Aguardando inicialização da câmera...</div>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <span class="text-muted small"><i class="bi bi-shield-check me-1"></i> Apenas uso local de vídeo</span>
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" onclick="stopBarcodeScanner()">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- jQuery, Bootstrap, DataTables & Select2 JS -->
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -563,6 +609,10 @@
 <!-- Firebase v9 (compat) -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+<!-- Barcode Scanner (html5-qrcode) -->
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
 <script>
     const firebaseConfig = {
@@ -576,6 +626,53 @@
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
+    const auth = firebase.auth();
+    let currentUser = null;
+
+    auth.onAuthStateChanged(user => {
+        currentUser = user;
+        renderAuthUI(user);
+    });
+
+    function loginGoogle() {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        auth.signInWithPopup(provider).catch(err => {
+            console.error("Login error:", err);
+            alert("Erro ao autenticar com o Google: " + err.message);
+        });
+    }
+
+    function logoutGoogle() {
+        auth.signOut();
+    }
+
+    function renderAuthUI(user) {
+        const container = document.getElementById('authContainer');
+        if (!container) return;
+        if (user) {
+            const photo = user.photoURL || '';
+            const name = user.displayName || user.email || 'Usuário';
+            container.innerHTML = `
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-2 rounded-pill px-2 py-1" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="${user.email}">
+                        ${photo ? `<img src="${photo}" alt="${name}" class="rounded-circle" style="width: 22px; height: 22px; object-fit: cover;">` : `<i class="bi bi-person-circle fs-5"></i>`}
+                        <span class="d-none d-sm-inline small text-truncate" style="max-width: 130px;">${name}</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                        <li class="dropdown-item-text text-muted small"><i class="bi bi-envelope me-1"></i> ${user.email}</li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger small" href="javascript:void(0)" onclick="logoutGoogle()"><i class="bi bi-box-arrow-right me-2"></i>Sair</a></li>
+                    </ul>
+                </div>
+            `;
+        } else {
+            container.innerHTML = `
+                <button class="btn btn-sm btn-outline-primary rounded-pill px-3 d-flex align-items-center gap-1 shadow-sm" onclick="loginGoogle()" title="Entrar com conta Google">
+                    <i class="bi bi-google"></i> <span class="d-none d-sm-inline">Entrar</span>
+                </button>
+            `;
+        }
+    }
 
     // Theme Toggle Logic
     const themeToggleBtn = document.getElementById('themeToggleBtn');
@@ -984,6 +1081,9 @@
                 let img = data.items[0].volumeInfo.imageLinks.thumbnail || data.items[0].volumeInfo.imageLinks.smallThumbnail;
                 if(img) img = img.replace('http:', 'https:');
                 coverCache[book.id] = img;
+                if (book.id) {
+                    db.collection('books').doc(book.id).update({ cover_url: img }).catch(() => {});
+                }
                 return img;
             }
         } catch(e) {}
@@ -1723,6 +1823,101 @@
         }
     }
 
+    // ----- SCANNER DE CÓDIGO DE BARRAS (ISBN) VIA CÂMERA -----
+    let html5QrCodeScanner = null;
+
+    function openBarcodeScannerModal() {
+        const modalEl = document.getElementById('barcodeScannerModal');
+        const scannerModal = new bootstrap.Modal(modalEl);
+        scannerModal.show();
+        setTimeout(() => {
+            startBarcodeScanner();
+        }, 350);
+    }
+
+    function startBarcodeScanner() {
+        const feedback = document.getElementById('barcodeScannerFeedback');
+        if (feedback) feedback.innerHTML = '<span class="text-muted"><span class="spinner-border spinner-border-sm me-2" role="status"></span>Iniciando câmera...</span>';
+
+        if (html5QrCodeScanner) {
+            html5QrCodeScanner.stop().catch(() => {}).then(() => {
+                initScannerInstance();
+            });
+        } else {
+            initScannerInstance();
+        }
+    }
+
+    function initScannerInstance() {
+        const feedback = document.getElementById('barcodeScannerFeedback');
+        try {
+            html5QrCodeScanner = new Html5Qrcode("barcodeReader");
+            const config = {
+                fps: 10,
+                qrbox: { width: 250, height: 150 },
+                aspectRatio: 1.333333
+            };
+
+            html5QrCodeScanner.start(
+                { facingMode: "environment" },
+                config,
+                (decodedText) => {
+                    const cleanCode = decodedText.replace(/\D/g, '');
+                    if (cleanCode.length >= 10) {
+                        if (feedback) {
+                            feedback.innerHTML = `<span class="text-success fw-bold"><i class="bi bi-check-circle-fill me-1"></i>Lido: ${cleanCode}</span>`;
+                        }
+                        
+                        try {
+                            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                            const osc = ctx.createOscillator();
+                            osc.type = 'sine';
+                            osc.frequency.setValueAtTime(800, ctx.currentTime);
+                            osc.connect(ctx.destination);
+                            osc.start();
+                            osc.stop(ctx.currentTime + 0.12);
+                        } catch(e) {}
+
+                        stopBarcodeScanner();
+
+                        const modalEl = document.getElementById('barcodeScannerModal');
+                        const modal = bootstrap.Modal.getInstance(modalEl);
+                        if (modal) modal.hide();
+
+                        $('#f_isbn').val(cleanCode).trigger('input');
+                        fetchIsbnMetadata();
+                    }
+                },
+                (err) => {}
+            ).catch(err => {
+                console.error("Erro ao inicializar câmera:", err);
+                if (feedback) {
+                    feedback.innerHTML = `<span class="text-danger"><i class="bi bi-exclamation-triangle me-1"></i>Câmera indisponível ou permissão negada. Digite o ISBN manualmente.</span>`;
+                }
+            });
+        } catch(e) {
+            console.error("Erro Html5Qrcode:", e);
+            if (feedback) {
+                feedback.innerHTML = `<span class="text-danger">Erro ao carregar componente de câmera.</span>`;
+            }
+        }
+    }
+
+    function stopBarcodeScanner() {
+        if (html5QrCodeScanner) {
+            html5QrCodeScanner.stop().then(() => {
+                html5QrCodeScanner.clear();
+                html5QrCodeScanner = null;
+            }).catch(() => {
+                html5QrCodeScanner = null;
+            });
+        }
+    }
+
+    document.getElementById('barcodeScannerModal')?.addEventListener('hidden.bs.modal', () => {
+        stopBarcodeScanner();
+    });
+
     // ----- LOGICA DO GERENCIADOR DE LISTAS (MODAL) -----
     function openListsModal() {
         $('#listCategorySelector').val('autores');
@@ -1921,7 +2116,11 @@
             try {
                 await db.collection('books').doc(id).delete();
             } catch (e) {
-                alert('Erro ao apagar: ' + e.message);
+                if (e.code === 'permission-denied' || (e.message && e.message.toLowerCase().includes('permission'))) {
+                    alert('Permissão negada: É necessário estar conectado com a conta Google autorizada (luizfernandho@gmail.com).');
+                } else {
+                    alert('Erro ao apagar: ' + e.message);
+                }
             }
         }
     }
@@ -2008,7 +2207,11 @@
             }
             bookModal.hide();
         } catch (e) {
-            alert('Erro ao salvar: ' + e.message);
+            if (e.code === 'permission-denied' || (e.message && e.message.toLowerCase().includes('permission'))) {
+                alert('Permissão negada: É necessário estar conectado com a conta Google autorizada (luizfernandho@gmail.com).');
+            } else {
+                alert('Erro ao salvar: ' + e.message);
+            }
         }
     }
 
