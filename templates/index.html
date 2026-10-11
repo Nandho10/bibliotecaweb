@@ -2410,12 +2410,28 @@
             console.warn("Sinopse exibida na tela, mas persistência no Firestore falhou:", dbErr);
             const isPerm = dbErr.code === 'permission-denied' || (dbErr.message && dbErr.message.toLowerCase().includes('permission'));
             if (isPerm) {
-                statusEl.html(`
-                    <div class="alert alert-warning py-1 px-2 mb-0 small rounded-2 d-flex align-items-center justify-content-between gap-2">
-                        <span><i class="bi bi-shield-lock-fill me-1"></i>Sinopse carregada na tela! Para salvá-la permanentemente no acervo, conecte-se com sua conta Google de administrador.</span>
-                        ${!currentUser ? `<button class="btn btn-sm btn-primary py-0 px-2 text-nowrap" onclick="loginGoogle()">Entrar</button>` : ''}
-                    </div>
-                `).fadeIn(200);
+                if (currentUser) {
+                    statusEl.html(`
+                        <div class="alert alert-warning py-2 px-3 mb-0 small rounded-2">
+                            <div class="d-flex align-items-center justify-content-between gap-2 flex-wrap mb-1">
+                                <span><i class="bi bi-shield-lock-fill me-1 text-warning"></i><strong>Conectado como:</strong> ${currentUser.email || 'usuário'}</span>
+                                <button type="button" class="btn btn-sm btn-outline-dark py-0 px-2 fw-semibold" style="font-size: 0.75rem;" onclick="showFirestoreRulesHelp()">
+                                    <i class="bi bi-gear-wide-connected me-1"></i>Como Liberar no Firebase
+                                </button>
+                            </div>
+                            <div class="text-muted" style="font-size: 0.78rem;">
+                                A sinopse está visível na tela! O Firestore bloqueou a gravação permanente porque as <strong>Regras (Rules)</strong> no Firebase Console ainda não autorizaram a escrita.
+                            </div>
+                        </div>
+                    `).fadeIn(200);
+                } else {
+                    statusEl.html(`
+                        <div class="alert alert-warning py-1 px-2 mb-0 small rounded-2 d-flex align-items-center justify-content-between gap-2">
+                            <span><i class="bi bi-shield-lock-fill me-1"></i>Sinopse carregada na tela! Para salvá-la permanentemente no acervo, conecte-se com sua conta Google.</span>
+                            <button class="btn btn-sm btn-primary py-0 px-2 text-nowrap" onclick="loginGoogle()">Entrar</button>
+                        </div>
+                    `).fadeIn(200);
+                }
             } else {
                 statusEl.html(`
                     <span class="badge bg-secondary-subtle text-secondary py-1 px-2">
@@ -2424,6 +2440,57 @@
                 `).fadeIn(200);
             }
         }
+    }
+
+    function showFirestoreRulesHelp() {
+        const emailStr = currentUser ? (currentUser.email || 'Usuário logado') : 'Não autenticado';
+        const modalHtml = `
+            <div class="modal fade" id="rulesHelpModal" tabindex="-1" style="z-index: 1070;">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content shadow-lg border-0">
+                        <div class="modal-header bg-light">
+                            <h6 class="modal-title fw-bold text-primary"><i class="bi bi-shield-lock-fill me-2"></i>Como Liberar Gravação no Firebase</h6>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body small">
+                            <div class="alert alert-info py-2 px-3 mb-3">
+                                <strong>Status Atual:</strong> Você está conectado como <code>${emailStr}</code>.<br>
+                                O Firebase Firestore recusou a escrita porque as <strong>Regras de Segurança (Rules)</strong> no console do Google estão bloqueando alterações.
+                            </div>
+                            <h6 class="fw-bold mb-2">Como resolver em 1 minuto:</h6>
+                            <ol class="ps-3 mb-3">
+                                <li class="mb-2">Acesse diretamente: <br><a href="https://console.firebase.google.com/project/biblioteca-app-8c0a8/firestore/rules" target="_blank" class="fw-bold text-primary text-break"><i class="bi bi-box-arrow-up-right me-1"></i>console.firebase.google.com/.../firestore/rules</a></li>
+                                <li class="mb-2">Na aba <strong>Regras (Rules)</strong>, substitua o código atual por esta regra:</li>
+                            </ol>
+                            <div class="position-relative mb-3">
+                                <pre class="bg-dark text-light p-2 rounded mb-0" style="font-size: 0.76rem; user-select: all;"><code>rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+  }
+}</code></pre>
+                            </div>
+                            <ol start="3" class="ps-3 mb-2">
+                                <li>Clique no botão azul <strong>Publicar (Publish)</strong> no Firebase Console.</li>
+                            </ol>
+                            <p class="text-muted mb-0 mt-2" style="font-size: 0.78rem;">
+                                Pronto! Com essa regra publicada, você autenticado terá permissão total para criar, editar livros e salvar sinopses.
+                            </p>
+                        </div>
+                        <div class="modal-footer py-2 bg-light">
+                            <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        $('#rulesHelpModal').remove();
+        $('body').append(modalHtml);
+        const m = new bootstrap.Modal(document.getElementById('rulesHelpModal'));
+        m.show();
     }
 
     function shareBookLink(bookId, title) {
@@ -2684,7 +2751,11 @@
                 await db.collection('books').doc(id).delete();
             } catch (e) {
                 if (e.code === 'permission-denied' || (e.message && e.message.toLowerCase().includes('permission'))) {
-                    alert('Permissão negada: É necessário estar conectado com a conta Google autorizada (luizfernandho@gmail.com).');
+                    if (currentUser) {
+                        alert(`Permissão negada pelo Firebase Firestore.\n\nVocê está conectado como: ${currentUser.email}.\nAs Regras de Segurança (Rules) no Firebase Console ainda não autorizaram a alteração.`);
+                    } else {
+                        alert('Permissão negada: É necessário estar conectado com sua conta Google de administrador.');
+                    }
                 } else {
                     alert('Erro ao apagar: ' + e.message);
                 }
@@ -2781,7 +2852,11 @@
             bookModal.hide();
         } catch (e) {
             if (e.code === 'permission-denied' || (e.message && e.message.toLowerCase().includes('permission'))) {
-                alert('Permissão negada: É necessário estar conectado com a conta Google autorizada (luizfernandho@gmail.com).');
+                if (currentUser) {
+                    alert(`Permissão negada pelo Firebase Firestore.\n\nVocê está conectado como: ${currentUser.email}.\nAs Regras de Segurança (Rules) no Firebase Console ainda estão bloqueando a gravação no banco.`);
+                } else {
+                    alert('Permissão negada: É necessário estar conectado com sua conta Google de administrador.');
+                }
             } else {
                 alert('Erro ao salvar: ' + e.message);
             }
