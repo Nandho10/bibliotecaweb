@@ -226,7 +226,7 @@
                     <option value="authors">Autor</option>
                     <option value="selo">Selo/Editora</option>
                     <option value="colecao">Coleção</option>
-                    <option value="genre">Literatura</option>
+                    <option value="genre">Categoria literária</option>
                     <option value="formato">Formato</option>
                 </select>
             </div>
@@ -296,7 +296,7 @@
                             <th>Selo</th>
                             <th>Grupo</th>
                             <th>Coleção</th>
-                            <th>Gênero literário</th>
+                            <th>Categoria literária</th>
                             <th>Formato</th>
                             <th>Status</th>
                             <th>Número de páginas</th>
@@ -410,7 +410,7 @@
                 </div>
                 <div class="card-body row g-3">
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold">Gênero literário</label>
+                        <label class="form-label fw-semibold">Categoria literária</label>
                         <select class="form-select dynamic-select" id="f_genre" data-category="generos_literarios"></select>
                     </div>
                     <div class="col-md-6">
@@ -528,7 +528,7 @@
             <option value="selos">Selos</option>
             <option value="grupos">Grupos</option>
             <option value="colecoes">Coleções</option>
-            <option value="generos_literarios">Gêneros Literários</option>
+            <option value="generos_literarios">Categorias literárias</option>
             <option value="formatos">Formatos</option>
             <option value="generos_autor">Gêneros do Autor</option>
             <option value="motivos_leitura">Motivos de Leitura (Por que li?)</option>
@@ -1200,7 +1200,7 @@
                                 <div class="spinner-border spinner-border-sm text-secondary m-auto" role="status"></div>
                             </div>
                             <div class="card-body d-flex flex-column">
-                                ${book.genre ? `<div class="mb-1"><span class="badge d-inline-block text-truncate" style="background-color: ${pTheme.badgeBg}; color: ${pTheme.badgeText}; font-size: 0.72rem; font-weight: 600; padding: 2px 7px; border: 1px solid ${pTheme.borderLight}; max-width: 100%;" title="Categoria Temática: ${book.genre}"><i class="bi bi-bookmark-fill me-1"></i>${book.genre}</span></div>` : ''}
+                                ${book.genre ? `<div class="mb-1"><span class="badge d-inline-block text-truncate" style="background-color: ${pTheme.badgeBg}; color: ${pTheme.badgeText}; font-size: 0.72rem; font-weight: 600; padding: 2px 7px; border: 1px solid ${pTheme.borderLight}; max-width: 100%;" title="Categoria literária: ${book.genre}"><i class="bi bi-bookmark-fill me-1"></i>${book.genre}</span></div>` : ''}
                                 <h5 class="card-title" title="${book.title}">${book.title}</h5>
                                 <p class="card-author mb-1">${book.authors}</p>
                                 <div class="card-footer-info mb-1">
