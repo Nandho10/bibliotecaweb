@@ -662,6 +662,7 @@
               <p class="mb-0 small text-secondary" id="detailSynopsis" style="line-height: 1.6; max-height: 180px; overflow-y: auto; white-space: pre-line;">
                 Sinopse não cadastrada.
               </p>
+              <div id="detailSynopsisStatus" class="mt-2" style="display: none;"></div>
             </div>
 
             <!-- Ficha Técnica -->
@@ -755,13 +756,35 @@
     auth.onAuthStateChanged(user => {
         currentUser = user;
         renderAuthUI(user);
+
+        // Se o usuário acabou de logar enquanto o modal de detalhes estava aberto com aviso de permissão, salva a sinopse automaticamente
+        if (user && $('#bookDetailsModal').hasClass('show') && $('#detailSynopsisStatus .alert-warning').length) {
+            const currentBookId = $('#bookDetailsModal').data('currentBookId');
+            const currentSynopsis = $('#detailSynopsis').text().trim();
+            if (currentBookId && currentSynopsis && !currentSynopsis.includes('não cadastrada')) {
+                db.collection('books').doc(currentBookId).update({ synopsis: currentSynopsis }).then(() => {
+                    $('#detailSynopsisStatus').html(`
+                        <span class="badge bg-success-subtle text-success border border-success-subtle py-1 px-2">
+                            <i class="bi bi-check-circle-fill me-1"></i>Conectado com sucesso! Sinopse salva no acervo.
+                        </span>
+                    `).show();
+                    setTimeout(() => $('#detailSynopsisStatus').fadeOut(600), 5000);
+                }).catch(err => console.warn(err));
+            }
+        }
     });
 
     function loginGoogle() {
         const provider = new firebase.auth.GoogleAuthProvider();
         auth.signInWithPopup(provider).catch(err => {
             console.error("Login error:", err);
-            alert("Erro ao autenticar com o Google: " + err.message);
+            if (err.code === 'auth/unauthorized-domain') {
+                alert("Domínio não autorizado no Firebase!\n\nPara permitir login no Vercel:\n1. Acesse o Firebase Console (console.firebase.google.com)\n2. Vá em Authentication -> Configurações (Settings) -> Domínios autorizados\n3. Adicione o domínio: " + window.location.hostname);
+            } else if (err.code === 'auth/popup-closed-by-user') {
+                console.log("Login cancelado pelo usuário.");
+            } else {
+                alert("Erro ao autenticar com o Google: " + err.message);
+            }
         });
     }
 
@@ -1726,9 +1749,9 @@
                 autores: [], tradutores: [], paises: [], selos: [], grupos: [], colecoes: [],
                 generos_literarios: [], formatos: [], generos_autor: [],
                 motivos_leitura: [], aquisicoes: [], meses: [], anos: [], status: ['Lido', 'Wishlist']
-            });
+            }).catch(() => {});
         }
-    });
+    }).catch(() => {});
 
     // Escutar mudanças nas listas
     settingsRef.onSnapshot(snapshot => {
@@ -1777,7 +1800,11 @@
         let currentArray = globalDropdownLists[category] || [];
         if (!currentArray.includes(value)) {
             currentArray.push(value);
-            await settingsRef.update({ [category]: currentArray });
+            try {
+                await settingsRef.update({ [category]: currentArray });
+            } catch(e) {
+                console.warn("Não foi possível persistir opção de lista no Firestore:", e);
+            }
         }
     }
 
@@ -2249,12 +2276,13 @@
         }
 
         const synopsis = book.synopsis || book.raw_data?.['Sinopse'] || '';
+        $('#detailSynopsisStatus').hide().empty();
         if (synopsis && synopsis.trim()) {
             $('#detailSynopsis').text(synopsis);
             $('#detailFetchSynopsisBtn').hide();
         } else {
             $('#detailSynopsis').html('<em class="text-muted">Sinopse ainda não cadastrada.</em>');
-            $('#detailFetchSynopsisBtn').show().off('click').on('click', () => fetchAndSaveSynopsis(book.id));
+            $('#detailFetchSynopsisBtn').prop('disabled', false).html('<i class="bi bi-arrow-clockwise"></i> Buscar sinopse online').show().off('click').on('click', () => fetchAndSaveSynopsis(book.id));
         }
 
         let techHtml = `
@@ -2316,6 +2344,7 @@
             shareBookLink(book.id, book.title);
         });
 
+        $('#bookDetailsModal').data('currentBookId', book.id);
         const modal = new bootstrap.Modal(document.getElementById('bookDetailsModal'));
         modal.show();
     }
@@ -2324,38 +2353,76 @@
         const book = allBooksData.find(b => b.id === bookId);
         if (!book) return;
 
-        $('#detailFetchSynopsisBtn').html('<span class="spinner-border spinner-border-sm me-1"></span>Buscando...');
+        const btn = $('#detailFetchSynopsisBtn');
+        const statusEl = $('#detailSynopsisStatus');
+        statusEl.hide().empty();
+
+        btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>Buscando...');
         let query = book.isbn ? `isbn:${book.isbn.replace(/\D/g, '')}` : `intitle:${encodeURIComponent(book.title)}`;
 
+        let synopsis = '';
         try {
-            let synopsis = '';
+            // 1. Tentar BrasilAPI pelo ISBN
             if (book.isbn) {
                 const clean = book.isbn.replace(/[^0-9X]/gi, '');
                 const bRes = await fetch(`https://brasilapi.com.br/api/isbn/v1/${clean}`).then(r => r.ok ? r.json() : null).catch(() => null);
                 if (bRes && bRes.synopsis) synopsis = bRes.synopsis;
             }
 
+            // 2. Tentar Google Books API
             if (!synopsis) {
                 const gRes = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}&maxResults=1`).then(r => r.ok ? r.json() : null).catch(() => null);
                 if (gRes && gRes.items && gRes.items.length > 0) {
                     synopsis = gRes.items[0].volumeInfo.description || '';
                 }
             }
-
-            if (synopsis) {
-                book.synopsis = synopsis;
-                $('#detailSynopsis').text(synopsis);
-                $('#detailFetchSynopsisBtn').hide();
-                await db.collection('books').doc(bookId).update({ synopsis: synopsis });
-                alert('Sinopse encontrada e salva com sucesso!');
-            } else {
-                alert('Nenhuma sinopse encontrada nas bases online para este livro.');
-                $('#detailFetchSynopsisBtn').html('<i class="bi bi-arrow-clockwise"></i> Tentar novamente');
-            }
         } catch(err) {
-            console.error(err);
-            alert('Erro ao buscar sinopse: ' + err.message);
-            $('#detailFetchSynopsisBtn').html('<i class="bi bi-arrow-clockwise"></i> Buscar sinopse online');
+            console.error("Erro na busca online de sinopse:", err);
+            btn.prop('disabled', false).html('<i class="bi bi-arrow-clockwise"></i> Buscar sinopse online');
+            alert('Não foi possível se conectar aos servidores de busca online: ' + err.message);
+            return;
+        }
+
+        btn.prop('disabled', false);
+
+        if (!synopsis || !synopsis.trim()) {
+            alert('Nenhuma sinopse encontrada nas bases online para este livro.');
+            btn.html('<i class="bi bi-arrow-clockwise"></i> Tentar novamente');
+            return;
+        }
+
+        // Sinopse obtida com sucesso: exibe na tela imediatamente!
+        book.synopsis = synopsis;
+        if (book.raw_data) book.raw_data['Sinopse'] = synopsis;
+        $('#detailSynopsis').text(synopsis);
+        btn.hide();
+
+        // Tentar salvar no Firestore de forma independente e não-bloqueante
+        try {
+            await db.collection('books').doc(bookId).update({ synopsis: synopsis });
+            statusEl.html(`
+                <span class="badge bg-success-subtle text-success border border-success-subtle py-1 px-2">
+                    <i class="bi bi-check-circle-fill me-1"></i>Sinopse salva no acervo com sucesso!
+                </span>
+            `).fadeIn(200);
+            setTimeout(() => statusEl.fadeOut(600), 5000);
+        } catch(dbErr) {
+            console.warn("Sinopse exibida na tela, mas persistência no Firestore falhou:", dbErr);
+            const isPerm = dbErr.code === 'permission-denied' || (dbErr.message && dbErr.message.toLowerCase().includes('permission'));
+            if (isPerm) {
+                statusEl.html(`
+                    <div class="alert alert-warning py-1 px-2 mb-0 small rounded-2 d-flex align-items-center justify-content-between gap-2">
+                        <span><i class="bi bi-shield-lock-fill me-1"></i>Sinopse carregada na tela! Para salvá-la permanentemente no acervo, conecte-se com sua conta Google de administrador.</span>
+                        ${!currentUser ? `<button class="btn btn-sm btn-primary py-0 px-2 text-nowrap" onclick="loginGoogle()">Entrar</button>` : ''}
+                    </div>
+                `).fadeIn(200);
+            } else {
+                statusEl.html(`
+                    <span class="badge bg-secondary-subtle text-secondary py-1 px-2">
+                        <i class="bi bi-info-circle me-1"></i>Sinopse visível na tela (não foi possível salvar no banco: ${dbErr.message || 'offline'}).
+                    </span>
+                `).fadeIn(200);
+            }
         }
     }
 
@@ -2439,7 +2506,15 @@
         if(confirm(`Tem certeza que deseja apagar "${val}" da lista?`)) {
             let currentArray = globalDropdownLists[cat] || [];
             currentArray = currentArray.filter(i => i !== val);
-            await settingsRef.update({ [cat]: currentArray });
+            try {
+                await settingsRef.update({ [cat]: currentArray });
+            } catch(e) {
+                if (e.code === 'permission-denied' || (e.message && e.message.toLowerCase().includes('permission'))) {
+                    alert('Permissão negada: É necessário estar conectado com a conta Google autorizada (luizfernandho@gmail.com).');
+                } else {
+                    alert('Erro ao apagar opção: ' + e.message);
+                }
+            }
         }
     }
 
@@ -2450,9 +2525,15 @@
             let currentArray = globalDropdownLists[cat] || [];
             currentArray = currentArray.filter(i => i !== oldVal);
             if (!currentArray.includes(newVal)) currentArray.push(newVal);
-            await settingsRef.update({ [cat]: currentArray });
-            
-            // Opcional futuro: Percorrer todos os livros que tinham oldVal e substituir por newVal (Update em massa)
+            try {
+                await settingsRef.update({ [cat]: currentArray });
+            } catch(e) {
+                if (e.code === 'permission-denied' || (e.message && e.message.toLowerCase().includes('permission'))) {
+                    alert('Permissão negada: É necessário estar conectado com a conta Google autorizada (luizfernandho@gmail.com).');
+                } else {
+                    alert('Erro ao editar opção: ' + e.message);
+                }
+            }
         }
     }
 
