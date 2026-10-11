@@ -97,8 +97,23 @@
         .card-view .card-img-container img { width: 100%; height: 100%; object-fit: cover; }
         .card-view .card-body { padding: 20px; display: flex; flex-direction: column; flex-grow: 1;}
         .card-view .card-title { font-size: 1.15rem; font-weight: 600; margin-bottom: 8px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; white-space: normal;}
-        .card-view .card-author { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 15px; font-weight: 500; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; white-space: normal;}
         .card-view .card-footer-info { margin-top: auto; display: flex; gap: 12px; font-size: 0.85rem; color: var(--text-muted); align-items: center;}
+        
+        /* Pastel Cards Theming */
+        .card-view .card.theme-pastel-card {
+            background: linear-gradient(135deg, var(--card-bg-light, var(--surface-color)) 0%, #ffffff 100%) !important;
+            border: 1px solid var(--card-border-light, rgba(0,0,0,0.05)) !important;
+        }
+        [data-bs-theme="dark"] .card-view .card.theme-pastel-card {
+            background: linear-gradient(135deg, var(--card-bg-dark, var(--surface-color)) 0%, #1e1e1e 100%) !important;
+            border: 1px solid var(--card-border-dark, rgba(255,255,255,0.08)) !important;
+        }
+        .card-view .card.theme-pastel-card .card-img-container {
+            border-right: 1px solid var(--card-border-light, rgba(0,0,0,0.05));
+        }
+        [data-bs-theme="dark"] .card-view .card.theme-pastel-card .card-img-container {
+            border-right: 1px solid var(--card-border-dark, rgba(255,255,255,0.08));
+        }
         
         .cover-view .card { border-radius: var(--border-radius); border: 1px solid rgba(0,0,0,0.03); overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.06); cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; background: var(--surface-color);}
         .cover-view .card:hover { transform: translateY(-8px); box-shadow: 0 16px 32px rgba(0,0,0,0.12); }
@@ -981,6 +996,158 @@
         return `<div class="fallback-cover"><div class="ftitle">${book.title}</div><div class="fauthor">${book.authors}</div></div>`;
     }
 
+    function getPastelThemeForGenre(genre) {
+        if (!genre || !String(genre).trim()) {
+            return {
+                bgLight: '#fafafa',
+                borderLight: 'rgba(0,0,0,0.06)',
+                bgDark: '#1e1e1e',
+                borderDark: 'rgba(255,255,255,0.08)',
+                badgeBg: 'rgba(108, 117, 125, 0.1)',
+                badgeText: 'var(--text-muted)'
+            };
+        }
+
+        const g = String(genre).toLowerCase().trim();
+
+        // 1. Mapeamento curado de categorias para tons pastel suaves e discretos
+        if (g.includes('fantasia') || g.includes('mitologia') || g.includes('conto de fadas')) {
+            return {
+                bgLight: '#f6f3fe',
+                borderLight: '#e4dcfb',
+                bgDark: '#201b2f',
+                borderDark: '#392e54',
+                badgeBg: 'rgba(124, 58, 237, 0.12)',
+                badgeText: '#7c3aed'
+            };
+        }
+        if (g.includes('ficção') || g.includes('ficcao') || g.includes('distopia') || g.includes('scifi')) {
+            return {
+                bgLight: '#f1f6fd',
+                borderLight: '#d7e4fa',
+                bgDark: '#182333',
+                borderDark: '#2b3d5c',
+                badgeBg: 'rgba(37, 99, 235, 0.12)',
+                badgeText: '#2563eb'
+            };
+        }
+        if (g.includes('suspense') || g.includes('mistério') || g.includes('misterio') || g.includes('terror') || g.includes('policial') || g.includes('thriller') || g.includes('crime')) {
+            return {
+                bgLight: '#f2f4f7',
+                borderLight: '#dce1e8',
+                bgDark: '#1c2128',
+                borderDark: '#313a48',
+                badgeBg: 'rgba(71, 85, 105, 0.12)',
+                badgeText: '#475569'
+            };
+        }
+        if (g.includes('acadêmico') || g.includes('academico') || g.includes('estudo') || g.includes('ciência') || g.includes('filosofia')) {
+            return {
+                bgLight: '#f0fdf9',
+                borderLight: '#cbf6ec',
+                bgDark: '#142925',
+                borderDark: '#1f443e',
+                badgeBg: 'rgba(13, 148, 136, 0.12)',
+                badgeText: '#0d9488'
+            };
+        }
+        if (g.includes('biografia') || g.includes('história') || g.includes('historia') || g.includes('memória') || g.includes('memoria')) {
+            return {
+                bgLight: '#f2f8f4',
+                borderLight: '#d5ebdc',
+                bgDark: '#19271e',
+                borderDark: '#2b4233',
+                badgeBg: 'rgba(16, 185, 129, 0.12)',
+                badgeText: '#059669'
+            };
+        }
+        if (g.includes('brasileira')) {
+            return {
+                bgLight: '#f1f9f5',
+                borderLight: '#d3ecde',
+                bgDark: '#172920',
+                borderDark: '#274636',
+                badgeBg: 'rgba(5, 150, 105, 0.12)',
+                badgeText: '#047857'
+            };
+        }
+        if (g.includes('francesa')) {
+            return {
+                bgLight: '#f3f6fc',
+                borderLight: '#d9e4f8',
+                bgDark: '#192233',
+                borderDark: '#2b3c58',
+                badgeBg: 'rgba(59, 130, 246, 0.12)',
+                badgeText: '#1d4ed8'
+            };
+        }
+        if (g.includes('inglesa') || g.includes('britânica') || g.includes('britanica') || g.includes('irlandesa')) {
+            return {
+                bgLight: '#fcf4f5',
+                borderLight: '#f7dde1',
+                bgDark: '#2b1c22',
+                borderDark: '#4d2f3a',
+                badgeBg: 'rgba(225, 29, 72, 0.12)',
+                badgeText: '#be123c'
+            };
+        }
+        if (g.includes('norte-americana') || g.includes('americana') || g.includes('alemã') || g.includes('alema')) {
+            return {
+                bgLight: '#fdf6ee',
+                borderLight: '#f7e1cd',
+                bgDark: '#2b2017',
+                borderDark: '#4a3727',
+                badgeBg: 'rgba(217, 119, 6, 0.12)',
+                badgeText: '#b45309'
+            };
+        }
+        if (g.includes('cristão') || g.includes('cristao') || g.includes('religião') || g.includes('religiao') || g.includes('desenvolvimento') || g.includes('autoajuda')) {
+            return {
+                bgLight: '#fdf9ee',
+                borderLight: '#f6ebc9',
+                bgDark: '#292314',
+                borderDark: '#463c22',
+                badgeBg: 'rgba(202, 138, 4, 0.12)',
+                badgeText: '#a16207'
+            };
+        }
+        if (g.includes('infanto') || g.includes('juvenil') || g.includes('hq') || g.includes('quadrinho')) {
+            return {
+                bgLight: '#fef5f0',
+                borderLight: '#fadcd0',
+                bgDark: '#2d1d18',
+                borderDark: '#4e3128',
+                badgeBg: 'rgba(234, 88, 12, 0.12)',
+                badgeText: '#c2410c'
+            };
+        }
+        if (g.includes('romance') || g.includes('clássico') || g.includes('classico') || g.includes('poesia') || g.includes('literatura')) {
+            return {
+                bgLight: '#fcf3f7',
+                borderLight: '#f6d9e5',
+                bgDark: '#2b1a23',
+                borderDark: '#4b2c3d',
+                badgeBg: 'rgba(219, 39, 119, 0.12)',
+                badgeText: '#be185d'
+            };
+        }
+
+        // 2. Geração determinística (hash) com tom pastel suave para qualquer outro gênero personalizado
+        let hash = 0;
+        for (let i = 0; i < g.length; i++) {
+            hash = g.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        const hue = Math.abs(hash) % 360;
+        return {
+            bgLight: `hsl(${hue}, 45%, 97%)`,
+            borderLight: `hsl(${hue}, 35%, 88%)`,
+            bgDark: `hsl(${hue}, 20%, 15%)`,
+            borderDark: `hsl(${hue}, 25%, 26%)`,
+            badgeBg: `hsla(${hue}, 50%, 50%, 0.12)`,
+            badgeText: `hsl(${hue}, 60%, 40%)`
+        };
+    }
+
     function renderCardsView(books, groupField = 'none') {
         const container = $('#cardsContainer');
         container.empty();
@@ -1010,6 +1177,9 @@
                 const anoMatch = String(book.ano_pub).match(/\d{4}/);
                 const anoStr = anoMatch ? `<span class="ms-2"><i class="bi bi-calendar3"></i> ${anoMatch[0]}</span>` : '';
                 
+                // Tema pastel suave baseado na Categoria Temática / Gênero
+                const pTheme = getPastelThemeForGenre(book.genre);
+
                 // Situação no acervo (Adquirido, Desejo ou Não Informado)
                 let aquisicaoBadge = '';
                 const aqRaw = (book.aquisicao || '').trim();
@@ -1025,11 +1195,12 @@
 
                 const card = $(`
                     <div class="col-md-6 col-lg-4">
-                        <div class="card">
+                        <div class="card theme-pastel-card" style="--card-bg-light: ${pTheme.bgLight}; --card-border-light: ${pTheme.borderLight}; --card-bg-dark: ${pTheme.bgDark}; --card-border-dark: ${pTheme.borderDark};">
                             <div class="card-img-container" id="${cardId}">
                                 <div class="spinner-border spinner-border-sm text-secondary m-auto" role="status"></div>
                             </div>
                             <div class="card-body d-flex flex-column">
+                                ${book.genre ? `<div class="mb-1"><span class="badge d-inline-block text-truncate" style="background-color: ${pTheme.badgeBg}; color: ${pTheme.badgeText}; font-size: 0.72rem; font-weight: 600; padding: 2px 7px; border: 1px solid ${pTheme.borderLight}; max-width: 100%;" title="Categoria Temática: ${book.genre}"><i class="bi bi-bookmark-fill me-1"></i>${book.genre}</span></div>` : ''}
                                 <h5 class="card-title" title="${book.title}">${book.title}</h5>
                                 <p class="card-author mb-1">${book.authors}</p>
                                 <div class="card-footer-info mb-1">
