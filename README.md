@@ -1,6 +1,6 @@
 # 📚 Minha Biblioteca Web
 
-Sistema moderno de gestão de acervo pessoal de livros, com interface web responsiva em tons pastel, sincronização em tempo real via Firebase Firestore, busca inteligente de metadados de livros por ISBN e leitor de código de barras pela câmera.
+Sistema moderno de gestão de acervo pessoal de livros, com interface web responsiva em tons pastel, sincronização em tempo real via Firebase Firestore, busca inteligente de metadados de livros por ISBN, leitor de código de barras pela câmera e suporte a aplicativo instalado (PWA).
 
 ---
 
@@ -31,30 +31,41 @@ service cloud.firestore {
 }
 ```
 
-> **Nota:** Para ativar o login Google no Firebase Console:
-> 1. Acesse o console do Firebase -> Projeto `biblioteca-app-8c0a8`.
-> 2. Vá em **Authentication** -> aba **Sign-in method**.
-> 3. Clique em **Google**, ative o provedor e salve.
-
 ---
 
 ## ✨ Funcionalidades Principais
-1. **Leitor de Código de Barras pela Câmera:**
-   - Ícone de câmera no campo de ISBN do modal de cadastro.
-   - Detecta o código EAN-13 / ISBN em tempo real via vídeo e emite confirmação sonora/visual.
-   - Dispara automaticamente a busca agregada de metadados.
-2. **Preenchimento Automático Multi-API por ISBN:**
-   - Consulta paralela nas bases gratuitas da **BrasilAPI (CBL)**, **Google Books API** e **OpenLibrary**.
-   - Preenchimento de título, autores, tradutores, editora/selo, páginas, ano, gênero, formato e país.
-3. **Persistência Inteligente de Capas:**
-   - Capas obtidas via API são salvas automaticamente no documento do livro no Firestore, eliminando novas requisições e acelerando o carregamento da biblioteca.
-4. **Design Pastel Suave e Cores por Categoria Temática:**
-   - Paleta suave para cada Categoria Literária com contraste adaptativo em modo Claro e Escuro.
-5. **Barra de Ações Compacta e Responsiva:**
-   - Destaque no botão primário `+ Novo Livro` e agrupamento das ferramentas secundárias em menu suspenso `Ações` (Gerenciar Listas, Exportar CSV, Exportar PDF, Atualizar via CSV).
-6. **Diferenciação Clara entre Situação do Acervo e Leitura:**
-   - **Situação (Acervo):** `Adquirido` ou `Desejo`.
-   - **Status de Leitura:** `Lido`, `Lendo`, `Aguardando`, `Não lido`, `Abandonado`.
+
+### 1. 📱 Suporte a PWA (Aplicativo no Celular)
+- Instale como app nativo no celular (Android e iOS) adicionando à tela de início.
+- Funciona em tela cheia com ícones dedicados e Service Worker de carregamento instantâneo.
+
+### 2. 📖 Ficha Catalográfica / Modal de Detalhes da Obra
+- Clique em qualquer livro (card, capa ou tabela) para abrir a ficha completa da obra sem entrar no formulário de edição.
+- Visualização de capa ampliada, sinopse, avaliação em estrelas, ficha técnica completa e notas de leitura.
+
+### 3. 📝 Captura e Exibição de Sinopse
+- As sinopses são extraídas automaticamente pelas APIs gratuitas ao informar o ISBN.
+- Botão "Buscar sinopse online" na ficha do livro caso o livro não possua sinopse cadastrada.
+
+### 4. 🎯 Desafio de Leitura Anual (Gamificação)
+- Exibido no topo do painel de **Estatísticas**.
+- Barra de progresso interativa da meta de livros lidos no ano e páginas acumuladas, com botão para ajustar a meta.
+
+### 5. ⭐ Avaliação em Estrelas & Tier Lists
+- Compatível com a classificação em tiers (*S, A, B, C, D, E*) e notas de 1 a 5 estrelas.
+- Badges dourados nos cards e nova opção de ordenação por **"Melhor avaliados (⭐)"** e **"Ano de Leitura"**.
+
+### 6. 🏷️ Filtro Rápido no Topo
+- Botões de acesso imediato: **Todos**, **No Acervo (Adquiridos)**, **Desejos**, **Lendo**, **Lidos**.
+- Permite isolar a lista de compras ou o acervo com um único toque.
+
+### 7. 🔗 Links Diretos e Compartilhamento
+- Botão "Compartilhar" na ficha de cada livro (`?book=ID`) para enviar recomendações para amigos ou abrir direto a obra.
+- Opção "Compartilhar Link da Estante" no menu de Ações.
+
+### 8. 📷 Leitor de Código de Barras e Persistência de Capas
+- Leitor via câmera integrado para códigos EAN-13 / ISBN.
+- Capas consultadas online são salvas automaticamente no Firestore, tornando o carregamento instantâneo.
 
 ---
 
