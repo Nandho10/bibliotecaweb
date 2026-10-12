@@ -455,6 +455,12 @@
                             <i class="bi bi-arrow-clockwise me-2 text-warning"></i> Atualizar via CSV
                         </a>
                     </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item fw-semibold" href="javascript:void(0)" onclick="openHerancaImportModal()" style="color: #b45309;">
+                            <i class="bi bi-hourglass-split me-2 text-warning"></i> Importar Plano Herança (35 Anos)
+                        </a>
+                    </li>
                 </ul>
             </div>
             <input type="file" id="csvFileInput" accept=".csv" style="display: none;" onchange="processCSVUpdate()">
@@ -1020,8 +1026,76 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
+<!-- Modal Importar Plano Herança (35 Anos) -->
+<div class="modal fade" id="herancaImportModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0">
+      <div class="modal-header bg-warning bg-opacity-10 border-bottom border-warning border-opacity-25">
+        <h5 class="modal-title fw-bold text-dark d-flex align-items-center gap-2">
+          <i class="bi bi-hourglass-split text-warning fs-4"></i> Importar Plano Biblioteca Herança (35 Anos)
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="alert alert-warning border-0 rounded-3 mb-4">
+          <div class="fw-bold mb-1"><i class="bi bi-info-circle me-1"></i> 780 Obras Mapeadas · 2026 a 2061</div>
+          <div class="small">
+            Este assistente irá carregar no seu sistema os livros curados no plano oficial de herança.
+            <br>• Os livros entram como <strong>Situação: "Desejo"</strong> e <strong>Status: "Aguardando"</strong>, com a Fase, o Ano e o Papel (Pilar / Prazer) pré-configurados.
+            <br>• <strong>Livros já existentes na sua biblioteca não serão duplicados</strong> (o sistema detecta pelo título do livro e apenas vincula os dados de herança caso você queira).
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Escolha o que deseja importar:</label>
+          <select class="form-select" id="herancaImportScopeSelect" onchange="updateHerancaImportPreview()">
+            <option value="all">Todas as 7 Fases Completas (780 livros · 35 anos)</option>
+            <option value="Fase I">Apenas Fase I (Anos 1 a 5 — A Pedra Fundamental · 120 livros)</option>
+            <option value="Fase II">Apenas Fase II (Anos 6 a 10 — Os Grandes Universos · 120 livros)</option>
+            <option value="Fase III">Apenas Fase III (Anos 11 a 15 — Sombras e Enigmas · 120 livros)</option>
+            <option value="Fase IV">Apenas Fase IV (Anos 16 a 20 — Brasil e Língua Portuguesa · 120 livros)</option>
+            <option value="Fase V">Apenas Fase V (Anos 21 a 25 — O Romance Universal · 120 livros)</option>
+            <option value="Fase VI">Apenas Fase VI (Anos 26 a 30 — Pensamento, História e Ciência · 120 livros)</option>
+            <option value="Fase VII">Apenas Fase VII (Anos 31 a 35 — Coroamento · 60 livros)</option>
+            <option value="Ano 1">Apenas o Ano 1 (2026 — Os Alicerces · 24 livros)</option>
+          </select>
+        </div>
+
+        <div class="card bg-light border-0 rounded-3 p-3 mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="fw-bold small text-muted text-uppercase">Resumo da Seleção</span>
+            <span class="badge bg-primary rounded-pill px-3 py-1" id="herancaPreviewBadgeCount">780 livros selecionados</span>
+          </div>
+          <div class="small text-secondary" id="herancaPreviewDetails">
+            Carregando dados...
+          </div>
+        </div>
+
+        <div id="herancaImportProgressArea" style="display: none;">
+          <div class="d-flex justify-content-between small fw-semibold text-muted mb-1">
+            <span id="herancaImportStatusText">Gravando livros no banco de dados...</span>
+            <span id="herancaImportPercentText">0%</span>
+          </div>
+          <div class="progress mb-2" style="height: 10px;">
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" id="herancaImportProgressBar" role="progressbar" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer bg-light border-top">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelHerancaImport">Fechar</button>
+        <button type="button" class="btn btn-warning fw-semibold px-4" id="btnStartHerancaImport" onclick="startHerancaImport()">
+          <i class="bi bi-cloud-arrow-up-fill me-1"></i> Iniciar Importação
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Barcode Scanner (html5-qrcode) -->
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+<!-- Dados Curados do Plano Herança -->
+<script src="/static/js/heranca_data.js"></script>
 
 <script>
     const firebaseConfig = {
@@ -4504,6 +4578,208 @@ service cloud.firestore {
         };
         // O Excel CSV geralmente usa UTF-8 agora. Ler como UTF-8 padrão.
         reader.readAsText(file);
+    }
+
+    // =========================================================================
+    // IMPORTAÇÃO OFICIAL DO PLANO BIBLIOTECA HERANÇA (35 ANOS)
+    // =========================================================================
+    let herancaImportModalInstance = null;
+
+    function openHerancaImportModal() {
+        if (!herancaImportModalInstance) {
+            herancaImportModalInstance = new bootstrap.Modal(document.getElementById('herancaImportModal'));
+        }
+        updateHerancaImportPreview();
+        $('#herancaImportProgressArea').hide();
+        $('#btnStartHerancaImport').prop('disabled', false).show();
+        $('#btnCancelHerancaImport').text('Fechar');
+        herancaImportModalInstance.show();
+    }
+
+    function getSelectedHerancaBooks() {
+        if (typeof HERANCA_PLAN_DATA === 'undefined' || !Array.isArray(HERANCA_PLAN_DATA)) {
+            return [];
+        }
+        const scope = $('#herancaImportScopeSelect').val();
+        if (scope === 'all') {
+            return HERANCA_PLAN_DATA;
+        } else if (scope === 'Ano 1') {
+            return HERANCA_PLAN_DATA.filter(b => b.ano && b.ano.includes('Ano 1 '));
+        } else {
+            return HERANCA_PLAN_DATA.filter(b => b.fase === scope);
+        }
+    }
+
+    function updateHerancaImportPreview() {
+        const selected = getSelectedHerancaBooks();
+        $('#herancaPreviewBadgeCount').text(`${selected.length} livros selecionados`);
+
+        // Compara com os livros já existentes na biblioteca (por título similar ou igual)
+        const existingTitles = new Set(allBooksData.map(b => (b.title || '').trim().toLowerCase()));
+        let alreadyInLib = 0;
+        let newToImport = 0;
+
+        selected.forEach(b => {
+            const t = (b.titulo || '').trim().toLowerCase();
+            if (existingTitles.has(t)) {
+                alreadyInLib++;
+            } else {
+                newToImport++;
+            }
+        });
+
+        $('#herancaPreviewDetails').html(`
+            <div class="d-flex justify-content-between align-items-center mb-1">
+                <span><i class="bi bi-plus-circle text-success me-1"></i>Novos para adicionar à Lista de Desejos:</span>
+                <strong class="text-success">${newToImport}</strong>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-link-45deg text-primary me-1"></i>Já detectados no seu acervo (serão atualizados com a Fase/Ano):</span>
+                <strong class="text-primary">${alreadyInLib}</strong>
+            </div>
+        `);
+    }
+
+    async function startHerancaImport() {
+        if (!currentUser) {
+            alert('Atenção: É necessário estar conectado com sua conta Google de administrador para gravar os livros no Firebase.');
+            return;
+        }
+
+        const selected = getSelectedHerancaBooks();
+        if (selected.length === 0) {
+            alert('Nenhum livro selecionado para importação.');
+            return;
+        }
+
+        const btn = $('#btnStartHerancaImport');
+        btn.prop('disabled', true);
+        $('#btnCancelHerancaImport').prop('disabled', true);
+        $('#herancaImportProgressArea').show();
+
+        const progressBar = $('#herancaImportProgressBar');
+        const statusText = $('#herancaImportStatusText');
+        const percentText = $('#herancaImportPercentText');
+
+        let createdCount = 0;
+        let linkedCount = 0;
+        const total = selected.length;
+
+        // Mapeamento em minúsculas para encontrar correspondências existentes
+        const existingMap = new Map();
+        allBooksData.forEach(b => {
+            if (b.title) {
+                existingMap.set(b.title.trim().toLowerCase(), b);
+            }
+        });
+
+        // Executa em lotes (batch) do Firestore de até 400 operações por vez
+        const BATCH_SIZE = 400;
+        let batch = db.batch();
+        let batchOperations = 0;
+
+        for (let i = 0; i < total; i++) {
+            const item = selected[i];
+            const cleanTitle = (item.titulo || '').trim();
+            const lowerTitle = cleanTitle.toLowerCase();
+            const matchedBook = existingMap.get(lowerTitle);
+
+            if (matchedBook) {
+                // Livro já existe: atualiza apenas os metadados do Plano Herança
+                const docRef = db.collection('books').doc(matchedBook.id);
+                batch.update(docRef, {
+                    heranca_fase: item.fase,
+                    heranca_ano: item.ano,
+                    heranca_papel: item.papel,
+                    heranca_ordem: item.ordem,
+                    'raw_data.Fase do Plano': item.fase,
+                    'raw_data.Ano do Plano': item.ano,
+                    'raw_data.Papel no Plano': item.papel,
+                    'raw_data.Ordem no Ano': item.ordem
+                });
+                linkedCount++;
+                batchOperations++;
+            } else {
+                // Livro novo: cria na Lista de Desejos com os campos de Herança preenchidos
+                const docRef = db.collection('books').doc();
+                const raw = {
+                    'Ano de Publicação': '',
+                    'Selo': '',
+                    'Grupo editorial': '',
+                    'Coleção': '',
+                    'Formato': 'Capa Dura',
+                    'Status': 'Aguardando',
+                    'Aquisição': 'Desejo',
+                    'Fase do Plano': item.fase,
+                    'Ano do Plano': item.ano,
+                    'Papel no Plano': item.papel,
+                    'Ordem no Ano': item.ordem,
+                    'Capa Dura Herança': true,
+                    'Costurado Herança': true,
+                    'Papel Alcalino Herança': true,
+                    'Tradução Referência Herança': true,
+                    'Por que entrou na herança?': ''
+                };
+
+                const newBookPayload = {
+                    title: cleanTitle,
+                    isbn: '',
+                    authors: item.autor || 'Autor Clássico',
+                    genre: 'Clássico / Herança',
+                    publisher: '',
+                    colecao: '',
+                    pages: '',
+                    cover_url: '',
+                    status: 'Aguardando',
+                    aquisicao: 'Desejo',
+                    nota: '',
+                    synopsis: '',
+                    heranca_fase: item.fase,
+                    heranca_ano: item.ano,
+                    heranca_papel: item.papel,
+                    heranca_ordem: item.ordem,
+                    heranca_capadura: true,
+                    heranca_costurado: true,
+                    heranca_papelalcalino: true,
+                    heranca_traducao: true,
+                    heranca_motivo: '',
+                    raw_data: raw,
+                    addedAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+
+                batch.set(docRef, newBookPayload);
+                createdCount++;
+                batchOperations++;
+            }
+
+            // Comita lote quando atinge o limite ou no final
+            if (batchOperations >= BATCH_SIZE || i === total - 1) {
+                const percent = Math.round(((i + 1) / total) * 100);
+                progressBar.css('width', `${percent}%`);
+                percentText.text(`${percent}%`);
+                statusText.text(`Salvando no Firestore (${i + 1} de ${total})...`);
+
+                try {
+                    await batch.commit();
+                } catch (batchErr) {
+                    console.error("Erro no batch do Firestore:", batchErr);
+                    alert("Erro ao gravar lote no banco de dados: " + batchErr.message);
+                    btn.prop('disabled', false);
+                    $('#btnCancelHerancaImport').prop('disabled', false);
+                    return;
+                }
+                batch = db.batch();
+                batchOperations = 0;
+            }
+        }
+
+        progressBar.css('width', '100%').removeClass('bg-warning').addClass('bg-success');
+        percentText.text('100%');
+        statusText.html(`<i class="bi bi-check-circle-fill text-success me-1"></i>Concluído com sucesso!`);
+        btn.hide();
+        $('#btnCancelHerancaImport').prop('disabled', false).text('Fechar');
+
+        alert(`Sucesso! Importação da Biblioteca Herança concluída:\n\n• ${createdCount} novos livros cadastrados na Lista de Desejos\n• ${linkedCount} livros já existentes vinculados ao Plano Herança.`);
     }
 </script>
 

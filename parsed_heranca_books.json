@@ -1,0 +1,7022 @@
+[
+  {
+    "ordem": 1,
+    "fase": "Fase I",
+    "ano": "Ano 1 (2026) — Os Alicerces",
+    "autor": "Diversos / Sagrado e Família",
+    "titulo": "Bíblia — edição de família, capa dura (Bíblia de Jerusalém ou Almeida)",
+    "aposta": false,
+    "papel": "Livro de Luxo"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase I",
+    "ano": "Ano 1 (2026) — Os Alicerces",
+    "autor": "Homero",
+    "titulo": "Odisseia",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase I",
+    "ano": "Ano 1 (2026) — Os Alicerces",
+    "autor": "Homero",
+    "titulo": "Ilíada",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase I",
+    "ano": "Ano 1 (2026) — Os Alicerces",
+    "autor": "Dante",
+    "titulo": "A Divina Comédia: Inferno",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase I",
+    "ano": "Ano 1 (2026) — Os Alicerces",
+    "autor": "Dante",
+    "titulo": "A Divina Comédia: Purgatório",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase I",
+    "ano": "Ano 1 (2026) — Os Alicerces",
+    "autor": "Dante",
+    "titulo": "A Divina Comédia: Paraíso",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase I",
+    "ano": "Ano 1 (2026) — Os Alicerces",
+    "autor": "Cervantes",
+    "titulo": "Dom Quixote, vol. I",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase I",
+    "ano": "Ano 1 (2026) — Os Alicerces",
+    "autor": "Cervantes",
+    "titulo": "Dom Quixote, vol. II",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase I",
+    "ano": "Ano 1 (2026) — Os Alicerces",
+    "autor": "Shakespeare",
+    "titulo": "Hamlet",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase I",
+    "ano": "Ano 1 (2026) — Os Alicerces",
+    "autor": "Shakespeare",
+    "titulo": "Macbeth",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase I",
+    "ano": "Ano 1 (2026) — Os Alicerces",
+    "autor": "Shakespeare",
+    "titulo": "Rei Lear",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase I",
+    "ano": "Ano 1 (2026) — Os Alicerces",
+    "autor": "Machado de Assis",
+    "titulo": "Memórias Póstumas de Brás Cubas",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase I",
+    "ano": "Ano 1 (2026) — Os Alicerces",
+    "autor": "Machado de Assis",
+    "titulo": "Dom Casmurro",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase I",
+    "ano": "Ano 1 (2026) — Os Alicerces",
+    "autor": "J. R. R. Tolkien",
+    "titulo": "O Silmarillion",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase I",
+    "ano": "Ano 1 (2026) — Os Alicerces",
+    "autor": "Arthur Conan Doyle",
+    "titulo": "Um Estudo em Vermelho",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase I",
+    "ano": "Ano 1 (2026) — Os Alicerces",
+    "autor": "Arthur Conan Doyle",
+    "titulo": "O Cão dos Baskervilles",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase I",
+    "ano": "Ano 1 (2026) — Os Alicerces",
+    "autor": "Agatha Christie",
+    "titulo": "O Assassinato de Roger Ackroyd",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase I",
+    "ano": "Ano 1 (2026) — Os Alicerces",
+    "autor": "Edgar Allan Poe",
+    "titulo": "Contos de Imaginação e Mistério (edição Darkside ou Zahar)",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase I",
+    "ano": "Ano 1 (2026) — Os Alicerces",
+    "autor": "Jane Austen",
+    "titulo": "Orgulho e Preconceito",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase I",
+    "ano": "Ano 1 (2026) — Os Alicerces",
+    "autor": "Alexandre Dumas",
+    "titulo": "O Conde de Monte Cristo",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase I",
+    "ano": "Ano 1 (2026) — Os Alicerces",
+    "autor": "George Orwell",
+    "titulo": "1984",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase I",
+    "ano": "Ano 1 (2026) — Os Alicerces",
+    "autor": "Gabriel García Márquez",
+    "titulo": "Cem Anos de Solidão",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase I",
+    "ano": "Ano 1 (2026) — Os Alicerces",
+    "autor": "Edith Hamilton",
+    "titulo": "Mitologia",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase I",
+    "ano": "Ano 1 (2026) — Os Alicerces",
+    "autor": "Monteiro Lobato",
+    "titulo": "Reinações de Narizinho",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase I",
+    "ano": "Ano 2 (2027) — O Grande Romance",
+    "autor": "Fiódor Dostoiévski",
+    "titulo": "Crime e Castigo",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase I",
+    "ano": "Ano 2 (2027) — O Grande Romance",
+    "autor": "Fiódor Dostoiévski",
+    "titulo": "Os Irmãos Karamázov",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase I",
+    "ano": "Ano 2 (2027) — O Grande Romance",
+    "autor": "Liev Tolstói",
+    "titulo": "Guerra e Paz",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase I",
+    "ano": "Ano 2 (2027) — O Grande Romance",
+    "autor": "Liev Tolstói",
+    "titulo": "Anna Kariênina",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase I",
+    "ano": "Ano 2 (2027) — O Grande Romance",
+    "autor": "Victor Hugo",
+    "titulo": "Os Miseráveis",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase I",
+    "ano": "Ano 2 (2027) — O Grande Romance",
+    "autor": "Charles Dickens",
+    "titulo": "Grandes Esperanças",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase I",
+    "ano": "Ano 2 (2027) — O Grande Romance",
+    "autor": "Charles Dickens",
+    "titulo": "Um Conto de Natal",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase I",
+    "ano": "Ano 2 (2027) — O Grande Romance",
+    "autor": "Emily Brontë",
+    "titulo": "O Morro dos Ventos Uivantes",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase I",
+    "ano": "Ano 2 (2027) — O Grande Romance",
+    "autor": "Charlotte Brontë",
+    "titulo": "Jane Eyre",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase I",
+    "ano": "Ano 2 (2027) — O Grande Romance",
+    "autor": "Jane Austen",
+    "titulo": "Razão e Sensibilidade",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase I",
+    "ano": "Ano 2 (2027) — O Grande Romance",
+    "autor": "Guimarães Rosa",
+    "titulo": "Grande Sertão: Veredas",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase I",
+    "ano": "Ano 2 (2027) — O Grande Romance",
+    "autor": "Clarice Lispector",
+    "titulo": "A Paixão Segundo G.H.",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase I",
+    "ano": "Ano 2 (2027) — O Grande Romance",
+    "autor": "Fernando Pessoa",
+    "titulo": "Livro do Desassossego",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase I",
+    "ano": "Ano 2 (2027) — O Grande Romance",
+    "autor": "Luís de Camões",
+    "titulo": "Os Lusíadas",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase I",
+    "ano": "Ano 2 (2027) — O Grande Romance",
+    "autor": "Franz Kafka",
+    "titulo": "O Processo",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase I",
+    "ano": "Ano 2 (2027) — O Grande Romance",
+    "autor": "Albert Camus",
+    "titulo": "O Estrangeiro",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase I",
+    "ano": "Ano 2 (2027) — O Grande Romance",
+    "autor": "Aldous Huxley",
+    "titulo": "Admirável Mundo Novo",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase I",
+    "ano": "Ano 2 (2027) — O Grande Romance",
+    "autor": "Ray Bradbury",
+    "titulo": "Fahrenheit 451",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase I",
+    "ano": "Ano 2 (2027) — O Grande Romance",
+    "autor": "Isaac Asimov",
+    "titulo": "Fundação",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase I",
+    "ano": "Ano 2 (2027) — O Grande Romance",
+    "autor": "Frank Herbert",
+    "titulo": "Duna",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase I",
+    "ano": "Ano 2 (2027) — O Grande Romance",
+    "autor": "Agatha Christie",
+    "titulo": "Cartas na Mesa",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase I",
+    "ano": "Ano 2 (2027) — O Grande Romance",
+    "autor": "Stephen King",
+    "titulo": "O Iluminado",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase I",
+    "ano": "Ano 2 (2027) — O Grande Romance",
+    "autor": "Terry Pratchett",
+    "titulo": "Guardas! Guardas!",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase I",
+    "ano": "Ano 2 (2027) — O Grande Romance",
+    "autor": "Thomas Bulfinch",
+    "titulo": "O Livro de Ouro da Mitologia",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase I",
+    "ano": "Ano 3 (2028) — Raízes Antigas e Mundo Moderno",
+    "autor": "Virgílio",
+    "titulo": "Eneida",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase I",
+    "ano": "Ano 3 (2028) — Raízes Antigas e Mundo Moderno",
+    "autor": "Ovídio",
+    "titulo": "Metamorfoses",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase I",
+    "ano": "Ano 3 (2028) — Raízes Antigas e Mundo Moderno",
+    "autor": "Sófocles",
+    "titulo": "Trilogia Tebana (Édipo Rei, Édipo em Colono, Antígona)",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase I",
+    "ano": "Ano 3 (2028) — Raízes Antigas e Mundo Moderno",
+    "autor": "Ésquilo",
+    "titulo": "Oresteia",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase I",
+    "ano": "Ano 3 (2028) — Raízes Antigas e Mundo Moderno",
+    "autor": "Goethe",
+    "titulo": "Fausto",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase I",
+    "ano": "Ano 3 (2028) — Raízes Antigas e Mundo Moderno",
+    "autor": "John Milton",
+    "titulo": "Paraíso Perdido",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase I",
+    "ano": "Ano 3 (2028) — Raízes Antigas e Mundo Moderno",
+    "autor": "Mark Twain",
+    "titulo": "As Aventuras de Huckleberry Finn",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase I",
+    "ano": "Ano 3 (2028) — Raízes Antigas e Mundo Moderno",
+    "autor": "Herman Melville",
+    "titulo": "Moby Dick",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase I",
+    "ano": "Ano 3 (2028) — Raízes Antigas e Mundo Moderno",
+    "autor": "F. Scott Fitzgerald",
+    "titulo": "O Grande Gatsby",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase I",
+    "ano": "Ano 3 (2028) — Raízes Antigas e Mundo Moderno",
+    "autor": "Ernest Hemingway",
+    "titulo": "O Velho e o Mar",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase I",
+    "ano": "Ano 3 (2028) — Raízes Antigas e Mundo Moderno",
+    "autor": "John Steinbeck",
+    "titulo": "As Vinhas da Ira",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase I",
+    "ano": "Ano 3 (2028) — Raízes Antigas e Mundo Moderno",
+    "autor": "Harper Lee",
+    "titulo": "O Sol É para Todos",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase I",
+    "ano": "Ano 3 (2028) — Raízes Antigas e Mundo Moderno",
+    "autor": "J. D. Salinger",
+    "titulo": "O Apanhador no Campo de Centeio",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase I",
+    "ano": "Ano 3 (2028) — Raízes Antigas e Mundo Moderno",
+    "autor": "Eça de Queirós",
+    "titulo": "Os Maias",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase I",
+    "ano": "Ano 3 (2028) — Raízes Antigas e Mundo Moderno",
+    "autor": "José Saramago",
+    "titulo": "Ensaio sobre a Cegueira",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase I",
+    "ano": "Ano 3 (2028) — Raízes Antigas e Mundo Moderno",
+    "autor": "Graciliano Ramos",
+    "titulo": "São Bernardo",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase I",
+    "ano": "Ano 3 (2028) — Raízes Antigas e Mundo Moderno",
+    "autor": "Jorge Amado",
+    "titulo": "Capitães da Areia",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase I",
+    "ano": "Ano 3 (2028) — Raízes Antigas e Mundo Moderno",
+    "autor": "Umberto Eco",
+    "titulo": "O Nome da Rosa",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase I",
+    "ano": "Ano 3 (2028) — Raízes Antigas e Mundo Moderno",
+    "autor": "Ursula K. Le Guin",
+    "titulo": "Um Mago de Terramar",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase I",
+    "ano": "Ano 3 (2028) — Raízes Antigas e Mundo Moderno",
+    "autor": "Neil Gaiman",
+    "titulo": "Deuses Americanos",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase I",
+    "ano": "Ano 3 (2028) — Raízes Antigas e Mundo Moderno",
+    "autor": "Arthur Conan Doyle",
+    "titulo": "O Signo dos Quatro",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase I",
+    "ano": "Ano 3 (2028) — Raízes Antigas e Mundo Moderno",
+    "autor": "Patricia Highsmith",
+    "titulo": "O Talentoso Ripley",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase I",
+    "ano": "Ano 3 (2028) — Raízes Antigas e Mundo Moderno",
+    "autor": "Shirley Jackson",
+    "titulo": "A Assombração da Casa da Colina",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase I",
+    "ano": "Ano 3 (2028) — Raízes Antigas e Mundo Moderno",
+    "autor": "Esopo",
+    "titulo": "Fábulas",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase I",
+    "ano": "Ano 4 (2029) — Teatro, Brasil e Sombras",
+    "autor": "Shakespeare",
+    "titulo": "Otelo",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase I",
+    "ano": "Ano 4 (2029) — Teatro, Brasil e Sombras",
+    "autor": "Shakespeare",
+    "titulo": "Romeu e Julieta",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase I",
+    "ano": "Ano 4 (2029) — Teatro, Brasil e Sombras",
+    "autor": "Shakespeare",
+    "titulo": "Sonho de uma Noite de Verão",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase I",
+    "ano": "Ano 4 (2029) — Teatro, Brasil e Sombras",
+    "autor": "Shakespeare",
+    "titulo": "A Tempestade",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase I",
+    "ano": "Ano 4 (2029) — Teatro, Brasil e Sombras",
+    "autor": "Machado de Assis",
+    "titulo": "Quincas Borba",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase I",
+    "ano": "Ano 4 (2029) — Teatro, Brasil e Sombras",
+    "autor": "Machado de Assis",
+    "titulo": "Contos (seleção com O Alienista)",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase I",
+    "ano": "Ano 4 (2029) — Teatro, Brasil e Sombras",
+    "autor": "Clarice Lispector",
+    "titulo": "Laços de Família",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase I",
+    "ano": "Ano 4 (2029) — Teatro, Brasil e Sombras",
+    "autor": "Guimarães Rosa",
+    "titulo": "Sagarana",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase I",
+    "ano": "Ano 4 (2029) — Teatro, Brasil e Sombras",
+    "autor": "Carlos Drummond de Andrade",
+    "titulo": "Antologia Poética",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase I",
+    "ano": "Ano 4 (2029) — Teatro, Brasil e Sombras",
+    "autor": "Euclides da Cunha",
+    "titulo": "Os Sertões",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase I",
+    "ano": "Ano 4 (2029) — Teatro, Brasil e Sombras",
+    "autor": "Mário de Andrade",
+    "titulo": "Macunaíma",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase I",
+    "ano": "Ano 4 (2029) — Teatro, Brasil e Sombras",
+    "autor": "Jorge Luis Borges",
+    "titulo": "Ficções",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase I",
+    "ano": "Ano 4 (2029) — Teatro, Brasil e Sombras",
+    "autor": "Albert Camus",
+    "titulo": "A Peste",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase I",
+    "ano": "Ano 4 (2029) — Teatro, Brasil e Sombras",
+    "autor": "Hermann Hesse",
+    "titulo": "Sidarta",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase I",
+    "ano": "Ano 4 (2029) — Teatro, Brasil e Sombras",
+    "autor": "Virginia Woolf",
+    "titulo": "Mrs. Dalloway",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase I",
+    "ano": "Ano 4 (2029) — Teatro, Brasil e Sombras",
+    "autor": "Daphne du Maurier",
+    "titulo": "Rebecca",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase I",
+    "ano": "Ano 4 (2029) — Teatro, Brasil e Sombras",
+    "autor": "Stephen King",
+    "titulo": "It: A Coisa",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase I",
+    "ano": "Ano 4 (2029) — Teatro, Brasil e Sombras",
+    "autor": "H. P. Lovecraft",
+    "titulo": "Medo Clássico, vol. 1 (Darkside)",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase I",
+    "ano": "Ano 4 (2029) — Teatro, Brasil e Sombras",
+    "autor": "J. R. R. Tolkien",
+    "titulo": "Contos Inacabados",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase I",
+    "ano": "Ano 4 (2029) — Teatro, Brasil e Sombras",
+    "autor": "Isaac Asimov",
+    "titulo": "Eu, Robô",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase I",
+    "ano": "Ano 4 (2029) — Teatro, Brasil e Sombras",
+    "autor": "Philip K. Dick",
+    "titulo": "O Homem do Castelo Alto",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase I",
+    "ano": "Ano 4 (2029) — Teatro, Brasil e Sombras",
+    "autor": "Raymond Chandler",
+    "titulo": "O Sono Eterno",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase I",
+    "ano": "Ano 4 (2029) — Teatro, Brasil e Sombras",
+    "autor": "Agatha Christie",
+    "titulo": "Convite para um Homicídio",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase I",
+    "ano": "Ano 4 (2029) — Teatro, Brasil e Sombras",
+    "autor": "Joseph Campbell",
+    "titulo": "O Herói de Mil Faces",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase I",
+    "ano": "Ano 5 (2030) — O Século XIX em Plenitude",
+    "autor": "Charles Dickens",
+    "titulo": "Oliver Twist",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase I",
+    "ano": "Ano 5 (2030) — O Século XIX em Plenitude",
+    "autor": "Charles Dickens",
+    "titulo": "David Copperfield",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase I",
+    "ano": "Ano 5 (2030) — O Século XIX em Plenitude",
+    "autor": "Thomas Hardy",
+    "titulo": "Tess dos D'Urbervilles",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase I",
+    "ano": "Ano 5 (2030) — O Século XIX em Plenitude",
+    "autor": "Gustave Flaubert",
+    "titulo": "Madame Bovary",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase I",
+    "ano": "Ano 5 (2030) — O Século XIX em Plenitude",
+    "autor": "Victor Hugo",
+    "titulo": "O Corcunda de Notre-Dame",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase I",
+    "ano": "Ano 5 (2030) — O Século XIX em Plenitude",
+    "autor": "Alexandre Dumas",
+    "titulo": "Os Três Mosqueteiros",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase I",
+    "ano": "Ano 5 (2030) — O Século XIX em Plenitude",
+    "autor": "Robert Louis Stevenson",
+    "titulo": "O Médico e o Monstro",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase I",
+    "ano": "Ano 5 (2030) — O Século XIX em Plenitude",
+    "autor": "Eça de Queirós",
+    "titulo": "O Primo Basílio",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase I",
+    "ano": "Ano 5 (2030) — O Século XIX em Plenitude",
+    "autor": "José Saramago",
+    "titulo": "Memorial do Convento",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase I",
+    "ano": "Ano 5 (2030) — O Século XIX em Plenitude",
+    "autor": "Lima Barreto",
+    "titulo": "Triste Fim de Policarpo Quaresma",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase I",
+    "ano": "Ano 5 (2030) — O Século XIX em Plenitude",
+    "autor": "Érico Veríssimo",
+    "titulo": "O Tempo e o Vento: O Continente, parte I",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase I",
+    "ano": "Ano 5 (2030) — O Século XIX em Plenitude",
+    "autor": "Fernando Pessoa",
+    "titulo": "Poesia (obra poética de Pessoa e heterônimos)",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase I",
+    "ano": "Ano 5 (2030) — O Século XIX em Plenitude",
+    "autor": "Jorge Amado",
+    "titulo": "Gabriela, Cravo e Canela",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase I",
+    "ano": "Ano 5 (2030) — O Século XIX em Plenitude",
+    "autor": "Gabriel García Márquez",
+    "titulo": "O Amor nos Tempos do Cólera",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase I",
+    "ano": "Ano 5 (2030) — O Século XIX em Plenitude",
+    "autor": "Thomas Mann",
+    "titulo": "A Montanha Mágica",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase I",
+    "ano": "Ano 5 (2030) — O Século XIX em Plenitude",
+    "autor": "Michael Ende",
+    "titulo": "A História Sem Fim",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase I",
+    "ano": "Ano 5 (2030) — O Século XIX em Plenitude",
+    "autor": "Philip Pullman",
+    "titulo": "A Bússola de Ouro",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase I",
+    "ano": "Ano 5 (2030) — O Século XIX em Plenitude",
+    "autor": "Stephen King",
+    "titulo": "Cemitério Maldito",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase I",
+    "ano": "Ano 5 (2030) — O Século XIX em Plenitude",
+    "autor": "Ira Levin",
+    "titulo": "O Bebê de Rosemary",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase I",
+    "ano": "Ano 5 (2030) — O Século XIX em Plenitude",
+    "autor": "John le Carré",
+    "titulo": "O Espião que Saiu do Frio",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase I",
+    "ano": "Ano 5 (2030) — O Século XIX em Plenitude",
+    "autor": "G. K. Chesterton",
+    "titulo": "O Homem que Era Quinta-Feira",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase I",
+    "ano": "Ano 5 (2030) — O Século XIX em Plenitude",
+    "autor": "C. S. Lewis",
+    "titulo": "Cartas de um Diabo a Seu Aprendiz",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase I",
+    "ano": "Ano 5 (2030) — O Século XIX em Plenitude",
+    "autor": "Robert Graves",
+    "titulo": "Os Mitos Gregos",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase I",
+    "ano": "Ano 5 (2030) — O Século XIX em Plenitude",
+    "autor": "Viktor Frankl",
+    "titulo": "Em Busca de Sentido",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase II",
+    "ano": "Ano 6 (2031) — Os Inklings e as Terras Altas da Fantasia",
+    "autor": "J. R. R. Tolkien",
+    "titulo": "Cartas de J. R. R. Tolkien",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase II",
+    "ano": "Ano 6 (2031) — Os Inklings e as Terras Altas da Fantasia",
+    "autor": "J. R. R. Tolkien",
+    "titulo": "Árvore e Folha",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase II",
+    "ano": "Ano 6 (2031) — Os Inklings e as Terras Altas da Fantasia",
+    "autor": "J. R. R. Tolkien",
+    "titulo": "As Aventuras de Tom Bombadil",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase II",
+    "ano": "Ano 6 (2031) — Os Inklings e as Terras Altas da Fantasia",
+    "autor": "J. R. R. Tolkien",
+    "titulo": "Mestre Gil de Ham",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase II",
+    "ano": "Ano 6 (2031) — Os Inklings e as Terras Altas da Fantasia",
+    "autor": "J. R. R. Tolkien",
+    "titulo": "A Queda de Arthur",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase II",
+    "ano": "Ano 6 (2031) — Os Inklings e as Terras Altas da Fantasia",
+    "autor": "J. R. R. Tolkien",
+    "titulo": "Roverandom",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase II",
+    "ano": "Ano 6 (2031) — Os Inklings e as Terras Altas da Fantasia",
+    "autor": "Humphrey Carpenter",
+    "titulo": "J. R. R. Tolkien: Uma Biografia",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase II",
+    "ano": "Ano 6 (2031) — Os Inklings e as Terras Altas da Fantasia",
+    "autor": "C. S. Lewis",
+    "titulo": "Além do Planeta Silencioso",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase II",
+    "ano": "Ano 6 (2031) — Os Inklings e as Terras Altas da Fantasia",
+    "autor": "C. S. Lewis",
+    "titulo": "Perelandra",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase II",
+    "ano": "Ano 6 (2031) — Os Inklings e as Terras Altas da Fantasia",
+    "autor": "C. S. Lewis",
+    "titulo": "That Hideous Strength (3º volume da Trilogia Cósmica)",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase II",
+    "ano": "Ano 6 (2031) — Os Inklings e as Terras Altas da Fantasia",
+    "autor": "C. S. Lewis",
+    "titulo": "Até que Tenhamos Rostos",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase II",
+    "ano": "Ano 6 (2031) — Os Inklings e as Terras Altas da Fantasia",
+    "autor": "C. S. Lewis",
+    "titulo": "Cristianismo Puro e Simples",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase II",
+    "ano": "Ano 6 (2031) — Os Inklings e as Terras Altas da Fantasia",
+    "autor": "C. S. Lewis",
+    "titulo": "Surpreendido pela Alegria",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase II",
+    "ano": "Ano 6 (2031) — Os Inklings e as Terras Altas da Fantasia",
+    "autor": "Ursula K. Le Guin",
+    "titulo": "As Tumbas de Atuan",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase II",
+    "ano": "Ano 6 (2031) — Os Inklings e as Terras Altas da Fantasia",
+    "autor": "Ursula K. Le Guin",
+    "titulo": "A Praia Mais Distante",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase II",
+    "ano": "Ano 6 (2031) — Os Inklings e as Terras Altas da Fantasia",
+    "autor": "Ursula K. Le Guin",
+    "titulo": "Tehanu",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase II",
+    "ano": "Ano 6 (2031) — Os Inklings e as Terras Altas da Fantasia",
+    "autor": "Ursula K. Le Guin",
+    "titulo": "Contos de Terramar",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase II",
+    "ano": "Ano 6 (2031) — Os Inklings e as Terras Altas da Fantasia",
+    "autor": "T. H. White",
+    "titulo": "O Único e Eterno Rei",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase II",
+    "ano": "Ano 6 (2031) — Os Inklings e as Terras Altas da Fantasia",
+    "autor": "Marion Zimmer Bradley",
+    "titulo": "As Brumas de Avalon",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase II",
+    "ano": "Ano 6 (2031) — Os Inklings e as Terras Altas da Fantasia",
+    "autor": "Thomas Malory",
+    "titulo": "A Morte de Arthur",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase II",
+    "ano": "Ano 6 (2031) — Os Inklings e as Terras Altas da Fantasia",
+    "autor": "George MacDonald",
+    "titulo": "A Princesa e o Goblin",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase II",
+    "ano": "Ano 6 (2031) — Os Inklings e as Terras Altas da Fantasia",
+    "autor": "Philip Pullman",
+    "titulo": "A Faca Sutil",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase II",
+    "ano": "Ano 6 (2031) — Os Inklings e as Terras Altas da Fantasia",
+    "autor": "Philip Pullman",
+    "titulo": "A Luneta Âmbar",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase II",
+    "ano": "Ano 6 (2031) — Os Inklings e as Terras Altas da Fantasia",
+    "autor": "Michael Ende",
+    "titulo": "Momo",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase II",
+    "ano": "Ano 7 (2032) — Sagas de Fantasia Moderna",
+    "autor": "Terry Pratchett",
+    "titulo": "O Colorido da Magia",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase II",
+    "ano": "Ano 7 (2032) — Sagas de Fantasia Moderna",
+    "autor": "Terry Pratchett",
+    "titulo": "Pequenos Deuses",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase II",
+    "ano": "Ano 7 (2032) — Sagas de Fantasia Moderna",
+    "autor": "Terry Pratchett",
+    "titulo": "Os Pequenos Homens Livres",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase II",
+    "ano": "Ano 7 (2032) — Sagas de Fantasia Moderna",
+    "autor": "Terry Pratchett e Neil Gaiman",
+    "titulo": "Belas Maldições (Good Omens)",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase II",
+    "ano": "Ano 7 (2032) — Sagas de Fantasia Moderna",
+    "autor": "Terry Pratchett",
+    "titulo": "Nação",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase II",
+    "ano": "Ano 7 (2032) — Sagas de Fantasia Moderna",
+    "autor": "Neil Gaiman",
+    "titulo": "Coraline",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase II",
+    "ano": "Ano 7 (2032) — Sagas de Fantasia Moderna",
+    "autor": "Neil Gaiman",
+    "titulo": "Stardust",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase II",
+    "ano": "Ano 7 (2032) — Sagas de Fantasia Moderna",
+    "autor": "Neil Gaiman",
+    "titulo": "Neverwhere",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase II",
+    "ano": "Ano 7 (2032) — Sagas de Fantasia Moderna",
+    "autor": "Neil Gaiman",
+    "titulo": "O Oceano no Fim do Caminho",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase II",
+    "ano": "Ano 7 (2032) — Sagas de Fantasia Moderna",
+    "autor": "Neil Gaiman",
+    "titulo": "O Livro do Cemitério",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase II",
+    "ano": "Ano 7 (2032) — Sagas de Fantasia Moderna",
+    "autor": "Neil Gaiman",
+    "titulo": "Mitologia Nórdica",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase II",
+    "ano": "Ano 7 (2032) — Sagas de Fantasia Moderna",
+    "autor": "Andrzej Sapkowski",
+    "titulo": "O Último Desejo",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase II",
+    "ano": "Ano 7 (2032) — Sagas de Fantasia Moderna",
+    "autor": "Andrzej Sapkowski",
+    "titulo": "A Espada do Destino",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase II",
+    "ano": "Ano 7 (2032) — Sagas de Fantasia Moderna",
+    "autor": "Andrzej Sapkowski",
+    "titulo": "Sangue de Elfos",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase II",
+    "ano": "Ano 7 (2032) — Sagas de Fantasia Moderna",
+    "autor": "Andrzej Sapkowski",
+    "titulo": "Tempo do Desprezo",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase II",
+    "ano": "Ano 7 (2032) — Sagas de Fantasia Moderna",
+    "autor": "Andrzej Sapkowski",
+    "titulo": "Batismo de Fogo",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase II",
+    "ano": "Ano 7 (2032) — Sagas de Fantasia Moderna",
+    "autor": "Andrzej Sapkowski",
+    "titulo": "A Torre da Andorinha",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase II",
+    "ano": "Ano 7 (2032) — Sagas de Fantasia Moderna",
+    "autor": "Andrzej Sapkowski",
+    "titulo": "A Senhora do Lago",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase II",
+    "ano": "Ano 7 (2032) — Sagas de Fantasia Moderna",
+    "autor": "George R. R. Martin",
+    "titulo": "Fogo & Sangue",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase II",
+    "ano": "Ano 7 (2032) — Sagas de Fantasia Moderna",
+    "autor": "Susanna Clarke",
+    "titulo": "Jonathan Strange & Mr Norrell",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase II",
+    "ano": "Ano 7 (2032) — Sagas de Fantasia Moderna",
+    "autor": "Robin Hobb",
+    "titulo": "O Aprendiz de Assassino",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase II",
+    "ano": "Ano 7 (2032) — Sagas de Fantasia Moderna",
+    "autor": "Brandon Sanderson",
+    "titulo": "Mistborn: O Império Final",
+    "aposta": true,
+    "papel": "Aposta Recente"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase II",
+    "ano": "Ano 7 (2032) — Sagas de Fantasia Moderna",
+    "autor": "Brandon Sanderson",
+    "titulo": "Mistborn: O Poço da Ascensão",
+    "aposta": true,
+    "papel": "Aposta Recente"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase II",
+    "ano": "Ano 7 (2032) — Sagas de Fantasia Moderna",
+    "autor": "Brandon Sanderson",
+    "titulo": "Mistborn: O Herói das Eras",
+    "aposta": true,
+    "papel": "Aposta Recente"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase II",
+    "ano": "Ano 8 (2033) — Ficção Científica Fundamental",
+    "autor": "Isaac Asimov",
+    "titulo": "Fundação e Império",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase II",
+    "ano": "Ano 8 (2033) — Ficção Científica Fundamental",
+    "autor": "Isaac Asimov",
+    "titulo": "Segunda Fundação",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase II",
+    "ano": "Ano 8 (2033) — Ficção Científica Fundamental",
+    "autor": "Isaac Asimov",
+    "titulo": "Limites da Fundação",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase II",
+    "ano": "Ano 8 (2033) — Ficção Científica Fundamental",
+    "autor": "Isaac Asimov",
+    "titulo": "Fundação e Terra",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase II",
+    "ano": "Ano 8 (2033) — Ficção Científica Fundamental",
+    "autor": "Isaac Asimov",
+    "titulo": "Prelúdio à Fundação",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase II",
+    "ano": "Ano 8 (2033) — Ficção Científica Fundamental",
+    "autor": "Isaac Asimov",
+    "titulo": "Origens da Fundação",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase II",
+    "ano": "Ano 8 (2033) — Ficção Científica Fundamental",
+    "autor": "Frank Herbert",
+    "titulo": "Messias de Duna",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase II",
+    "ano": "Ano 8 (2033) — Ficção Científica Fundamental",
+    "autor": "Frank Herbert",
+    "titulo": "Filhos de Duna",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase II",
+    "ano": "Ano 8 (2033) — Ficção Científica Fundamental",
+    "autor": "Frank Herbert",
+    "titulo": "Deus Imperador de Duna",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase II",
+    "ano": "Ano 8 (2033) — Ficção Científica Fundamental",
+    "autor": "Frank Herbert",
+    "titulo": "Hereges de Duna",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase II",
+    "ano": "Ano 8 (2033) — Ficção Científica Fundamental",
+    "autor": "Frank Herbert",
+    "titulo": "Casa Capitular: Duna",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase II",
+    "ano": "Ano 8 (2033) — Ficção Científica Fundamental",
+    "autor": "Arthur C. Clarke",
+    "titulo": "2001: Uma Odisseia no Espaço",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase II",
+    "ano": "Ano 8 (2033) — Ficção Científica Fundamental",
+    "autor": "Arthur C. Clarke",
+    "titulo": "O Fim da Infância",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase II",
+    "ano": "Ano 8 (2033) — Ficção Científica Fundamental",
+    "autor": "Arthur C. Clarke",
+    "titulo": "Encontro com Rama",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase II",
+    "ano": "Ano 8 (2033) — Ficção Científica Fundamental",
+    "autor": "Robert A. Heinlein",
+    "titulo": "Um Estranho numa Terra Estranha",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase II",
+    "ano": "Ano 8 (2033) — Ficção Científica Fundamental",
+    "autor": "Robert A. Heinlein",
+    "titulo": "A Lua É uma Amante Cruel",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase II",
+    "ano": "Ano 8 (2033) — Ficção Científica Fundamental",
+    "autor": "Ursula K. Le Guin",
+    "titulo": "A Mão Esquerda da Escuridão",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase II",
+    "ano": "Ano 8 (2033) — Ficção Científica Fundamental",
+    "autor": "Ursula K. Le Guin",
+    "titulo": "Os Despossuídos",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase II",
+    "ano": "Ano 8 (2033) — Ficção Científica Fundamental",
+    "autor": "Philip K. Dick",
+    "titulo": "Androides Sonham com Ovelhas Elétricas?",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase II",
+    "ano": "Ano 8 (2033) — Ficção Científica Fundamental",
+    "autor": "H. G. Wells",
+    "titulo": "A Máquina do Tempo",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase II",
+    "ano": "Ano 8 (2033) — Ficção Científica Fundamental",
+    "autor": "H. G. Wells",
+    "titulo": "A Guerra dos Mundos",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase II",
+    "ano": "Ano 8 (2033) — Ficção Científica Fundamental",
+    "autor": "Stanisław Lem",
+    "titulo": "Solaris",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase II",
+    "ano": "Ano 8 (2033) — Ficção Científica Fundamental",
+    "autor": "William Gibson",
+    "titulo": "Neuromancer",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase II",
+    "ano": "Ano 8 (2033) — Ficção Científica Fundamental",
+    "autor": "Douglas Adams",
+    "titulo": "O Guia do Mochileiro das Galáxias",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase II",
+    "ano": "Ano 9 (2034) — A Estante das Crianças",
+    "autor": "Monteiro Lobato",
+    "titulo": "O Saci",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase II",
+    "ano": "Ano 9 (2034) — A Estante das Crianças",
+    "autor": "Monteiro Lobato",
+    "titulo": "Caçadas de Pedrinho",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase II",
+    "ano": "Ano 9 (2034) — A Estante das Crianças",
+    "autor": "Monteiro Lobato",
+    "titulo": "Memórias da Emília",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase II",
+    "ano": "Ano 9 (2034) — A Estante das Crianças",
+    "autor": "Monteiro Lobato",
+    "titulo": "A Chave do Tamanho",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase II",
+    "ano": "Ano 9 (2034) — A Estante das Crianças",
+    "autor": "Monteiro Lobato",
+    "titulo": "Viagem ao Céu",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase II",
+    "ano": "Ano 9 (2034) — A Estante das Crianças",
+    "autor": "J. M. Barrie",
+    "titulo": "Peter Pan",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase II",
+    "ano": "Ano 9 (2034) — A Estante das Crianças",
+    "autor": "L. Frank Baum",
+    "titulo": "O Mágico de Oz",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase II",
+    "ano": "Ano 9 (2034) — A Estante das Crianças",
+    "autor": "Kenneth Grahame",
+    "titulo": "O Vento nos Salgueiros",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase II",
+    "ano": "Ano 9 (2034) — A Estante das Crianças",
+    "autor": "A. A. Milne",
+    "titulo": "O Ursinho Puff",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase II",
+    "ano": "Ano 9 (2034) — A Estante das Crianças",
+    "autor": "Carlo Collodi",
+    "titulo": "As Aventuras de Pinóquio",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase II",
+    "ano": "Ano 9 (2034) — A Estante das Crianças",
+    "autor": "Louisa May Alcott",
+    "titulo": "Mulherzinhas",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase II",
+    "ano": "Ano 9 (2034) — A Estante das Crianças",
+    "autor": "L. M. Montgomery",
+    "titulo": "Anne de Green Gables",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase II",
+    "ano": "Ano 9 (2034) — A Estante das Crianças",
+    "autor": "Frances Hodgson Burnett",
+    "titulo": "O Jardim Secreto",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase II",
+    "ano": "Ano 9 (2034) — A Estante das Crianças",
+    "autor": "Johanna Spyri",
+    "titulo": "Heidi",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase II",
+    "ano": "Ano 9 (2034) — A Estante das Crianças",
+    "autor": "Roald Dahl",
+    "titulo": "A Fantástica Fábrica de Chocolate",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase II",
+    "ano": "Ano 9 (2034) — A Estante das Crianças",
+    "autor": "Roald Dahl",
+    "titulo": "Matilda",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase II",
+    "ano": "Ano 9 (2034) — A Estante das Crianças",
+    "autor": "Roald Dahl",
+    "titulo": "O Bom Gigante Amigo",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase II",
+    "ano": "Ano 9 (2034) — A Estante das Crianças",
+    "autor": "Astrid Lindgren",
+    "titulo": "Píppi Meialonga",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase II",
+    "ano": "Ano 9 (2034) — A Estante das Crianças",
+    "autor": "Ziraldo",
+    "titulo": "O Menino Maluquinho",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase II",
+    "ano": "Ano 9 (2034) — A Estante das Crianças",
+    "autor": "Irmãos Grimm",
+    "titulo": "Contos de Grimm (edição completa)",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase II",
+    "ano": "Ano 9 (2034) — A Estante das Crianças",
+    "autor": "Hans Christian Andersen",
+    "titulo": "Contos de Andersen",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase II",
+    "ano": "Ano 9 (2034) — A Estante das Crianças",
+    "autor": "Charles Perrault",
+    "titulo": "Contos de Perrault",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase II",
+    "ano": "Ano 9 (2034) — A Estante das Crianças",
+    "autor": "Ruth Rocha",
+    "titulo": "Marcelo, Marmelo, Martelo",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase II",
+    "ano": "Ano 9 (2034) — A Estante das Crianças",
+    "autor": "Quino",
+    "titulo": "Toda Mafalda",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase II",
+    "ano": "Ano 10 (2035) — Mitologia do Mundo",
+    "autor": "Hesíodo",
+    "titulo": "Teogonia",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase II",
+    "ano": "Ano 10 (2035) — Mitologia do Mundo",
+    "autor": "Hesíodo",
+    "titulo": "Os Trabalhos e os Dias",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase II",
+    "ano": "Ano 10 (2035) — Mitologia do Mundo",
+    "autor": "Pierre Grimal",
+    "titulo": "Dicionário de Mitologia Grega e Romana",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase II",
+    "ano": "Ano 10 (2035) — Mitologia do Mundo",
+    "autor": "Jean",
+    "titulo": "Pierre Vernant — O Universo, os Deuses, os Homens",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase II",
+    "ano": "Ano 10 (2035) — Mitologia do Mundo",
+    "autor": "Clássico Anônimo / Tradição",
+    "titulo": "Epopeia de Gilgámesh",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase II",
+    "ano": "Ano 10 (2035) — Mitologia do Mundo",
+    "autor": "Snorri Sturluson",
+    "titulo": "Edda em Prosa",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase II",
+    "ano": "Ano 10 (2035) — Mitologia do Mundo",
+    "autor": "Clássico Anônimo / Tradição",
+    "titulo": "A Saga dos Volsungos",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase II",
+    "ano": "Ano 10 (2035) — Mitologia do Mundo",
+    "autor": "Clássico Anônimo / Tradição",
+    "titulo": "Beowulf (edição bilíngue)",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase II",
+    "ano": "Ano 10 (2035) — Mitologia do Mundo",
+    "autor": "Elias Lönnrot",
+    "titulo": "Kalevala",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase II",
+    "ano": "Ano 10 (2035) — Mitologia do Mundo",
+    "autor": "Clássico Anônimo / Tradição",
+    "titulo": "A Canção dos Nibelungos",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase II",
+    "ano": "Ano 10 (2035) — Mitologia do Mundo",
+    "autor": "Clássico Anônimo / Tradição",
+    "titulo": "A Canção de Rolando",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase II",
+    "ano": "Ano 10 (2035) — Mitologia do Mundo",
+    "autor": "Clássico Anônimo / Tradição",
+    "titulo": "Livro das Mil e Uma Noites, vol. 1 (trad. Mamede Jarouche)",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase II",
+    "ano": "Ano 10 (2035) — Mitologia do Mundo",
+    "autor": "Clássico Anônimo / Tradição",
+    "titulo": "Livro das Mil e Uma Noites, vol. 2",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase II",
+    "ano": "Ano 10 (2035) — Mitologia do Mundo",
+    "autor": "Clássico Anônimo / Tradição",
+    "titulo": "Livro das Mil e Uma Noites, vol. 3",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase II",
+    "ano": "Ano 10 (2035) — Mitologia do Mundo",
+    "autor": "Clássico Anônimo / Tradição",
+    "titulo": "Mahabharata (com o Bhagavad Gita)",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase II",
+    "ano": "Ano 10 (2035) — Mitologia do Mundo",
+    "autor": "Clássico Anônimo / Tradição",
+    "titulo": "Ramayana",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase II",
+    "ano": "Ano 10 (2035) — Mitologia do Mundo",
+    "autor": "Clássico Anônimo / Tradição",
+    "titulo": "Popol Vuh",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase II",
+    "ano": "Ano 10 (2035) — Mitologia do Mundo",
+    "autor": "Reginaldo Prandi",
+    "titulo": "Mitologia dos Orixás",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase II",
+    "ano": "Ano 10 (2035) — Mitologia do Mundo",
+    "autor": "Luís da Câmara Cascudo",
+    "titulo": "Dicionário do Folclore Brasileiro",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase II",
+    "ano": "Ano 10 (2035) — Mitologia do Mundo",
+    "autor": "Luís da Câmara Cascudo",
+    "titulo": "Contos Tradicionais do Brasil",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase II",
+    "ano": "Ano 10 (2035) — Mitologia do Mundo",
+    "autor": "Mircea Eliade",
+    "titulo": "O Sagrado e o Profano",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase II",
+    "ano": "Ano 10 (2035) — Mitologia do Mundo",
+    "autor": "Joseph Campbell",
+    "titulo": "O Poder do Mito",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase II",
+    "ano": "Ano 10 (2035) — Mitologia do Mundo",
+    "autor": "Clássico Anônimo / Tradição",
+    "titulo": "Mabinogion",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase II",
+    "ano": "Ano 10 (2035) — Mitologia do Mundo",
+    "autor": "Chrétien de Troyes",
+    "titulo": "Lancelote, o Cavaleiro da Carreta",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase III",
+    "ano": "Ano 11 (2036) — Gótico e Terror Clássico",
+    "autor": "Horace Walpole",
+    "titulo": "O Castelo de Otranto",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase III",
+    "ano": "Ano 11 (2036) — Gótico e Terror Clássico",
+    "autor": "John Polidori",
+    "titulo": "O Vampiro",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase III",
+    "ano": "Ano 11 (2036) — Gótico e Terror Clássico",
+    "autor": "Sheridan Le Fanu",
+    "titulo": "Carmilla",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase III",
+    "ano": "Ano 11 (2036) — Gótico e Terror Clássico",
+    "autor": "Henry James",
+    "titulo": "A Volta do Parafuso",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase III",
+    "ano": "Ano 11 (2036) — Gótico e Terror Clássico",
+    "autor": "Edgar Allan Poe",
+    "titulo": "O Corvo e Outros Poemas",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase III",
+    "ano": "Ano 11 (2036) — Gótico e Terror Clássico",
+    "autor": "H. P. Lovecraft",
+    "titulo": "Medo Clássico, vol. 2 (Darkside)",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase III",
+    "ano": "Ano 11 (2036) — Gótico e Terror Clássico",
+    "autor": "H. P. Lovecraft",
+    "titulo": "Nas Montanhas da Loucura",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase III",
+    "ano": "Ano 11 (2036) — Gótico e Terror Clássico",
+    "autor": "M. R. James",
+    "titulo": "Contos de Fantasmas (Ghost Stories of an Antiquary)",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase III",
+    "ano": "Ano 11 (2036) — Gótico e Terror Clássico",
+    "autor": "Ambrose Bierce",
+    "titulo": "O Dicionário do Diabo",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase III",
+    "ano": "Ano 11 (2036) — Gótico e Terror Clássico",
+    "autor": "Daphne du Maurier",
+    "titulo": "Os Pássaros (e outros contos)",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase III",
+    "ano": "Ano 11 (2036) — Gótico e Terror Clássico",
+    "autor": "Shirley Jackson",
+    "titulo": "Sempre Vivemos no Castelo",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase III",
+    "ano": "Ano 11 (2036) — Gótico e Terror Clássico",
+    "autor": "Shirley Jackson",
+    "titulo": "A Loteria e Outros Contos",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase III",
+    "ano": "Ano 11 (2036) — Gótico e Terror Clássico",
+    "autor": "Richard Matheson",
+    "titulo": "Eu Sou a Lenda",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase III",
+    "ano": "Ano 11 (2036) — Gótico e Terror Clássico",
+    "autor": "William Peter Blatty",
+    "titulo": "O Exorcista",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase III",
+    "ano": "Ano 11 (2036) — Gótico e Terror Clássico",
+    "autor": "Stephen King",
+    "titulo": "Carrie, a Estranha",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase III",
+    "ano": "Ano 11 (2036) — Gótico e Terror Clássico",
+    "autor": "Stephen King",
+    "titulo": "Misery",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase III",
+    "ano": "Ano 11 (2036) — Gótico e Terror Clássico",
+    "autor": "Stephen King",
+    "titulo": "A Dança da Morte",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase III",
+    "ano": "Ano 11 (2036) — Gótico e Terror Clássico",
+    "autor": "Stephen King",
+    "titulo": "Doutor Sono",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase III",
+    "ano": "Ano 11 (2036) — Gótico e Terror Clássico",
+    "autor": "Clive Barker",
+    "titulo": "Livros de Sangue, vol. 1",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase III",
+    "ano": "Ano 11 (2036) — Gótico e Terror Clássico",
+    "autor": "Anne Rice",
+    "titulo": "Entrevista com o Vampiro",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase III",
+    "ano": "Ano 11 (2036) — Gótico e Terror Clássico",
+    "autor": "Anne Rice",
+    "titulo": "O Vampiro Lestat",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase III",
+    "ano": "Ano 11 (2036) — Gótico e Terror Clássico",
+    "autor": "Susan Hill",
+    "titulo": "A Mulher de Preto",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase III",
+    "ano": "Ano 11 (2036) — Gótico e Terror Clássico",
+    "autor": "Ira Levin",
+    "titulo": "Os Meninos do Brasil",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase III",
+    "ano": "Ano 11 (2036) — Gótico e Terror Clássico",
+    "autor": "Thomas Harris",
+    "titulo": "O Silêncio dos Inocentes",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase III",
+    "ano": "Ano 12 (2037) — A Era de Ouro do Policial",
+    "autor": "Arthur Conan Doyle",
+    "titulo": "As Aventuras de Sherlock Holmes",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase III",
+    "ano": "Ano 12 (2037) — A Era de Ouro do Policial",
+    "autor": "Arthur Conan Doyle",
+    "titulo": "As Memórias de Sherlock Holmes",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase III",
+    "ano": "Ano 12 (2037) — A Era de Ouro do Policial",
+    "autor": "Arthur Conan Doyle",
+    "titulo": "A Volta de Sherlock Holmes",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase III",
+    "ano": "Ano 12 (2037) — A Era de Ouro do Policial",
+    "autor": "Arthur Conan Doyle",
+    "titulo": "O Vale do Medo",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase III",
+    "ano": "Ano 12 (2037) — A Era de Ouro do Policial",
+    "autor": "Arthur Conan Doyle",
+    "titulo": "O Último Adeus de Sherlock Holmes",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase III",
+    "ano": "Ano 12 (2037) — A Era de Ouro do Policial",
+    "autor": "Arthur Conan Doyle",
+    "titulo": "O Arquivo de Sherlock Holmes",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase III",
+    "ano": "Ano 12 (2037) — A Era de Ouro do Policial",
+    "autor": "Arthur Conan Doyle",
+    "titulo": "O Mundo Perdido",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase III",
+    "ano": "Ano 12 (2037) — A Era de Ouro do Policial",
+    "autor": "Agatha Christie",
+    "titulo": "O Misterioso Caso de Styles",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase III",
+    "ano": "Ano 12 (2037) — A Era de Ouro do Policial",
+    "autor": "Agatha Christie",
+    "titulo": "Assassinato no Campo de Golfe",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase III",
+    "ano": "Ano 12 (2037) — A Era de Ouro do Policial",
+    "autor": "Agatha Christie",
+    "titulo": "Poirot Investiga",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase III",
+    "ano": "Ano 12 (2037) — A Era de Ouro do Policial",
+    "autor": "Agatha Christie",
+    "titulo": "Os Cinco Porquinhos",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase III",
+    "ano": "Ano 12 (2037) — A Era de Ouro do Policial",
+    "autor": "Agatha Christie",
+    "titulo": "Cai o Pano",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase III",
+    "ano": "Ano 12 (2037) — A Era de Ouro do Policial",
+    "autor": "Agatha Christie",
+    "titulo": "Um Brinde de Cianureto",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase III",
+    "ano": "Ano 12 (2037) — A Era de Ouro do Policial",
+    "autor": "Agatha Christie",
+    "titulo": "Morte na Mesopotâmia",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase III",
+    "ano": "Ano 12 (2037) — A Era de Ouro do Policial",
+    "autor": "Agatha Christie",
+    "titulo": "Encontro com a Morte",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase III",
+    "ano": "Ano 12 (2037) — A Era de Ouro do Policial",
+    "autor": "Agatha Christie",
+    "titulo": "Hora Zero",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase III",
+    "ano": "Ano 12 (2037) — A Era de Ouro do Policial",
+    "autor": "Agatha Christie",
+    "titulo": "A Ratoeira (teatro)",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase III",
+    "ano": "Ano 12 (2037) — A Era de Ouro do Policial",
+    "autor": "Agatha Christie",
+    "titulo": "Nêmesis",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase III",
+    "ano": "Ano 12 (2037) — A Era de Ouro do Policial",
+    "autor": "Agatha Christie",
+    "titulo": "Um Crime Adormecido",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase III",
+    "ano": "Ano 12 (2037) — A Era de Ouro do Policial",
+    "autor": "Wilkie Collins",
+    "titulo": "A Pedra da Lua",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase III",
+    "ano": "Ano 12 (2037) — A Era de Ouro do Policial",
+    "autor": "Wilkie Collins",
+    "titulo": "A Mulher de Branco",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase III",
+    "ano": "Ano 12 (2037) — A Era de Ouro do Policial",
+    "autor": "Raymond Chandler",
+    "titulo": "Adeus, Minha Querida",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase III",
+    "ano": "Ano 12 (2037) — A Era de Ouro do Policial",
+    "autor": "Dashiell Hammett",
+    "titulo": "O Falcão Maltês",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase III",
+    "ano": "Ano 12 (2037) — A Era de Ouro do Policial",
+    "autor": "Dashiell Hammett",
+    "titulo": "Seara Vermelha",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase III",
+    "ano": "Ano 13 (2038) — Thriller, Espionagem e Crime Moderno",
+    "autor": "John le Carré",
+    "titulo": "O Espião que Sabia Demais",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase III",
+    "ano": "Ano 13 (2038) — Thriller, Espionagem e Crime Moderno",
+    "autor": "John le Carré",
+    "titulo": "O Jardineiro Fiel",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase III",
+    "ano": "Ano 13 (2038) — Thriller, Espionagem e Crime Moderno",
+    "autor": "John le Carré",
+    "titulo": "O Alfaiate do Panamá",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase III",
+    "ano": "Ano 13 (2038) — Thriller, Espionagem e Crime Moderno",
+    "autor": "Frederick Forsyth",
+    "titulo": "O Dia do Chacal",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase III",
+    "ano": "Ano 13 (2038) — Thriller, Espionagem e Crime Moderno",
+    "autor": "Ian Fleming",
+    "titulo": "Casino Royale",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase III",
+    "ano": "Ano 13 (2038) — Thriller, Espionagem e Crime Moderno",
+    "autor": "Ian Fleming",
+    "titulo": "Moscou contra 007",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase III",
+    "ano": "Ano 13 (2038) — Thriller, Espionagem e Crime Moderno",
+    "autor": "Ian Fleming",
+    "titulo": "Goldfinger",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase III",
+    "ano": "Ano 13 (2038) — Thriller, Espionagem e Crime Moderno",
+    "autor": "Patricia Highsmith",
+    "titulo": "Pacto Sinistro",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase III",
+    "ano": "Ano 13 (2038) — Thriller, Espionagem e Crime Moderno",
+    "autor": "Patricia Highsmith",
+    "titulo": "Ripley Subterrâneo",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase III",
+    "ano": "Ano 13 (2038) — Thriller, Espionagem e Crime Moderno",
+    "autor": "Patricia Highsmith",
+    "titulo": "O Amigo Americano",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase III",
+    "ano": "Ano 13 (2038) — Thriller, Espionagem e Crime Moderno",
+    "autor": "Gillian Flynn",
+    "titulo": "Garota Exemplar",
+    "aposta": true,
+    "papel": "Aposta Recente"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase III",
+    "ano": "Ano 13 (2038) — Thriller, Espionagem e Crime Moderno",
+    "autor": "Stieg Larsson",
+    "titulo": "Os Homens que Não Amavam as Mulheres",
+    "aposta": true,
+    "papel": "Aposta Recente"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase III",
+    "ano": "Ano 13 (2038) — Thriller, Espionagem e Crime Moderno",
+    "autor": "Stieg Larsson",
+    "titulo": "A Menina que Brincava com Fogo",
+    "aposta": true,
+    "papel": "Aposta Recente"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase III",
+    "ano": "Ano 13 (2038) — Thriller, Espionagem e Crime Moderno",
+    "autor": "Stieg Larsson",
+    "titulo": "A Rainha do Castelo de Ar",
+    "aposta": true,
+    "papel": "Aposta Recente"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase III",
+    "ano": "Ano 13 (2038) — Thriller, Espionagem e Crime Moderno",
+    "autor": "Dennis Lehane",
+    "titulo": "Sobre Meninos e Lobos",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase III",
+    "ano": "Ano 13 (2038) — Thriller, Espionagem e Crime Moderno",
+    "autor": "Dennis Lehane",
+    "titulo": "Ilha do Medo",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase III",
+    "ano": "Ano 13 (2038) — Thriller, Espionagem e Crime Moderno",
+    "autor": "Mario Puzo",
+    "titulo": "O Poderoso Chefão",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase III",
+    "ano": "Ano 13 (2038) — Thriller, Espionagem e Crime Moderno",
+    "autor": "Ken Follett",
+    "titulo": "Os Pilares da Terra",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase III",
+    "ano": "Ano 13 (2038) — Thriller, Espionagem e Crime Moderno",
+    "autor": "Ken Follett",
+    "titulo": "Mundo sem Fim",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase III",
+    "ano": "Ano 13 (2038) — Thriller, Espionagem e Crime Moderno",
+    "autor": "Ken Follett",
+    "titulo": "A Chave de Rebecca",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase III",
+    "ano": "Ano 13 (2038) — Thriller, Espionagem e Crime Moderno",
+    "autor": "Michael Crichton",
+    "titulo": "Jurassic Park",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase III",
+    "ano": "Ano 13 (2038) — Thriller, Espionagem e Crime Moderno",
+    "autor": "Michael Crichton",
+    "titulo": "A Cepa Andrômeda",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase III",
+    "ano": "Ano 13 (2038) — Thriller, Espionagem e Crime Moderno",
+    "autor": "Tana French",
+    "titulo": "No Bosque",
+    "aposta": true,
+    "papel": "Aposta Recente"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase III",
+    "ano": "Ano 13 (2038) — Thriller, Espionagem e Crime Moderno",
+    "autor": "Jo Nesbø",
+    "titulo": "O Boneco de Neve",
+    "aposta": true,
+    "papel": "Aposta Recente"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase III",
+    "ano": "Ano 14 (2039) — Mistério sem Fronteiras",
+    "autor": "Rubem Fonseca",
+    "titulo": "A Grande Arte",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase III",
+    "ano": "Ano 14 (2039) — Mistério sem Fronteiras",
+    "autor": "Rubem Fonseca",
+    "titulo": "Feliz Ano Novo",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase III",
+    "ano": "Ano 14 (2039) — Mistério sem Fronteiras",
+    "autor": "Luiz Alfredo Garcia",
+    "titulo": "Roza — O Silêncio da Chuva",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase III",
+    "ano": "Ano 14 (2039) — Mistério sem Fronteiras",
+    "autor": "Jô Soares",
+    "titulo": "O Xangô de Baker Street",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase III",
+    "ano": "Ano 14 (2039) — Mistério sem Fronteiras",
+    "autor": "Patrícia Melo",
+    "titulo": "O Matador",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase III",
+    "ano": "Ano 14 (2039) — Mistério sem Fronteiras",
+    "autor": "Henning Mankell",
+    "titulo": "Assassinos sem Rosto",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase III",
+    "ano": "Ano 14 (2039) — Mistério sem Fronteiras",
+    "autor": "Georges Simenon",
+    "titulo": "Os Fantasmas do Chapeleiro",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase III",
+    "ano": "Ano 14 (2039) — Mistério sem Fronteiras",
+    "autor": "Maurice Leblanc",
+    "titulo": "Arsène Lupin, o Ladrão de Casaca",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase III",
+    "ano": "Ano 14 (2039) — Mistério sem Fronteiras",
+    "autor": "Gaston Leroux",
+    "titulo": "O Mistério do Quarto Amarelo",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase III",
+    "ano": "Ano 14 (2039) — Mistério sem Fronteiras",
+    "autor": "Michael Connelly",
+    "titulo": "O Poeta",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase III",
+    "ano": "Ano 14 (2039) — Mistério sem Fronteiras",
+    "autor": "James Ellroy",
+    "titulo": "Dália Negra",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase III",
+    "ano": "Ano 14 (2039) — Mistério sem Fronteiras",
+    "autor": "Thomas Harris",
+    "titulo": "Dragão Vermelho",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase III",
+    "ano": "Ano 14 (2039) — Mistério sem Fronteiras",
+    "autor": "Thomas Harris",
+    "titulo": "Hannibal",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase III",
+    "ano": "Ano 14 (2039) — Mistério sem Fronteiras",
+    "autor": "Cormac McCarthy",
+    "titulo": "Onde os Fracos Não Têm Vez",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase III",
+    "ano": "Ano 14 (2039) — Mistério sem Fronteiras",
+    "autor": "Cormac McCarthy",
+    "titulo": "A Estrada",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase III",
+    "ano": "Ano 14 (2039) — Mistério sem Fronteiras",
+    "autor": "Cormac McCarthy",
+    "titulo": "Meridiano de Sangue",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase III",
+    "ano": "Ano 14 (2039) — Mistério sem Fronteiras",
+    "autor": "Umberto Eco",
+    "titulo": "O Pêndulo de Foucault",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase III",
+    "ano": "Ano 14 (2039) — Mistério sem Fronteiras",
+    "autor": "Umberto Eco",
+    "titulo": "Baudolino",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase III",
+    "ano": "Ano 14 (2039) — Mistério sem Fronteiras",
+    "autor": "Umberto Eco",
+    "titulo": "O Cemitério de Praga",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase III",
+    "ano": "Ano 14 (2039) — Mistério sem Fronteiras",
+    "autor": "Arturo Pérez",
+    "titulo": "Reverte — O Clube Dumas",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase III",
+    "ano": "Ano 14 (2039) — Mistério sem Fronteiras",
+    "autor": "Carlos Ruiz Zafón",
+    "titulo": "A Sombra do Vento",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase III",
+    "ano": "Ano 14 (2039) — Mistério sem Fronteiras",
+    "autor": "Carlos Ruiz Zafón",
+    "titulo": "O Jogo do Anjo",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase III",
+    "ano": "Ano 14 (2039) — Mistério sem Fronteiras",
+    "autor": "Donna Tartt",
+    "titulo": "A História Secreta",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase III",
+    "ano": "Ano 14 (2039) — Mistério sem Fronteiras",
+    "autor": "Paul Auster",
+    "titulo": "Trilogia de Nova York",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase III",
+    "ano": "Ano 15 (2040) — Distopia, Guerra e Política",
+    "autor": "George Orwell",
+    "titulo": "Homenagem à Catalunha",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase III",
+    "ano": "Ano 15 (2040) — Distopia, Guerra e Política",
+    "autor": "Ievgêni Zamiátin",
+    "titulo": "Nós",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase III",
+    "ano": "Ano 15 (2040) — Distopia, Guerra e Política",
+    "autor": "Margaret Atwood",
+    "titulo": "O Conto da Aia",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase III",
+    "ano": "Ano 15 (2040) — Distopia, Guerra e Política",
+    "autor": "Margaret Atwood",
+    "titulo": "Oryx e Crake",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase III",
+    "ano": "Ano 15 (2040) — Distopia, Guerra e Política",
+    "autor": "Ken Kesey",
+    "titulo": "Um Estranho no Ninho",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase III",
+    "ano": "Ano 15 (2040) — Distopia, Guerra e Política",
+    "autor": "Joseph Heller",
+    "titulo": "Ardil-22",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase III",
+    "ano": "Ano 15 (2040) — Distopia, Guerra e Política",
+    "autor": "Kurt Vonnegut",
+    "titulo": "Matadouro 5",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase III",
+    "ano": "Ano 15 (2040) — Distopia, Guerra e Política",
+    "autor": "Erich Maria Remarque",
+    "titulo": "Nada de Novo no Front",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase III",
+    "ano": "Ano 15 (2040) — Distopia, Guerra e Política",
+    "autor": "Primo Levi",
+    "titulo": "É Isto um Homem?",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase III",
+    "ano": "Ano 15 (2040) — Distopia, Guerra e Política",
+    "autor": "Anne Frank",
+    "titulo": "O Diário de Anne Frank",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase III",
+    "ano": "Ano 15 (2040) — Distopia, Guerra e Política",
+    "autor": "Elie Wiesel",
+    "titulo": "A Noite",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase III",
+    "ano": "Ano 15 (2040) — Distopia, Guerra e Política",
+    "autor": "Alexandr Soljenítsin",
+    "titulo": "Um Dia na Vida de Ivan Deníssovitch",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase III",
+    "ano": "Ano 15 (2040) — Distopia, Guerra e Política",
+    "autor": "Mikhail Bulgákov",
+    "titulo": "O Mestre e Margarida",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase III",
+    "ano": "Ano 15 (2040) — Distopia, Guerra e Política",
+    "autor": "Boris Pasternak",
+    "titulo": "Doutor Jivago",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase III",
+    "ano": "Ano 15 (2040) — Distopia, Guerra e Política",
+    "autor": "Vassili Grossman",
+    "titulo": "Vida e Destino",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase III",
+    "ano": "Ano 15 (2040) — Distopia, Guerra e Política",
+    "autor": "Vladimir Nabokov",
+    "titulo": "Lolita",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase III",
+    "ano": "Ano 15 (2040) — Distopia, Guerra e Política",
+    "autor": "Arthur Koestler",
+    "titulo": "O Zero e o Infinito",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase III",
+    "ano": "Ano 15 (2040) — Distopia, Guerra e Política",
+    "autor": "Stefan Zweig",
+    "titulo": "O Mundo de Ontem",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase III",
+    "ano": "Ano 15 (2040) — Distopia, Guerra e Política",
+    "autor": "Stefan Zweig",
+    "titulo": "Brasil, um País do Futuro",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase III",
+    "ano": "Ano 15 (2040) — Distopia, Guerra e Política",
+    "autor": "Sándor Márai",
+    "titulo": "As Brasas",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase III",
+    "ano": "Ano 15 (2040) — Distopia, Guerra e Política",
+    "autor": "Günter Grass",
+    "titulo": "O Tambor",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase III",
+    "ano": "Ano 15 (2040) — Distopia, Guerra e Política",
+    "autor": "Thomas Mann",
+    "titulo": "Os Buddenbrooks",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase III",
+    "ano": "Ano 15 (2040) — Distopia, Guerra e Política",
+    "autor": "Hermann Hesse",
+    "titulo": "O Lobo da Estepe",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase III",
+    "ano": "Ano 15 (2040) — Distopia, Guerra e Política",
+    "autor": "Hermann Hesse",
+    "titulo": "Demian",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase IV",
+    "ano": "Ano 16 (2041) — Machado e o Século XIX",
+    "autor": "Machado de Assis",
+    "titulo": "Esaú e Jacó",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase IV",
+    "ano": "Ano 16 (2041) — Machado e o Século XIX",
+    "autor": "Machado de Assis",
+    "titulo": "Memorial de Aires",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase IV",
+    "ano": "Ano 16 (2041) — Machado e o Século XIX",
+    "autor": "Machado de Assis",
+    "titulo": "Helena",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase IV",
+    "ano": "Ano 16 (2041) — Machado e o Século XIX",
+    "autor": "Machado de Assis",
+    "titulo": "Iaiá Garcia",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase IV",
+    "ano": "Ano 16 (2041) — Machado e o Século XIX",
+    "autor": "Machado de Assis",
+    "titulo": "Ressurreição",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase IV",
+    "ano": "Ano 16 (2041) — Machado e o Século XIX",
+    "autor": "Machado de Assis",
+    "titulo": "Várias Histórias",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase IV",
+    "ano": "Ano 16 (2041) — Machado e o Século XIX",
+    "autor": "Machado de Assis",
+    "titulo": "Crônicas Escolhidas",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase IV",
+    "ano": "Ano 16 (2041) — Machado e o Século XIX",
+    "autor": "José de Alencar",
+    "titulo": "O Guarani",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase IV",
+    "ano": "Ano 16 (2041) — Machado e o Século XIX",
+    "autor": "José de Alencar",
+    "titulo": "Iracema",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase IV",
+    "ano": "Ano 16 (2041) — Machado e o Século XIX",
+    "autor": "José de Alencar",
+    "titulo": "Senhora",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase IV",
+    "ano": "Ano 16 (2041) — Machado e o Século XIX",
+    "autor": "José de Alencar",
+    "titulo": "Lucíola",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase IV",
+    "ano": "Ano 16 (2041) — Machado e o Século XIX",
+    "autor": "Manuel Antônio de Almeida",
+    "titulo": "Memórias de um Sargento de Milícias",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase IV",
+    "ano": "Ano 16 (2041) — Machado e o Século XIX",
+    "autor": "Bernardo Guimarães",
+    "titulo": "A Escrava Isaura",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase IV",
+    "ano": "Ano 16 (2041) — Machado e o Século XIX",
+    "autor": "Joaquim Manuel de Macedo",
+    "titulo": "A Moreninha",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase IV",
+    "ano": "Ano 16 (2041) — Machado e o Século XIX",
+    "autor": "Visconde de Taunay",
+    "titulo": "Inocência",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase IV",
+    "ano": "Ano 16 (2041) — Machado e o Século XIX",
+    "autor": "Raul Pompéia",
+    "titulo": "O Ateneu",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase IV",
+    "ano": "Ano 16 (2041) — Machado e o Século XIX",
+    "autor": "Álvares de Azevedo",
+    "titulo": "Noite na Taverna",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase IV",
+    "ano": "Ano 16 (2041) — Machado e o Século XIX",
+    "autor": "Castro Alves",
+    "titulo": "Os Escravos (inclui O Navio Negreiro)",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase IV",
+    "ano": "Ano 16 (2041) — Machado e o Século XIX",
+    "autor": "Gonçalves Dias",
+    "titulo": "Poesias",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase IV",
+    "ano": "Ano 16 (2041) — Machado e o Século XIX",
+    "autor": "Cruz e Sousa",
+    "titulo": "Broquéis",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase IV",
+    "ano": "Ano 16 (2041) — Machado e o Século XIX",
+    "autor": "Augusto dos Anjos",
+    "titulo": "Eu e Outras Poesias",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase IV",
+    "ano": "Ano 16 (2041) — Machado e o Século XIX",
+    "autor": "Olavo Bilac",
+    "titulo": "Poesias",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase IV",
+    "ano": "Ano 16 (2041) — Machado e o Século XIX",
+    "autor": "Joaquim Nabuco",
+    "titulo": "O Abolicionismo",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase IV",
+    "ano": "Ano 16 (2041) — Machado e o Século XIX",
+    "autor": "Sérgio Buarque de Holanda",
+    "titulo": "Raízes do Brasil",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase IV",
+    "ano": "Ano 17 (2042) — Modernismo e o Romance de 30",
+    "autor": "Guimarães Rosa",
+    "titulo": "Primeiras Estórias",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase IV",
+    "ano": "Ano 17 (2042) — Modernismo e o Romance de 30",
+    "autor": "Guimarães Rosa",
+    "titulo": "Corpo de Baile (ou Manuelzão e Miguilim)",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase IV",
+    "ano": "Ano 17 (2042) — Modernismo e o Romance de 30",
+    "autor": "Guimarães Rosa",
+    "titulo": "Tutaméia",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase IV",
+    "ano": "Ano 17 (2042) — Modernismo e o Romance de 30",
+    "autor": "Graciliano Ramos",
+    "titulo": "Angústia",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase IV",
+    "ano": "Ano 17 (2042) — Modernismo e o Romance de 30",
+    "autor": "Graciliano Ramos",
+    "titulo": "Memórias do Cárcere, vol. I",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase IV",
+    "ano": "Ano 17 (2042) — Modernismo e o Romance de 30",
+    "autor": "Graciliano Ramos",
+    "titulo": "Memórias do Cárcere, vol. II",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase IV",
+    "ano": "Ano 17 (2042) — Modernismo e o Romance de 30",
+    "autor": "Graciliano Ramos",
+    "titulo": "Infância",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase IV",
+    "ano": "Ano 17 (2042) — Modernismo e o Romance de 30",
+    "autor": "Graciliano Ramos",
+    "titulo": "Caetés",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase IV",
+    "ano": "Ano 17 (2042) — Modernismo e o Romance de 30",
+    "autor": "José Lins do Rego",
+    "titulo": "Menino de Engenho",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase IV",
+    "ano": "Ano 17 (2042) — Modernismo e o Romance de 30",
+    "autor": "José Lins do Rego",
+    "titulo": "Fogo Morto",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase IV",
+    "ano": "Ano 17 (2042) — Modernismo e o Romance de 30",
+    "autor": "Rachel de Queiroz",
+    "titulo": "O Quinze",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase IV",
+    "ano": "Ano 17 (2042) — Modernismo e o Romance de 30",
+    "autor": "Jorge Amado",
+    "titulo": "Dona Flor e Seus Dois Maridos",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase IV",
+    "ano": "Ano 17 (2042) — Modernismo e o Romance de 30",
+    "autor": "Jorge Amado",
+    "titulo": "Terras do Sem-Fim",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase IV",
+    "ano": "Ano 17 (2042) — Modernismo e o Romance de 30",
+    "autor": "Jorge Amado",
+    "titulo": "Tieta do Agreste",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase IV",
+    "ano": "Ano 17 (2042) — Modernismo e o Romance de 30",
+    "autor": "Jorge Amado",
+    "titulo": "Jubiabá",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase IV",
+    "ano": "Ano 17 (2042) — Modernismo e o Romance de 30",
+    "autor": "Oswald de Andrade",
+    "titulo": "Poesias Reunidas",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase IV",
+    "ano": "Ano 17 (2042) — Modernismo e o Romance de 30",
+    "autor": "Mário de Andrade",
+    "titulo": "Amar, Verbo Intransitivo",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase IV",
+    "ano": "Ano 17 (2042) — Modernismo e o Romance de 30",
+    "autor": "Manuel Bandeira",
+    "titulo": "Estrela da Vida Inteira",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase IV",
+    "ano": "Ano 17 (2042) — Modernismo e o Romance de 30",
+    "autor": "Cecília Meireles",
+    "titulo": "Romanceiro da Inconfidência",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase IV",
+    "ano": "Ano 17 (2042) — Modernismo e o Romance de 30",
+    "autor": "Vinícius de Moraes",
+    "titulo": "Antologia Poética",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase IV",
+    "ano": "Ano 17 (2042) — Modernismo e o Romance de 30",
+    "autor": "Carlos Drummond de Andrade",
+    "titulo": "A Rosa do Povo",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase IV",
+    "ano": "Ano 17 (2042) — Modernismo e o Romance de 30",
+    "autor": "Carlos Drummond de Andrade",
+    "titulo": "Sentimento do Mundo",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase IV",
+    "ano": "Ano 17 (2042) — Modernismo e o Romance de 30",
+    "autor": "João Cabral de Melo Neto",
+    "titulo": "Morte e Vida Severina (com outros poemas)",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase IV",
+    "ano": "Ano 17 (2042) — Modernismo e o Romance de 30",
+    "autor": "Cora Coralina",
+    "titulo": "Poemas dos Becos de Goiás",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase IV",
+    "ano": "Ano 18 (2043) — Clarice, Érico e a Prosa Moderna",
+    "autor": "Clarice Lispector",
+    "titulo": "Perto do Coração Selvagem",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase IV",
+    "ano": "Ano 18 (2043) — Clarice, Érico e a Prosa Moderna",
+    "autor": "Clarice Lispector",
+    "titulo": "A Maçã no Escuro",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase IV",
+    "ano": "Ano 18 (2043) — Clarice, Érico e a Prosa Moderna",
+    "autor": "Clarice Lispector",
+    "titulo": "Todos os Contos",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase IV",
+    "ano": "Ano 18 (2043) — Clarice, Érico e a Prosa Moderna",
+    "autor": "Clarice Lispector",
+    "titulo": "Felicidade Clandestina",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase IV",
+    "ano": "Ano 18 (2043) — Clarice, Érico e a Prosa Moderna",
+    "autor": "Clarice Lispector",
+    "titulo": "Água Viva",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase IV",
+    "ano": "Ano 18 (2043) — Clarice, Érico e a Prosa Moderna",
+    "autor": "Clarice Lispector",
+    "titulo": "A Descoberta do Mundo",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase IV",
+    "ano": "Ano 18 (2043) — Clarice, Érico e a Prosa Moderna",
+    "autor": "Clarice Lispector",
+    "titulo": "O Lustre",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase IV",
+    "ano": "Ano 18 (2043) — Clarice, Érico e a Prosa Moderna",
+    "autor": "Clarice Lispector",
+    "titulo": "A Cidade Sitiada",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase IV",
+    "ano": "Ano 18 (2043) — Clarice, Érico e a Prosa Moderna",
+    "autor": "Clarice Lispector",
+    "titulo": "Um Sopro de Vida",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase IV",
+    "ano": "Ano 18 (2043) — Clarice, Érico e a Prosa Moderna",
+    "autor": "Érico Veríssimo",
+    "titulo": "O Tempo e o Vento: O Continente, parte II",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase IV",
+    "ano": "Ano 18 (2043) — Clarice, Érico e a Prosa Moderna",
+    "autor": "Érico Veríssimo",
+    "titulo": "O Tempo e o Vento: O Retrato, parte I",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase IV",
+    "ano": "Ano 18 (2043) — Clarice, Érico e a Prosa Moderna",
+    "autor": "Érico Veríssimo",
+    "titulo": "O Tempo e o Vento: O Retrato, parte II",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase IV",
+    "ano": "Ano 18 (2043) — Clarice, Érico e a Prosa Moderna",
+    "autor": "Érico Veríssimo",
+    "titulo": "O Tempo e o Vento: O Arquipélago, parte I",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase IV",
+    "ano": "Ano 18 (2043) — Clarice, Érico e a Prosa Moderna",
+    "autor": "Érico Veríssimo",
+    "titulo": "O Tempo e o Vento: O Arquipélago, parte II",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase IV",
+    "ano": "Ano 18 (2043) — Clarice, Érico e a Prosa Moderna",
+    "autor": "Érico Veríssimo",
+    "titulo": "O Tempo e o Vento: O Arquipélago, parte III",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase IV",
+    "ano": "Ano 18 (2043) — Clarice, Érico e a Prosa Moderna",
+    "autor": "Érico Veríssimo",
+    "titulo": "Incidente em Antares",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase IV",
+    "ano": "Ano 18 (2043) — Clarice, Érico e a Prosa Moderna",
+    "autor": "Érico Veríssimo",
+    "titulo": "Olhai os Lírios do Campo",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase IV",
+    "ano": "Ano 18 (2043) — Clarice, Érico e a Prosa Moderna",
+    "autor": "Lygia Fagundes Telles",
+    "titulo": "As Meninas",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase IV",
+    "ano": "Ano 18 (2043) — Clarice, Érico e a Prosa Moderna",
+    "autor": "Lygia Fagundes Telles",
+    "titulo": "Ciranda de Pedra",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase IV",
+    "ano": "Ano 18 (2043) — Clarice, Érico e a Prosa Moderna",
+    "autor": "Lygia Fagundes Telles",
+    "titulo": "Antes do Baile Verde",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase IV",
+    "ano": "Ano 18 (2043) — Clarice, Érico e a Prosa Moderna",
+    "autor": "Hilda Hilst",
+    "titulo": "A Obscena Senhora D",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase IV",
+    "ano": "Ano 18 (2043) — Clarice, Érico e a Prosa Moderna",
+    "autor": "Dalton Trevisan",
+    "titulo": "O Vampiro de Curitiba",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase IV",
+    "ano": "Ano 18 (2043) — Clarice, Érico e a Prosa Moderna",
+    "autor": "Autran Dourado",
+    "titulo": "Ópera dos Mortos",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase IV",
+    "ano": "Ano 18 (2043) — Clarice, Érico e a Prosa Moderna",
+    "autor": "Fernando Sabino",
+    "titulo": "O Encontro Marcado",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase IV",
+    "ano": "Ano 19 (2044) — O Brasil Contemporâneo",
+    "autor": "João Ubaldo Ribeiro",
+    "titulo": "Viva o Povo Brasileiro",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase IV",
+    "ano": "Ano 19 (2044) — O Brasil Contemporâneo",
+    "autor": "João Ubaldo Ribeiro",
+    "titulo": "Sargento Getúlio",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase IV",
+    "ano": "Ano 19 (2044) — O Brasil Contemporâneo",
+    "autor": "Ariano Suassuna",
+    "titulo": "Auto da Compadecida",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase IV",
+    "ano": "Ano 19 (2044) — O Brasil Contemporâneo",
+    "autor": "Ariano Suassuna",
+    "titulo": "A Pedra do Reino",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase IV",
+    "ano": "Ano 19 (2044) — O Brasil Contemporâneo",
+    "autor": "Nelson Rodrigues",
+    "titulo": "Vestido de Noiva",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase IV",
+    "ano": "Ano 19 (2044) — O Brasil Contemporâneo",
+    "autor": "Nelson Rodrigues",
+    "titulo": "A Vida Como Ela É",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase IV",
+    "ano": "Ano 19 (2044) — O Brasil Contemporâneo",
+    "autor": "Raduan Nassar",
+    "titulo": "Lavoura Arcaica",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase IV",
+    "ano": "Ano 19 (2044) — O Brasil Contemporâneo",
+    "autor": "Milton Hatoum",
+    "titulo": "Dois Irmãos",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase IV",
+    "ano": "Ano 19 (2044) — O Brasil Contemporâneo",
+    "autor": "Milton Hatoum",
+    "titulo": "Relato de um Certo Oriente",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase IV",
+    "ano": "Ano 19 (2044) — O Brasil Contemporâneo",
+    "autor": "Chico Buarque",
+    "titulo": "Budapeste",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase IV",
+    "ano": "Ano 19 (2044) — O Brasil Contemporâneo",
+    "autor": "Chico Buarque",
+    "titulo": "Leite Derramado",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase IV",
+    "ano": "Ano 19 (2044) — O Brasil Contemporâneo",
+    "autor": "Nélida Piñon",
+    "titulo": "A República dos Sonhos",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase IV",
+    "ano": "Ano 19 (2044) — O Brasil Contemporâneo",
+    "autor": "Conceição Evaristo",
+    "titulo": "Ponciá Vicêncio",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase IV",
+    "ano": "Ano 19 (2044) — O Brasil Contemporâneo",
+    "autor": "Conceição Evaristo",
+    "titulo": "Olhos d'Água",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase IV",
+    "ano": "Ano 19 (2044) — O Brasil Contemporâneo",
+    "autor": "Moacyr Scliar",
+    "titulo": "O Centauro no Jardim",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase IV",
+    "ano": "Ano 19 (2044) — O Brasil Contemporâneo",
+    "autor": "Ferreira Gullar",
+    "titulo": "Poema Sujo",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase IV",
+    "ano": "Ano 19 (2044) — O Brasil Contemporâneo",
+    "autor": "Adélia Prado",
+    "titulo": "Bagagem",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase IV",
+    "ano": "Ano 19 (2044) — O Brasil Contemporâneo",
+    "autor": "Mário Quintana",
+    "titulo": "Antologia Poética",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase IV",
+    "ano": "Ano 19 (2044) — O Brasil Contemporâneo",
+    "autor": "Paulo Leminski",
+    "titulo": "Toda Poesia",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase IV",
+    "ano": "Ano 19 (2044) — O Brasil Contemporâneo",
+    "autor": "Rubem Braga",
+    "titulo": "Crônicas (seleção)",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase IV",
+    "ano": "Ano 19 (2044) — O Brasil Contemporâneo",
+    "autor": "Antonio Callado",
+    "titulo": "Quarup",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase IV",
+    "ano": "Ano 19 (2044) — O Brasil Contemporâneo",
+    "autor": "Lima Barreto",
+    "titulo": "Recordações do Escrivão Isías Caminha",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase IV",
+    "ano": "Ano 19 (2044) — O Brasil Contemporâneo",
+    "autor": "Darcy Ribeiro",
+    "titulo": "O Povo Brasileiro",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase IV",
+    "ano": "Ano 19 (2044) — O Brasil Contemporâneo",
+    "autor": "Gilberto Freyre",
+    "titulo": "Casa-Grande & Senzala",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase IV",
+    "ano": "Ano 20 (2045) — Portugal e Lusofonia",
+    "autor": "Eça de Queirós",
+    "titulo": "O Crime do Padre Amaro",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase IV",
+    "ano": "Ano 20 (2045) — Portugal e Lusofonia",
+    "autor": "Eça de Queirós",
+    "titulo": "A Relíquia",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase IV",
+    "ano": "Ano 20 (2045) — Portugal e Lusofonia",
+    "autor": "Eça de Queirós",
+    "titulo": "A Cidade e as Serras",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase IV",
+    "ano": "Ano 20 (2045) — Portugal e Lusofonia",
+    "autor": "Eça de Queirós",
+    "titulo": "A Ilustre Casa de Ramires",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase IV",
+    "ano": "Ano 20 (2045) — Portugal e Lusofonia",
+    "autor": "Camilo Castelo Branco",
+    "titulo": "Amor de Perdição",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase IV",
+    "ano": "Ano 20 (2045) — Portugal e Lusofonia",
+    "autor": "Almeida Garrett",
+    "titulo": "Viagens na Minha Terra",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase IV",
+    "ano": "Ano 20 (2045) — Portugal e Lusofonia",
+    "autor": "Gil Vicente",
+    "titulo": "Auto da Barca do Inferno",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase IV",
+    "ano": "Ano 20 (2045) — Portugal e Lusofonia",
+    "autor": "Padre António Vieira",
+    "titulo": "Sermões (seleção)",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase IV",
+    "ano": "Ano 20 (2045) — Portugal e Lusofonia",
+    "autor": "Fernando Pessoa",
+    "titulo": "Mensagem",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase IV",
+    "ano": "Ano 20 (2045) — Portugal e Lusofonia",
+    "autor": "Fernando Pessoa",
+    "titulo": "Poesia de Álvaro de Campos",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase IV",
+    "ano": "Ano 20 (2045) — Portugal e Lusofonia",
+    "autor": "Sophia de Mello Breyner Andresen",
+    "titulo": "Obra Poética",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase IV",
+    "ano": "Ano 20 (2045) — Portugal e Lusofonia",
+    "autor": "Miguel Torga",
+    "titulo": "Contos da Montanha",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase IV",
+    "ano": "Ano 20 (2045) — Portugal e Lusofonia",
+    "autor": "José Saramago",
+    "titulo": "O Evangelho Segundo Jesus Cristo",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase IV",
+    "ano": "Ano 20 (2045) — Portugal e Lusofonia",
+    "autor": "José Saramago",
+    "titulo": "O Ano da Morte de Ricardo Reis",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase IV",
+    "ano": "Ano 20 (2045) — Portugal e Lusofonia",
+    "autor": "José Saramago",
+    "titulo": "História do Cerco de Lisboa",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase IV",
+    "ano": "Ano 20 (2045) — Portugal e Lusofonia",
+    "autor": "José Saramago",
+    "titulo": "A Jangada de Pedra",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase IV",
+    "ano": "Ano 20 (2045) — Portugal e Lusofonia",
+    "autor": "José Saramago",
+    "titulo": "Todos os Nomes",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase IV",
+    "ano": "Ano 20 (2045) — Portugal e Lusofonia",
+    "autor": "José Saramago",
+    "titulo": "A Caverna",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase IV",
+    "ano": "Ano 20 (2045) — Portugal e Lusofonia",
+    "autor": "José Saramago",
+    "titulo": "As Intermitências da Morte",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase IV",
+    "ano": "Ano 20 (2045) — Portugal e Lusofonia",
+    "autor": "José Saramago",
+    "titulo": "Ensaio sobre a Lucidez",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase IV",
+    "ano": "Ano 20 (2045) — Portugal e Lusofonia",
+    "autor": "António Lobo Antunes",
+    "titulo": "Memória de Elefante",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase IV",
+    "ano": "Ano 20 (2045) — Portugal e Lusofonia",
+    "autor": "Mia Couto",
+    "titulo": "Terra Sonâmbula",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase IV",
+    "ano": "Ano 20 (2045) — Portugal e Lusofonia",
+    "autor": "Pepetela",
+    "titulo": "Mayombe",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase IV",
+    "ano": "Ano 20 (2045) — Portugal e Lusofonia",
+    "autor": "José Eduardo Agualusa",
+    "titulo": "O Vendedor de Passados",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase V",
+    "ano": "Ano 21 (2046) — Anglo-americano do Século XX",
+    "autor": "James Joyce",
+    "titulo": "Ulisses",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase V",
+    "ano": "Ano 21 (2046) — Anglo-americano do Século XX",
+    "autor": "James Joyce",
+    "titulo": "Dublinenses",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase V",
+    "ano": "Ano 21 (2046) — Anglo-americano do Século XX",
+    "autor": "Virginia Woolf",
+    "titulo": "Ao Farol",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase V",
+    "ano": "Ano 21 (2046) — Anglo-americano do Século XX",
+    "autor": "Virginia Woolf",
+    "titulo": "Orlando",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase V",
+    "ano": "Ano 21 (2046) — Anglo-americano do Século XX",
+    "autor": "Virginia Woolf",
+    "titulo": "Um Teto Todo Seu",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase V",
+    "ano": "Ano 21 (2046) — Anglo-americano do Século XX",
+    "autor": "William Faulkner",
+    "titulo": "O Som e a Fúria",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase V",
+    "ano": "Ano 21 (2046) — Anglo-americano do Século XX",
+    "autor": "William Faulkner",
+    "titulo": "Enquanto Agonizo",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase V",
+    "ano": "Ano 21 (2046) — Anglo-americano do Século XX",
+    "autor": "Ernest Hemingway",
+    "titulo": "Adeus às Armas",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase V",
+    "ano": "Ano 21 (2046) — Anglo-americano do Século XX",
+    "autor": "Ernest Hemingway",
+    "titulo": "Por Quem os Sinos Dobram",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase V",
+    "ano": "Ano 21 (2046) — Anglo-americano do Século XX",
+    "autor": "Ernest Hemingway",
+    "titulo": "O Sol Também Se Levanta",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase V",
+    "ano": "Ano 21 (2046) — Anglo-americano do Século XX",
+    "autor": "F. Scott Fitzgerald",
+    "titulo": "Suave É a Noite",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase V",
+    "ano": "Ano 21 (2046) — Anglo-americano do Século XX",
+    "autor": "John Steinbeck",
+    "titulo": "A Leste do Éden",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase V",
+    "ano": "Ano 21 (2046) — Anglo-americano do Século XX",
+    "autor": "John Steinbeck",
+    "titulo": "Ratos e Homens",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase V",
+    "ano": "Ano 21 (2046) — Anglo-americano do Século XX",
+    "autor": "Jack Kerouac",
+    "titulo": "Na Estrada",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase V",
+    "ano": "Ano 21 (2046) — Anglo-americano do Século XX",
+    "autor": "Toni Morrison",
+    "titulo": "Amada",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase V",
+    "ano": "Ano 21 (2046) — Anglo-americano do Século XX",
+    "autor": "James Baldwin",
+    "titulo": "Se a Rua Beale Falasse",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase V",
+    "ano": "Ano 21 (2046) — Anglo-americano do Século XX",
+    "autor": "Ralph Ellison",
+    "titulo": "Homem Invisível",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase V",
+    "ano": "Ano 21 (2046) — Anglo-americano do Século XX",
+    "autor": "Philip Roth",
+    "titulo": "Pastoral Americana",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase V",
+    "ano": "Ano 21 (2046) — Anglo-americano do Século XX",
+    "autor": "Saul Bellow",
+    "titulo": "Herzog",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase V",
+    "ano": "Ano 21 (2046) — Anglo-americano do Século XX",
+    "autor": "Truman Capote",
+    "titulo": "A Sangue Frio",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase V",
+    "ano": "Ano 21 (2046) — Anglo-americano do Século XX",
+    "autor": "Truman Capote",
+    "titulo": "Bonequinha de Luxo",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase V",
+    "ano": "Ano 21 (2046) — Anglo-americano do Século XX",
+    "autor": "John Irving",
+    "titulo": "O Mundo Segundo Garp",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase V",
+    "ano": "Ano 21 (2046) — Anglo-americano do Século XX",
+    "autor": "Margaret Mitchell",
+    "titulo": "E o Vento Levou",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase V",
+    "ano": "Ano 21 (2046) — Anglo-americano do Século XX",
+    "autor": "Colleen McCullough",
+    "titulo": "Pássaros Feridos",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase V",
+    "ano": "Ano 22 (2047) — América Latina e Espanha",
+    "autor": "Gabriel García Márquez",
+    "titulo": "Crônica de uma Morte Anunciada",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase V",
+    "ano": "Ano 22 (2047) — América Latina e Espanha",
+    "autor": "Gabriel García Márquez",
+    "titulo": "O Outono do Patriarca",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase V",
+    "ano": "Ano 22 (2047) — América Latina e Espanha",
+    "autor": "Gabriel García Márquez",
+    "titulo": "Ninguém Escreve ao Coronel",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase V",
+    "ano": "Ano 22 (2047) — América Latina e Espanha",
+    "autor": "Gabriel García Márquez",
+    "titulo": "Viver para Contá-la",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase V",
+    "ano": "Ano 22 (2047) — América Latina e Espanha",
+    "autor": "Jorge Luis Borges",
+    "titulo": "O Aleph",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase V",
+    "ano": "Ano 22 (2047) — América Latina e Espanha",
+    "autor": "Jorge Luis Borges",
+    "titulo": "Livro dos Seres Imaginários",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase V",
+    "ano": "Ano 22 (2047) — América Latina e Espanha",
+    "autor": "Jorge Luis Borges",
+    "titulo": "História Universal da Infâmia",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase V",
+    "ano": "Ano 22 (2047) — América Latina e Espanha",
+    "autor": "Julio Cortázar",
+    "titulo": "O Jogo da Amarelinha",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase V",
+    "ano": "Ano 22 (2047) — América Latina e Espanha",
+    "autor": "Julio Cortázar",
+    "titulo": "Bestiário",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase V",
+    "ano": "Ano 22 (2047) — América Latina e Espanha",
+    "autor": "Mario Vargas Llosa",
+    "titulo": "A Guerra do Fim do Mundo",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase V",
+    "ano": "Ano 22 (2047) — América Latina e Espanha",
+    "autor": "Mario Vargas Llosa",
+    "titulo": "A Cidade e os Cachorros",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase V",
+    "ano": "Ano 22 (2047) — América Latina e Espanha",
+    "autor": "Mario Vargas Llosa",
+    "titulo": "A Festa do Bode",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase V",
+    "ano": "Ano 22 (2047) — América Latina e Espanha",
+    "autor": "Isabel Allende",
+    "titulo": "A Casa dos Espíritos",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase V",
+    "ano": "Ano 22 (2047) — América Latina e Espanha",
+    "autor": "Juan Rulfo",
+    "titulo": "Pedro Páramo",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase V",
+    "ano": "Ano 22 (2047) — América Latina e Espanha",
+    "autor": "Roberto Bolaño",
+    "titulo": "Os Detetives Selvagens",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase V",
+    "ano": "Ano 22 (2047) — América Latina e Espanha",
+    "autor": "Roberto Bolaño",
+    "titulo": "2666",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase V",
+    "ano": "Ano 22 (2047) — América Latina e Espanha",
+    "autor": "Pablo Neruda",
+    "titulo": "Vinte Poemas de Amor e uma Canção Desesperada",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase V",
+    "ano": "Ano 22 (2047) — América Latina e Espanha",
+    "autor": "Pablo Neruda",
+    "titulo": "Canto Geral",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase V",
+    "ano": "Ano 22 (2047) — América Latina e Espanha",
+    "autor": "Federico García Lorca",
+    "titulo": "Bodas de Sangue",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase V",
+    "ano": "Ano 22 (2047) — América Latina e Espanha",
+    "autor": "Octavio Paz",
+    "titulo": "O Labirinto da Solidão",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase V",
+    "ano": "Ano 22 (2047) — América Latina e Espanha",
+    "autor": "Eduardo Galeano",
+    "titulo": "As Veias Abertas da América Latina",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase V",
+    "ano": "Ano 22 (2047) — América Latina e Espanha",
+    "autor": "Ernesto Sabato",
+    "titulo": "O Túnel",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase V",
+    "ano": "Ano 22 (2047) — América Latina e Espanha",
+    "autor": "Alejo Carpentier",
+    "titulo": "O Reino deste Mundo",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase V",
+    "ano": "Ano 22 (2047) — América Latina e Espanha",
+    "autor": "Carlos Fuentes",
+    "titulo": "A Morte de Artemio Cruz",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase V",
+    "ano": "Ano 23 (2048) — Rússia e França: o Restante dos Gigantes",
+    "autor": "Fiódor Dostoiévski",
+    "titulo": "O Idiota",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase V",
+    "ano": "Ano 23 (2048) — Rússia e França: o Restante dos Gigantes",
+    "autor": "Fiódor Dostoiévski",
+    "titulo": "Os Demônios",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase V",
+    "ano": "Ano 23 (2048) — Rússia e França: o Restante dos Gigantes",
+    "autor": "Fiódor Dostoiévski",
+    "titulo": "Memórias do Subsolo",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase V",
+    "ano": "Ano 23 (2048) — Rússia e França: o Restante dos Gigantes",
+    "autor": "Fiódor Dostoiévski",
+    "titulo": "Humilhados e Ofendidos",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase V",
+    "ano": "Ano 23 (2048) — Rússia e França: o Restante dos Gigantes",
+    "autor": "Liev Tolstói",
+    "titulo": "A Morte de Ivan Ilitch",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase V",
+    "ano": "Ano 23 (2048) — Rússia e França: o Restante dos Gigantes",
+    "autor": "Liev Tolstói",
+    "titulo": "Ressurreição",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase V",
+    "ano": "Ano 23 (2048) — Rússia e França: o Restante dos Gigantes",
+    "autor": "Nikolai Gógol",
+    "titulo": "Almas Mortas",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase V",
+    "ano": "Ano 23 (2048) — Rússia e França: o Restante dos Gigantes",
+    "autor": "Anton Tchékhov",
+    "titulo": "Contos (seleção)",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase V",
+    "ano": "Ano 23 (2048) — Rússia e França: o Restante dos Gigantes",
+    "autor": "Ivan Turguêniev",
+    "titulo": "Pais e Filhos",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase V",
+    "ano": "Ano 23 (2048) — Rússia e França: o Restante dos Gigantes",
+    "autor": "Aleksandr Pushkin",
+    "titulo": "Eugênio Onieguin",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase V",
+    "ano": "Ano 23 (2048) — Rússia e França: o Restante dos Gigantes",
+    "autor": "Ivan Gontcharov",
+    "titulo": "Oblómov",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase V",
+    "ano": "Ano 23 (2048) — Rússia e França: o Restante dos Gigantes",
+    "autor": "Honoré de Balzac",
+    "titulo": "Pai Goriot",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase V",
+    "ano": "Ano 23 (2048) — Rússia e França: o Restante dos Gigantes",
+    "autor": "Stendhal",
+    "titulo": "O Vermelho e o Negro",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase V",
+    "ano": "Ano 23 (2048) — Rússia e França: o Restante dos Gigantes",
+    "autor": "Gustave Flaubert",
+    "titulo": "A Educação Sentimental",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase V",
+    "ano": "Ano 23 (2048) — Rússia e França: o Restante dos Gigantes",
+    "autor": "Émile Zola",
+    "titulo": "Germinal",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase V",
+    "ano": "Ano 23 (2048) — Rússia e França: o Restante dos Gigantes",
+    "autor": "Guy de Maupassant",
+    "titulo": "Bola de Sebo e Outros Contos",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase V",
+    "ano": "Ano 23 (2048) — Rússia e França: o Restante dos Gigantes",
+    "autor": "Charles Baudelaire",
+    "titulo": "As Flores do Mal",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase V",
+    "ano": "Ano 23 (2048) — Rússia e França: o Restante dos Gigantes",
+    "autor": "Marcel Proust",
+    "titulo": "No Caminho de Swann",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase V",
+    "ano": "Ano 23 (2048) — Rússia e França: o Restante dos Gigantes",
+    "autor": "Marcel Proust",
+    "titulo": "À Sombra das Moças em Flor",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase V",
+    "ano": "Ano 23 (2048) — Rússia e França: o Restante dos Gigantes",
+    "autor": "Marcel Proust",
+    "titulo": "O Caminho de Guermantes",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase V",
+    "ano": "Ano 23 (2048) — Rússia e França: o Restante dos Gigantes",
+    "autor": "Marcel Proust",
+    "titulo": "Sodoma e Gomorra",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase V",
+    "ano": "Ano 23 (2048) — Rússia e França: o Restante dos Gigantes",
+    "autor": "Marcel Proust",
+    "titulo": "A Prisioneira",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase V",
+    "ano": "Ano 23 (2048) — Rússia e França: o Restante dos Gigantes",
+    "autor": "Marcel Proust",
+    "titulo": "A Fugitiva",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase V",
+    "ano": "Ano 23 (2048) — Rússia e França: o Restante dos Gigantes",
+    "autor": "Marcel Proust",
+    "titulo": "O Tempo Redescoberto",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase V",
+    "ano": "Ano 24 (2049) — Europa do Sul, Ásia e Oriente",
+    "autor": "Italo Calvino",
+    "titulo": "As Cidades Invisíveis",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase V",
+    "ano": "Ano 24 (2049) — Europa do Sul, Ásia e Oriente",
+    "autor": "Italo Calvino",
+    "titulo": "Se um Viajante numa Noite de Inverno",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase V",
+    "ano": "Ano 24 (2049) — Europa do Sul, Ásia e Oriente",
+    "autor": "Italo Calvino",
+    "titulo": "O Barão nas Árvores",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase V",
+    "ano": "Ano 24 (2049) — Europa do Sul, Ásia e Oriente",
+    "autor": "Italo Calvino",
+    "titulo": "Seis Propostas para o Próximo Milênio",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase V",
+    "ano": "Ano 24 (2049) — Europa do Sul, Ásia e Oriente",
+    "autor": "Giuseppe Tomasi di Lampedusa",
+    "titulo": "O Leopardo",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase V",
+    "ano": "Ano 24 (2049) — Europa do Sul, Ásia e Oriente",
+    "autor": "Giovanni Boccaccio",
+    "titulo": "Decamerão",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase V",
+    "ano": "Ano 24 (2049) — Europa do Sul, Ásia e Oriente",
+    "autor": "Geoffrey Chaucer",
+    "titulo": "Os Contos de Cantuária",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase V",
+    "ano": "Ano 24 (2049) — Europa do Sul, Ásia e Oriente",
+    "autor": "François Rabelais",
+    "titulo": "Gargantua e Pantagruel",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase V",
+    "ano": "Ano 24 (2049) — Europa do Sul, Ásia e Oriente",
+    "autor": "Thomas Mann",
+    "titulo": "Morte em Veneza",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase V",
+    "ano": "Ano 24 (2049) — Europa do Sul, Ásia e Oriente",
+    "autor": "Rainer Maria Rilke",
+    "titulo": "Cartas a um Jovem Poeta",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase V",
+    "ano": "Ano 24 (2049) — Europa do Sul, Ásia e Oriente",
+    "autor": "Haruki Murakami",
+    "titulo": "Norwegian Wood",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase V",
+    "ano": "Ano 24 (2049) — Europa do Sul, Ásia e Oriente",
+    "autor": "Haruki Murakami",
+    "titulo": "Kafka à Beira-Mar",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase V",
+    "ano": "Ano 24 (2049) — Europa do Sul, Ásia e Oriente",
+    "autor": "Haruki Murakami",
+    "titulo": "Crônica do Pássaro de Corda",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase V",
+    "ano": "Ano 24 (2049) — Europa do Sul, Ásia e Oriente",
+    "autor": "Yukio Mishima",
+    "titulo": "O Pavilhão Dourado",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase V",
+    "ano": "Ano 24 (2049) — Europa do Sul, Ásia e Oriente",
+    "autor": "Yasunari Kawabata",
+    "titulo": "País das Neves",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase V",
+    "ano": "Ano 24 (2049) — Europa do Sul, Ásia e Oriente",
+    "autor": "Natsume Sōseki",
+    "titulo": "Kokoro",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase V",
+    "ano": "Ano 24 (2049) — Europa do Sul, Ásia e Oriente",
+    "autor": "Murasaki Shikibu",
+    "titulo": "Genji Monogatari",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase V",
+    "ano": "Ano 24 (2049) — Europa do Sul, Ásia e Oriente",
+    "autor": "Jun'ichirō Tanizaki",
+    "titulo": "Elogio da Sombra",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase V",
+    "ano": "Ano 24 (2049) — Europa do Sul, Ásia e Oriente",
+    "autor": "Ryūnosuke Akutagawa",
+    "titulo": "Rashōmon e Outros Contos",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase V",
+    "ano": "Ano 24 (2049) — Europa do Sul, Ásia e Oriente",
+    "autor": "Cao Xueqin",
+    "titulo": "Sonho da Câmara Vermelha",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase V",
+    "ano": "Ano 24 (2049) — Europa do Sul, Ásia e Oriente",
+    "autor": "Luo Guanzhong",
+    "titulo": "Romance dos Três Reinos",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase V",
+    "ano": "Ano 24 (2049) — Europa do Sul, Ásia e Oriente",
+    "autor": "Wu Cheng'en",
+    "titulo": "Jornada ao Oeste",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase V",
+    "ano": "Ano 24 (2049) — Europa do Sul, Ásia e Oriente",
+    "autor": "Orhan Pamuk",
+    "titulo": "Meu Nome É Vermelho",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase V",
+    "ano": "Ano 24 (2049) — Europa do Sul, Ásia e Oriente",
+    "autor": "Khalil Gibran",
+    "titulo": "O Profeta",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase V",
+    "ano": "Ano 25 (2050) — Contemporâneos Consagrados",
+    "autor": "Kazuo Ishiguro",
+    "titulo": "Os Resquícios do Dia",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase V",
+    "ano": "Ano 25 (2050) — Contemporâneos Consagrados",
+    "autor": "Kazuo Ishiguro",
+    "titulo": "Nunca Me Deixe Ir",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase V",
+    "ano": "Ano 25 (2050) — Contemporâneos Consagrados",
+    "autor": "Kazuo Ishiguro",
+    "titulo": "O Gigante Enterrado",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase V",
+    "ano": "Ano 25 (2050) — Contemporâneos Consagrados",
+    "autor": "Ian McEwan",
+    "titulo": "Reparação",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase V",
+    "ano": "Ano 25 (2050) — Contemporâneos Consagrados",
+    "autor": "J. M. Coetzee",
+    "titulo": "Desonra",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase V",
+    "ano": "Ano 25 (2050) — Contemporâneos Consagrados",
+    "autor": "Salman Rushdie",
+    "titulo": "Os Filhos da Meia-Noite",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase V",
+    "ano": "Ano 25 (2050) — Contemporâneos Consagrados",
+    "autor": "Chinua Achebe",
+    "titulo": "O Mundo se Despedaça",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase V",
+    "ano": "Ano 25 (2050) — Contemporâneos Consagrados",
+    "autor": "Chimamanda Ngozi Adichie",
+    "titulo": "Meio Sol Amarelo",
+    "aposta": true,
+    "papel": "Aposta Recente"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase V",
+    "ano": "Ano 25 (2050) — Contemporâneos Consagrados",
+    "autor": "Arundhati Roy",
+    "titulo": "O Deus das Pequenas Coisas",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase V",
+    "ano": "Ano 25 (2050) — Contemporâneos Consagrados",
+    "autor": "Khaled Hosseini",
+    "titulo": "O Caçador de Pipas",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase V",
+    "ano": "Ano 25 (2050) — Contemporâneos Consagrados",
+    "autor": "Markus Zusak",
+    "titulo": "A Menina que Roubava Livros",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase V",
+    "ano": "Ano 25 (2050) — Contemporâneos Consagrados",
+    "autor": "Yann Martel",
+    "titulo": "As Aventuras de Pi",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase V",
+    "ano": "Ano 25 (2050) — Contemporâneos Consagrados",
+    "autor": "Jostein Gaarder",
+    "titulo": "O Mundo de Sofia",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase V",
+    "ano": "Ano 25 (2050) — Contemporâneos Consagrados",
+    "autor": "Paulo Coelho",
+    "titulo": "O Alquimista",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase V",
+    "ano": "Ano 25 (2050) — Contemporâneos Consagrados",
+    "autor": "Michael Cunningham",
+    "titulo": "As Horas",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase V",
+    "ano": "Ano 25 (2050) — Contemporâneos Consagrados",
+    "autor": "Hilary Mantel",
+    "titulo": "Wolf Hall",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase V",
+    "ano": "Ano 25 (2050) — Contemporâneos Consagrados",
+    "autor": "Michael Ondaatje",
+    "titulo": "O Paciente Inglês",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase V",
+    "ano": "Ano 25 (2050) — Contemporâneos Consagrados",
+    "autor": "Julian Barnes",
+    "titulo": "O Sentido de um Fim",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase V",
+    "ano": "Ano 25 (2050) — Contemporâneos Consagrados",
+    "autor": "Zadie Smith",
+    "titulo": "Dentes Brancos",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase V",
+    "ano": "Ano 25 (2050) — Contemporâneos Consagrados",
+    "autor": "David Mitchell",
+    "titulo": "Atlas de Nuvens",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase V",
+    "ano": "Ano 25 (2050) — Contemporâneos Consagrados",
+    "autor": "Jhumpa Lahiri",
+    "titulo": "Interprete de Males",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase V",
+    "ano": "Ano 25 (2050) — Contemporâneos Consagrados",
+    "autor": "Jonathan Franzen",
+    "titulo": "As Correções",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase V",
+    "ano": "Ano 25 (2050) — Contemporâneos Consagrados",
+    "autor": "Marilynne Robinson",
+    "titulo": "Gilead",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase V",
+    "ano": "Ano 25 (2050) — Contemporâneos Consagrados",
+    "autor": "Liu Cixin",
+    "titulo": "O Problema dos Três Corpos",
+    "aposta": true,
+    "papel": "Aposta Recente"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase VI",
+    "ano": "Ano 26 (2051) — Filosofia e Fé",
+    "autor": "Platão",
+    "titulo": "A República",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase VI",
+    "ano": "Ano 26 (2051) — Filosofia e Fé",
+    "autor": "Platão",
+    "titulo": "O Banquete",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase VI",
+    "ano": "Ano 26 (2051) — Filosofia e Fé",
+    "autor": "Platão",
+    "titulo": "Fédon",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase VI",
+    "ano": "Ano 26 (2051) — Filosofia e Fé",
+    "autor": "Aristóteles",
+    "titulo": "Ética a Nicômaco",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase VI",
+    "ano": "Ano 26 (2051) — Filosofia e Fé",
+    "autor": "Aristóteles",
+    "titulo": "Poética",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase VI",
+    "ano": "Ano 26 (2051) — Filosofia e Fé",
+    "autor": "Aristóteles",
+    "titulo": "Política",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase VI",
+    "ano": "Ano 26 (2051) — Filosofia e Fé",
+    "autor": "Marco Aurélio",
+    "titulo": "Meditações",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase VI",
+    "ano": "Ano 26 (2051) — Filosofia e Fé",
+    "autor": "Sêneca",
+    "titulo": "Cartas a Lucílio",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase VI",
+    "ano": "Ano 26 (2051) — Filosofia e Fé",
+    "autor": "Epicteto",
+    "titulo": "Manual de Epicteto",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase VI",
+    "ano": "Ano 26 (2051) — Filosofia e Fé",
+    "autor": "Santo Agostinho",
+    "titulo": "Confissões",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase VI",
+    "ano": "Ano 26 (2051) — Filosofia e Fé",
+    "autor": "Santo Agostinho",
+    "titulo": "A Cidade de Deus",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase VI",
+    "ano": "Ano 26 (2051) — Filosofia e Fé",
+    "autor": "Tomás de Kempis",
+    "titulo": "Imitação de Cristo",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase VI",
+    "ano": "Ano 26 (2051) — Filosofia e Fé",
+    "autor": "Blaise Pascal",
+    "titulo": "Pensamentos",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase VI",
+    "ano": "Ano 26 (2051) — Filosofia e Fé",
+    "autor": "Michel de Montaigne",
+    "titulo": "Os Ensaios",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase VI",
+    "ano": "Ano 26 (2051) — Filosofia e Fé",
+    "autor": "René Descartes",
+    "titulo": "Discurso do Método",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase VI",
+    "ano": "Ano 26 (2051) — Filosofia e Fé",
+    "autor": "Baruch Spinoza",
+    "titulo": "Ética",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase VI",
+    "ano": "Ano 26 (2051) — Filosofia e Fé",
+    "autor": "Nicolau Maquiavel",
+    "titulo": "O Príncipe",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase VI",
+    "ano": "Ano 26 (2051) — Filosofia e Fé",
+    "autor": "Thomas Hobbes",
+    "titulo": "Leviatã",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase VI",
+    "ano": "Ano 26 (2051) — Filosofia e Fé",
+    "autor": "Jean",
+    "titulo": "Jacques Rousseau — Do Contrato Social",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase VI",
+    "ano": "Ano 26 (2051) — Filosofia e Fé",
+    "autor": "Immanuel Kant",
+    "titulo": "Crítica da Razão Pura",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase VI",
+    "ano": "Ano 26 (2051) — Filosofia e Fé",
+    "autor": "Friedrich Nietzsche",
+    "titulo": "Assim Falou Zaratustra",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase VI",
+    "ano": "Ano 26 (2051) — Filosofia e Fé",
+    "autor": "Søren Kierkegaard",
+    "titulo": "Temor e Tremor",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase VI",
+    "ano": "Ano 26 (2051) — Filosofia e Fé",
+    "autor": "Lao Tsé",
+    "titulo": "Tao Te Ching",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase VI",
+    "ano": "Ano 26 (2051) — Filosofia e Fé",
+    "autor": "Confúcio",
+    "titulo": "Os Analectos",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase VI",
+    "ano": "Ano 27 (2052) — História e Civilizações",
+    "autor": "Heródoto",
+    "titulo": "Histórias",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase VI",
+    "ano": "Ano 27 (2052) — História e Civilizações",
+    "autor": "Tucídides",
+    "titulo": "História da Guerra do Peloponeso",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase VI",
+    "ano": "Ano 27 (2052) — História e Civilizações",
+    "autor": "Plutarco",
+    "titulo": "Vidas Paralelas",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase VI",
+    "ano": "Ano 27 (2052) — História e Civilizações",
+    "autor": "Suetônio",
+    "titulo": "A Vida dos Doze Césares",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase VI",
+    "ano": "Ano 27 (2052) — História e Civilizações",
+    "autor": "Tácito",
+    "titulo": "Anais",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase VI",
+    "ano": "Ano 27 (2052) — História e Civilizações",
+    "autor": "Edward Gibbon",
+    "titulo": "Declínio e Queda do Império Romano",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase VI",
+    "ano": "Ano 27 (2052) — História e Civilizações",
+    "autor": "Will Durant",
+    "titulo": "A História da Filosofia",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase VI",
+    "ano": "Ano 27 (2052) — História e Civilizações",
+    "autor": "Bertrand Russell",
+    "titulo": "História do Pensamento Ocidental",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase VI",
+    "ano": "Ano 27 (2052) — História e Civilizações",
+    "autor": "E. H. Gombrich",
+    "titulo": "A História da Arte",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase VI",
+    "ano": "Ano 27 (2052) — História e Civilizações",
+    "autor": "E. H. Gombrich",
+    "titulo": "Breve História do Mundo",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase VI",
+    "ano": "Ano 27 (2052) — História e Civilizações",
+    "autor": "Alexis de Tocqueville",
+    "titulo": "A Democracia na América",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase VI",
+    "ano": "Ano 27 (2052) — História e Civilizações",
+    "autor": "Jared Diamond",
+    "titulo": "Armas, Germes e Aço",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase VI",
+    "ano": "Ano 27 (2052) — História e Civilizações",
+    "autor": "Yuval Noah Harari",
+    "titulo": "Sapiens",
+    "aposta": true,
+    "papel": "Aposta Recente"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase VI",
+    "ano": "Ano 27 (2052) — História e Civilizações",
+    "autor": "Eric Hobsbawm",
+    "titulo": "A Era dos Extremos",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase VI",
+    "ano": "Ano 27 (2052) — História e Civilizações",
+    "autor": "Eric Hobsbawm",
+    "titulo": "A Era das Revoluções",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase VI",
+    "ano": "Ano 27 (2052) — História e Civilizações",
+    "autor": "Winston Churchill",
+    "titulo": "Memórias da Segunda Guerra Mundial",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase VI",
+    "ano": "Ano 27 (2052) — História e Civilizações",
+    "autor": "Carl von Clausewitz",
+    "titulo": "Da Guerra",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase VI",
+    "ano": "Ano 27 (2052) — História e Civilizações",
+    "autor": "Antony Beevor",
+    "titulo": "Stalingrado",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase VI",
+    "ano": "Ano 27 (2052) — História e Civilizações",
+    "autor": "Lilia Schwarcz e Heloisa Starling",
+    "titulo": "Brasil: Uma Biografia",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase VI",
+    "ano": "Ano 27 (2052) — História e Civilizações",
+    "autor": "Boris Fausto",
+    "titulo": "História do Brasil",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase VI",
+    "ano": "Ano 27 (2052) — História e Civilizações",
+    "autor": "Caio Prado Júnior",
+    "titulo": "Formação do Brasil Contemporâneo",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase VI",
+    "ano": "Ano 27 (2052) — História e Civilizações",
+    "autor": "Laurentino Gomes",
+    "titulo": "1808",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase VI",
+    "ano": "Ano 27 (2052) — História e Civilizações",
+    "autor": "Celso Furtado",
+    "titulo": "Formação Econômica do Brasil",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase VI",
+    "ano": "Ano 27 (2052) — História e Civilizações",
+    "autor": "Luís da Câmara Cascudo",
+    "titulo": "História da Alimentação no Brasil",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase VI",
+    "ano": "Ano 28 (2053) — Ciência, Mente e Vida Prática",
+    "autor": "Charles Darwin",
+    "titulo": "A Origem das Espécies",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase VI",
+    "ano": "Ano 28 (2053) — Ciência, Mente e Vida Prática",
+    "autor": "Charles Darwin",
+    "titulo": "A Viagem do Beagle",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase VI",
+    "ano": "Ano 28 (2053) — Ciência, Mente e Vida Prática",
+    "autor": "Clássico Anônimo / Tradição",
+    "titulo": "Carl Sagan — Cosmos",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase VI",
+    "ano": "Ano 28 (2053) — Ciência, Mente e Vida Prática",
+    "autor": "Clássico Anônimo / Tradição",
+    "titulo": "Carl Sagan — Contato",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase VI",
+    "ano": "Ano 28 (2053) — Ciência, Mente e Vida Prática",
+    "autor": "Clássico Anônimo / Tradição",
+    "titulo": "Carl Sagan — Pálido Ponto Azul",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase VI",
+    "ano": "Ano 28 (2053) — Ciência, Mente e Vida Prática",
+    "autor": "Stephen Hawking",
+    "titulo": "Uma Breve História do Tempo",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase VI",
+    "ano": "Ano 28 (2053) — Ciência, Mente e Vida Prática",
+    "autor": "Richard Feynman",
+    "titulo": "Está Brincando, Sr. Feynman!",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase VI",
+    "ano": "Ano 28 (2053) — Ciência, Mente e Vida Prática",
+    "autor": "Richard Dawkins",
+    "titulo": "O Gene Egoísta",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase VI",
+    "ano": "Ano 28 (2053) — Ciência, Mente e Vida Prática",
+    "autor": "Oliver Sacks",
+    "titulo": "O Homem que Confundiu Sua Mulher com um Chapéu",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase VI",
+    "ano": "Ano 28 (2053) — Ciência, Mente e Vida Prática",
+    "autor": "Sigmund Freud",
+    "titulo": "A Interpretação dos Sonhos",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase VI",
+    "ano": "Ano 28 (2053) — Ciência, Mente e Vida Prática",
+    "autor": "Carl Jung",
+    "titulo": "O Homem e Seus Símbolos",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase VI",
+    "ano": "Ano 28 (2053) — Ciência, Mente e Vida Prática",
+    "autor": "Daniel Kahneman",
+    "titulo": "Rápido e Devagar",
+    "aposta": true,
+    "papel": "Aposta Recente"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase VI",
+    "ano": "Ano 28 (2053) — Ciência, Mente e Vida Prática",
+    "autor": "Nassim Taleb",
+    "titulo": "A Lógica do Cisne Negro",
+    "aposta": true,
+    "papel": "Aposta Recente"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase VI",
+    "ano": "Ano 28 (2053) — Ciência, Mente e Vida Prática",
+    "autor": "Primo Levi",
+    "titulo": "A Tabela Periódica",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase VI",
+    "ano": "Ano 28 (2053) — Ciência, Mente e Vida Prática",
+    "autor": "Thomas Kuhn",
+    "titulo": "A Estrutura das Revoluções Científicas",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase VI",
+    "ano": "Ano 28 (2053) — Ciência, Mente e Vida Prática",
+    "autor": "Rachel Carson",
+    "titulo": "Primavera Silenciosa",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase VI",
+    "ano": "Ano 28 (2053) — Ciência, Mente e Vida Prática",
+    "autor": "Dava Sobel",
+    "titulo": "Longitude",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase VI",
+    "ano": "Ano 28 (2053) — Ciência, Mente e Vida Prática",
+    "autor": "Bill Bryson",
+    "titulo": "Uma Breve História de Quase Tudo",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase VI",
+    "ano": "Ano 28 (2053) — Ciência, Mente e Vida Prática",
+    "autor": "Malba Tahan",
+    "titulo": "O Homem que Calculava",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase VI",
+    "ano": "Ano 28 (2053) — Ciência, Mente e Vida Prática",
+    "autor": "Douglas Hofstadter",
+    "titulo": "Gödel, Escher, Bach",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase VI",
+    "ano": "Ano 28 (2053) — Ciência, Mente e Vida Prática",
+    "autor": "Henry David Thoreau",
+    "titulo": "Walden",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase VI",
+    "ano": "Ano 28 (2053) — Ciência, Mente e Vida Prática",
+    "autor": "Benjamin Franklin",
+    "titulo": "Autobiografia",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase VI",
+    "ano": "Ano 28 (2053) — Ciência, Mente e Vida Prática",
+    "autor": "Dale Carnegie",
+    "titulo": "Como Fazer Amigos e Influenciar Pessoas",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase VI",
+    "ano": "Ano 28 (2053) — Ciência, Mente e Vida Prática",
+    "autor": "Peter Drucker",
+    "titulo": "O Gestor Eficaz",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase VI",
+    "ano": "Ano 29 (2054) — Teatro e Poesia Universal",
+    "autor": "Eurípides",
+    "titulo": "Medeia",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase VI",
+    "ano": "Ano 29 (2054) — Teatro e Poesia Universal",
+    "autor": "Eurípides",
+    "titulo": "As Bacantes",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase VI",
+    "ano": "Ano 29 (2054) — Teatro e Poesia Universal",
+    "autor": "Aristófanes",
+    "titulo": "Lisístrata",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase VI",
+    "ano": "Ano 29 (2054) — Teatro e Poesia Universal",
+    "autor": "Shakespeare",
+    "titulo": "Ricardo III",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase VI",
+    "ano": "Ano 29 (2054) — Teatro e Poesia Universal",
+    "autor": "Shakespeare",
+    "titulo": "Júlio César",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase VI",
+    "ano": "Ano 29 (2054) — Teatro e Poesia Universal",
+    "autor": "Shakespeare",
+    "titulo": "Sonetos",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase VI",
+    "ano": "Ano 29 (2054) — Teatro e Poesia Universal",
+    "autor": "Shakespeare",
+    "titulo": "O Mercador de Veneza",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase VI",
+    "ano": "Ano 29 (2054) — Teatro e Poesia Universal",
+    "autor": "Shakespeare",
+    "titulo": "Muito Barulho por Nada",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase VI",
+    "ano": "Ano 29 (2054) — Teatro e Poesia Universal",
+    "autor": "Molière",
+    "titulo": "Tartufo",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase VI",
+    "ano": "Ano 29 (2054) — Teatro e Poesia Universal",
+    "autor": "Molière",
+    "titulo": "O Avarento",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase VI",
+    "ano": "Ano 29 (2054) — Teatro e Poesia Universal",
+    "autor": "Henrik Ibsen",
+    "titulo": "Casa de Bonecas",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase VI",
+    "ano": "Ano 29 (2054) — Teatro e Poesia Universal",
+    "autor": "Anton Tchékhov",
+    "titulo": "O Jardim das Cerejeiras",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase VI",
+    "ano": "Ano 29 (2054) — Teatro e Poesia Universal",
+    "autor": "Oscar Wilde",
+    "titulo": "A Importância de Ser Prudente",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase VI",
+    "ano": "Ano 29 (2054) — Teatro e Poesia Universal",
+    "autor": "Samuel Beckett",
+    "titulo": "Esperando Godot",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase VI",
+    "ano": "Ano 29 (2054) — Teatro e Poesia Universal",
+    "autor": "Bertolt Brecht",
+    "titulo": "Mãe Coragem e Seus Filhos",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase VI",
+    "ano": "Ano 29 (2054) — Teatro e Poesia Universal",
+    "autor": "Arthur Miller",
+    "titulo": "A Morte do Caixeiro-Viajante",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase VI",
+    "ano": "Ano 29 (2054) — Teatro e Poesia Universal",
+    "autor": "Tennessee Williams",
+    "titulo": "Um Bonde Chamado Desejo",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase VI",
+    "ano": "Ano 29 (2054) — Teatro e Poesia Universal",
+    "autor": "Luigi Pirandello",
+    "titulo": "Seis Personagens à Procura de um Autor",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase VI",
+    "ano": "Ano 29 (2054) — Teatro e Poesia Universal",
+    "autor": "Walt Whitman",
+    "titulo": "Folhas de Relva",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase VI",
+    "ano": "Ano 29 (2054) — Teatro e Poesia Universal",
+    "autor": "Emily Dickinson",
+    "titulo": "Poemas",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase VI",
+    "ano": "Ano 29 (2054) — Teatro e Poesia Universal",
+    "autor": "T. S. Eliot",
+    "titulo": "A Terra Desolada",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase VI",
+    "ano": "Ano 29 (2054) — Teatro e Poesia Universal",
+    "autor": "Arthur Rimbaud",
+    "titulo": "Uma Temporada no Inferno",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase VI",
+    "ano": "Ano 29 (2054) — Teatro e Poesia Universal",
+    "autor": "Omar Khayyam",
+    "titulo": "Rubaiyát",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase VI",
+    "ano": "Ano 29 (2054) — Teatro e Poesia Universal",
+    "autor": "William Blake",
+    "titulo": "Canções da Inocência e da Experiência",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase VI",
+    "ano": "Ano 30 (2055) — Referência, Imagem e Prateleira da Família",
+    "autor": "Referência",
+    "titulo": "Dicionário Houaiss da Língua Portuguesa",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase VI",
+    "ano": "Ano 30 (2055) — Referência, Imagem e Prateleira da Família",
+    "autor": "Evanildo Bechara",
+    "titulo": "Moderna Gramática Portuguesa",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase VI",
+    "ano": "Ano 30 (2055) — Referência, Imagem e Prateleira da Família",
+    "autor": "Jean Chevalier e Alain Gheerbrant",
+    "titulo": "Dicionário de Símbolos",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase VI",
+    "ano": "Ano 30 (2055) — Referência, Imagem e Prateleira da Família",
+    "autor": "Nicola Abbagnano",
+    "titulo": "Dicionário de Filosofia",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase VI",
+    "ano": "Ano 30 (2055) — Referência, Imagem e Prateleira da Família",
+    "autor": "Referência",
+    "titulo": "Atlas Geográfico Mundial (edição de referência)",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase VI",
+    "ano": "Ano 30 (2055) — Referência, Imagem e Prateleira da Família",
+    "autor": "Referência",
+    "titulo": "Atlas da História do Mundo",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase VI",
+    "ano": "Ano 30 (2055) — Referência, Imagem e Prateleira da Família",
+    "autor": "Karen Wynn Fonstad",
+    "titulo": "O Atlas da Terra-Média",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase VI",
+    "ano": "Ano 30 (2055) — Referência, Imagem e Prateleira da Família",
+    "autor": "Wayne G. Hammond e Christina Scull",
+    "titulo": "J. R. R. Tolkien: Artista e Ilustrador",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase VI",
+    "ano": "Ano 30 (2055) — Referência, Imagem e Prateleira da Família",
+    "autor": "Walter Isaacson",
+    "titulo": "Leonardo da Vinci",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase VI",
+    "ano": "Ano 30 (2055) — Referência, Imagem e Prateleira da Família",
+    "autor": "Art Spiegelman",
+    "titulo": "Maus",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase VI",
+    "ano": "Ano 30 (2055) — Referência, Imagem e Prateleira da Família",
+    "autor": "Alan Moore e Dave Gibbons",
+    "titulo": "Watchmen",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase VI",
+    "ano": "Ano 30 (2055) — Referência, Imagem e Prateleira da Família",
+    "autor": "Alan Moore e David Lloyd",
+    "titulo": "V de Vingança",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 13,
+    "fase": "Fase VI",
+    "ano": "Ano 30 (2055) — Referência, Imagem e Prateleira da Família",
+    "autor": "Frank Miller",
+    "titulo": "Batman: O Cavaleiro das Trevas",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 14,
+    "fase": "Fase VI",
+    "ano": "Ano 30 (2055) — Referência, Imagem e Prateleira da Família",
+    "autor": "Neil Gaiman",
+    "titulo": "Sandman: Prélúdios e Noturnos",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 15,
+    "fase": "Fase VI",
+    "ano": "Ano 30 (2055) — Referência, Imagem e Prateleira da Família",
+    "autor": "Marjane Satrapi",
+    "titulo": "Persépolis",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 16,
+    "fase": "Fase VI",
+    "ano": "Ano 30 (2055) — Referência, Imagem e Prateleira da Família",
+    "autor": "Hergé",
+    "titulo": "Tintim no Tibete",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 17,
+    "fase": "Fase VI",
+    "ano": "Ano 30 (2055) — Referência, Imagem e Prateleira da Família",
+    "autor": "Goscinny e Uderzo",
+    "titulo": "Asterix, o Gaulês",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 18,
+    "fase": "Fase VI",
+    "ano": "Ano 30 (2055) — Referência, Imagem e Prateleira da Família",
+    "autor": "Mauricio de Sousa",
+    "titulo": "Turma da Mônica (coleção histórica)",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 19,
+    "fase": "Fase VI",
+    "ano": "Ano 30 (2055) — Referência, Imagem e Prateleira da Família",
+    "autor": "Bill Watterson",
+    "titulo": "Calvin e Haroldo",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 20,
+    "fase": "Fase VI",
+    "ano": "Ano 30 (2055) — Referência, Imagem e Prateleira da Família",
+    "autor": "Paulo Freire",
+    "titulo": "Pedagogia do Oprimido",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 21,
+    "fase": "Fase VI",
+    "ano": "Ano 30 (2055) — Referência, Imagem e Prateleira da Família",
+    "autor": "Paulo Freire",
+    "titulo": "Pedagogia da Autonomia",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 22,
+    "fase": "Fase VI",
+    "ano": "Ano 30 (2055) — Referência, Imagem e Prateleira da Família",
+    "autor": "Rubem Alves",
+    "titulo": "A Alegria de Ensinar",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 23,
+    "fase": "Fase VI",
+    "ano": "Ano 30 (2055) — Referência, Imagem e Prateleira da Família",
+    "autor": "Burton Malkiel",
+    "titulo": "Um Passeio Aleatório por Wall Street",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 24,
+    "fase": "Fase VI",
+    "ano": "Ano 30 (2055) — Referência, Imagem e Prateleira da Família",
+    "autor": "Thomas Stanley e William Danko",
+    "titulo": "O Milionário Mora ao Lado",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase VII",
+    "ano": "Ano 31 (2056) — O Romance Britânico Completo",
+    "autor": "Charles Dickens",
+    "titulo": "Duas Cidades",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase VII",
+    "ano": "Ano 31 (2056) — O Romance Britânico Completo",
+    "autor": "Charles Dickens",
+    "titulo": "A Casa Soturna",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase VII",
+    "ano": "Ano 31 (2056) — O Romance Britânico Completo",
+    "autor": "Charles Dickens",
+    "titulo": "A Pequena Dorrit",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase VII",
+    "ano": "Ano 31 (2056) — O Romance Britânico Completo",
+    "autor": "Jane Austen",
+    "titulo": "Emma",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase VII",
+    "ano": "Ano 31 (2056) — O Romance Britânico Completo",
+    "autor": "Jane Austen",
+    "titulo": "Persuasão",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase VII",
+    "ano": "Ano 31 (2056) — O Romance Britânico Completo",
+    "autor": "George Eliot",
+    "titulo": "Middlemarch",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase VII",
+    "ano": "Ano 31 (2056) — O Romance Britânico Completo",
+    "autor": "William Makepeace Thackeray",
+    "titulo": "A Feira das Vaidades",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase VII",
+    "ano": "Ano 31 (2056) — O Romance Britânico Completo",
+    "autor": "Daniel Defoe",
+    "titulo": "Robinson Crusoé",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase VII",
+    "ano": "Ano 31 (2056) — O Romance Britânico Completo",
+    "autor": "Jonathan Swift",
+    "titulo": "As Viagens de Gulliver",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase VII",
+    "ano": "Ano 31 (2056) — O Romance Britânico Completo",
+    "autor": "Henry Fielding",
+    "titulo": "Tom Jones",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase VII",
+    "ano": "Ano 31 (2056) — O Romance Britânico Completo",
+    "autor": "Laurence Sterne",
+    "titulo": "Tristram Shandy",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase VII",
+    "ano": "Ano 31 (2056) — O Romance Britânico Completo",
+    "autor": "Joseph Conrad",
+    "titulo": "Coração das Trevas",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase VII",
+    "ano": "Ano 32 (2057) — Hardy, Austen e a Aventura Vitoriana",
+    "autor": "Thomas Hardy",
+    "titulo": "Judas, o Obscuro",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase VII",
+    "ano": "Ano 32 (2057) — Hardy, Austen e a Aventura Vitoriana",
+    "autor": "Thomas Hardy",
+    "titulo": "Longe do Mundanal Ruído",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase VII",
+    "ano": "Ano 32 (2057) — Hardy, Austen e a Aventura Vitoriana",
+    "autor": "Thomas Hardy",
+    "titulo": "O Prefeito de Casterbridge",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase VII",
+    "ano": "Ano 32 (2057) — Hardy, Austen e a Aventura Vitoriana",
+    "autor": "Jane Austen",
+    "titulo": "Mansfield Park",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase VII",
+    "ano": "Ano 32 (2057) — Hardy, Austen e a Aventura Vitoriana",
+    "autor": "Jane Austen",
+    "titulo": "A Abadia de Northanger",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase VII",
+    "ano": "Ano 32 (2057) — Hardy, Austen e a Aventura Vitoriana",
+    "autor": "Anne Brontë",
+    "titulo": "A Inquilina de Wildfell Hall",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase VII",
+    "ano": "Ano 32 (2057) — Hardy, Austen e a Aventura Vitoriana",
+    "autor": "Nathaniel Hawthorne",
+    "titulo": "A Letra Escarlate",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase VII",
+    "ano": "Ano 32 (2057) — Hardy, Austen e a Aventura Vitoriana",
+    "autor": "Henry James",
+    "titulo": "Retrato de uma Dama",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase VII",
+    "ano": "Ano 32 (2057) — Hardy, Austen e a Aventura Vitoriana",
+    "autor": "Joseph Conrad",
+    "titulo": "Lord Jim",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase VII",
+    "ano": "Ano 32 (2057) — Hardy, Austen e a Aventura Vitoriana",
+    "autor": "Rudyard Kipling",
+    "titulo": "Kim",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase VII",
+    "ano": "Ano 32 (2057) — Hardy, Austen e a Aventura Vitoriana",
+    "autor": "Rudyard Kipling",
+    "titulo": "O Livro da Selva",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase VII",
+    "ano": "Ano 32 (2057) — Hardy, Austen e a Aventura Vitoriana",
+    "autor": "Jack London",
+    "titulo": "O Chamado Selvagem",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase VII",
+    "ano": "Ano 33 (2058) — Aventura Clássica: Verne, Wells e Dumas",
+    "autor": "Júlio Verne",
+    "titulo": "A Volta ao Mundo em 80 Dias",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase VII",
+    "ano": "Ano 33 (2058) — Aventura Clássica: Verne, Wells e Dumas",
+    "autor": "Júlio Verne",
+    "titulo": "Viagem ao Centro da Terra",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase VII",
+    "ano": "Ano 33 (2058) — Aventura Clássica: Verne, Wells e Dumas",
+    "autor": "Júlio Verne",
+    "titulo": "A Ilha Misteriosa",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase VII",
+    "ano": "Ano 33 (2058) — Aventura Clássica: Verne, Wells e Dumas",
+    "autor": "Júlio Verne",
+    "titulo": "Da Terra à Lua",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase VII",
+    "ano": "Ano 33 (2058) — Aventura Clássica: Verne, Wells e Dumas",
+    "autor": "H. G. Wells",
+    "titulo": "O Homem Invisível",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase VII",
+    "ano": "Ano 33 (2058) — Aventura Clássica: Verne, Wells e Dumas",
+    "autor": "H. G. Wells",
+    "titulo": "A Ilha do Dr. Moreau",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase VII",
+    "ano": "Ano 33 (2058) — Aventura Clássica: Verne, Wells e Dumas",
+    "autor": "Robert Louis Stevenson",
+    "titulo": "A Ilha do Tesouro",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase VII",
+    "ano": "Ano 33 (2058) — Aventura Clássica: Verne, Wells e Dumas",
+    "autor": "Robert Louis Stevenson",
+    "titulo": "Raptado",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase VII",
+    "ano": "Ano 33 (2058) — Aventura Clássica: Verne, Wells e Dumas",
+    "autor": "Alexandre Dumas",
+    "titulo": "Vinte Anos Depois",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase VII",
+    "ano": "Ano 33 (2058) — Aventura Clássica: Verne, Wells e Dumas",
+    "autor": "Alexandre Dumas",
+    "titulo": "O Homem da Máscara de Ferro",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase VII",
+    "ano": "Ano 33 (2058) — Aventura Clássica: Verne, Wells e Dumas",
+    "autor": "Victor Hugo",
+    "titulo": "Os Trabalhadores do Mar",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase VII",
+    "ano": "Ano 33 (2058) — Aventura Clássica: Verne, Wells e Dumas",
+    "autor": "Rafael Sabatini",
+    "titulo": "Capitão Blood",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase VII",
+    "ano": "Ano 34 (2059) — A Torre Negra e Ficção Científica Contemporânea",
+    "autor": "Stephen King",
+    "titulo": "A Torre Negra I: O Pistoleiro",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase VII",
+    "ano": "Ano 34 (2059) — A Torre Negra e Ficção Científica Contemporânea",
+    "autor": "Stephen King",
+    "titulo": "A Torre Negra II: A Escolha dos Três",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase VII",
+    "ano": "Ano 34 (2059) — A Torre Negra e Ficção Científica Contemporânea",
+    "autor": "Stephen King",
+    "titulo": "A Torre Negra III: As Terras Devastadas",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase VII",
+    "ano": "Ano 34 (2059) — A Torre Negra e Ficção Científica Contemporânea",
+    "autor": "Stephen King",
+    "titulo": "A Torre Negra IV: Mago e Vidro",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase VII",
+    "ano": "Ano 34 (2059) — A Torre Negra e Ficção Científica Contemporânea",
+    "autor": "Stephen King",
+    "titulo": "A Torre Negra V: Lobos de Calla",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase VII",
+    "ano": "Ano 34 (2059) — A Torre Negra e Ficção Científica Contemporânea",
+    "autor": "Stephen King",
+    "titulo": "A Torre Negra VI: Canção de Susannah",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase VII",
+    "ano": "Ano 34 (2059) — A Torre Negra e Ficção Científica Contemporânea",
+    "autor": "Stephen King",
+    "titulo": "A Torre Negra VII: A Torre Negra",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase VII",
+    "ano": "Ano 34 (2059) — A Torre Negra e Ficção Científica Contemporânea",
+    "autor": "Stephen King",
+    "titulo": "A Torre Negra VIII: O Vento pela Fechadura",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase VII",
+    "ano": "Ano 34 (2059) — A Torre Negra e Ficção Científica Contemporânea",
+    "autor": "Dan Simmons",
+    "titulo": "Hyperion",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase VII",
+    "ano": "Ano 34 (2059) — A Torre Negra e Ficção Científica Contemporânea",
+    "autor": "Octavia Butler",
+    "titulo": "Kindred: Laços de Sangue",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase VII",
+    "ano": "Ano 34 (2059) — A Torre Negra e Ficção Científica Contemporânea",
+    "autor": "Liu Cixin",
+    "titulo": "A Floresta Sombria",
+    "aposta": true,
+    "papel": "Aposta Recente"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase VII",
+    "ano": "Ano 34 (2059) — A Torre Negra e Ficção Científica Contemporânea",
+    "autor": "Liu Cixin",
+    "titulo": "O Fim da Morte",
+    "aposta": true,
+    "papel": "Aposta Recente"
+  },
+  {
+    "ordem": 1,
+    "fase": "Fase VII",
+    "ano": "Ano 35 (2060-2061) — O Fechamento do Círculo",
+    "autor": "Albert Camus",
+    "titulo": "A Queda",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 2,
+    "fase": "Fase VII",
+    "ano": "Ano 35 (2060-2061) — O Fechamento do Círculo",
+    "autor": "Jean",
+    "titulo": "Paul Sartre — A Náusea",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 3,
+    "fase": "Fase VII",
+    "ano": "Ano 35 (2060-2061) — O Fechamento do Círculo",
+    "autor": "Simone de Beauvoir",
+    "titulo": "O Segundo Sexo",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 4,
+    "fase": "Fase VII",
+    "ano": "Ano 35 (2060-2061) — O Fechamento do Círculo",
+    "autor": "Joseph Roth",
+    "titulo": "A Marcha de Radetzky",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 5,
+    "fase": "Fase VII",
+    "ano": "Ano 35 (2060-2061) — O Fechamento do Círculo",
+    "autor": "Thomas Mann",
+    "titulo": "Doutor Fausto",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 6,
+    "fase": "Fase VII",
+    "ano": "Ano 35 (2060-2061) — O Fechamento do Círculo",
+    "autor": "Hermann Hesse",
+    "titulo": "O Jogo das Contas de Vidro",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 7,
+    "fase": "Fase VII",
+    "ano": "Ano 35 (2060-2061) — O Fechamento do Círculo",
+    "autor": "Franz Kafka",
+    "titulo": "O Castelo",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 8,
+    "fase": "Fase VII",
+    "ano": "Ano 35 (2060-2061) — O Fechamento do Círculo",
+    "autor": "Robert Musil",
+    "titulo": "O Homem sem Qualidades",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 9,
+    "fase": "Fase VII",
+    "ano": "Ano 35 (2060-2061) — O Fechamento do Círculo",
+    "autor": "Italo Svevo",
+    "titulo": "A Consciência de Zeno",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 10,
+    "fase": "Fase VII",
+    "ano": "Ano 35 (2060-2061) — O Fechamento do Círculo",
+    "autor": "José Saramago",
+    "titulo": "Caim",
+    "aposta": false,
+    "papel": "Prazer"
+  },
+  {
+    "ordem": 11,
+    "fase": "Fase VII",
+    "ano": "Ano 35 (2060-2061) — O Fechamento do Círculo",
+    "autor": "Mia Couto",
+    "titulo": "O Último Voo do Flamingo",
+    "aposta": false,
+    "papel": "Pilar"
+  },
+  {
+    "ordem": 12,
+    "fase": "Fase VII",
+    "ano": "Ano 35 (2060-2061) — O Fechamento do Círculo",
+    "autor": "Diversos / Sagrado e Família",
+    "titulo": "Livro da Família: a Bíblia de família com folhas de registro (nascimentos, casamentos, datas importantes) e o seu livro — tombo encadernado, para a biblioteca ser entregue junto com a história dela",
+    "aposta": false,
+    "papel": "Prazer"
+  }
+]
