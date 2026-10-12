@@ -67,6 +67,12 @@ service cloud.firestore {
 - Leitor via câmera integrado para códigos EAN-13 / ISBN.
 - Capas consultadas online são salvas automaticamente no Firestore, tornando o carregamento instantâneo.
 
+### 9. 🤖 Central de Inteligência & Recomendações
+- **Calculadora de Ritmo & Metas:** Pacing inteligente informando dias por livro, páginas/dia necessárias e projeção de fim de ano com base no ritmo real. Sugere leituras rápidas (<260p) do acervo para recuperar o ritmo.
+- **Oráculo de Leitura ("O Que Ler Agora?"):** Matchmaker interativo que pontua livros não lidos do catálogo por afinidade de autor, notas de categoria e tempo disponível.
+- **Radar de Próximas Compras & Desejos:** Conexão com Google Books que descobre obras famosas dos seus autores favoritos (Tier S/A) que você ainda não possui, com botão de adição em 1 clique para a Lista de Desejos e atalho para Amazon.
+- **DNA Literário:** Mapeamento da categoria com maior nota média real vs maior volume, ranking dos autores nota 10 e estimativa de horas de leitura na fila.
+
 ---
 
 ## 💻 Como Rodar Localmente
