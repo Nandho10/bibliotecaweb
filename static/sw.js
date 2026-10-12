@@ -1,4 +1,4 @@
-const CACHE_NAME = 'biblioteca-pwa-v1';
+const CACHE_NAME = 'biblioteca-pwa-v2';
 const STATIC_ASSETS = [
   '/',
   '/static/manifest.json',
