@@ -2031,6 +2031,99 @@
             paceText = `No ritmo atual você projetará <strong>${projectedEndYear} livros</strong> até o fim do ano (faltarão ${readingGoal - projectedEndYear}). Veja as leituras rápidas sugeridas abaixo para retomar o fôlego!`;
         }
 
+        const estReadingMinutes = Math.max(10, Math.round(pagesPerDayNeeded * 1.5));
+
+        // Bloco de ritmo do livro atualmente em leitura (se houver) ou sugestão para a próxima obra
+        let currentReadingPacingHtml = '';
+        if (readingBooks.length > 0) {
+            const cur = readingBooks[0];
+            const curPages = parseInt(String(cur.pages).match(/\d+/) || [0], 10) || 250;
+            const curPaceDays = Math.max(1, Math.ceil(curPages / Math.max(1, pagesPerDayNeeded)));
+            const sprintPages = Math.ceil(curPages / 7);
+            const sprintMins = Math.round(sprintPages * 1.5);
+            const chillPages = Math.ceil(curPages / 20);
+            const chillMins = Math.round(chillPages * 1.5);
+
+            currentReadingPacingHtml = `
+                <div class="col-12 mt-1">
+                    <div class="p-2 px-3 rounded-3 shadow-sm" style="background: rgba(255, 255, 255, 0.95); color: #1e293b; border-left: 4px solid #10b981;">
+                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                            <div class="d-flex align-items-center gap-2 overflow-hidden">
+                                <span class="badge bg-success text-white"><i class="bi bi-book-half me-1"></i>Lendo Agora</span>
+                                <span class="fw-bold text-truncate" style="color: #0f172a; max-width: 260px;" title="${cur.title.replace(/"/g, '&quot;')}">${cur.title}</span>
+                                <span class="text-muted small">(${curPages} págs)</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-1 flex-wrap">
+                                <span class="badge bg-primary-subtle text-primary border small" title="Ritmo para meta anual">
+                                    <i class="bi bi-bullseye me-1"></i>Meta Anual: ${curPaceDays} dias (${pagesPerDayNeeded} p/dia)
+                                </span>
+                                <span class="badge bg-warning-subtle text-warning-emphasis border small" title="Ritmo Sprint para fechar em 7 dias">
+                                    <i class="bi bi-lightning-charge me-1"></i>Sprint 7 dias: ~${sprintPages} p/dia (~${sprintMins}m)
+                                </span>
+                                <span class="badge bg-secondary-subtle text-secondary border small" title="Ritmo suave para fechar em 20 dias">
+                                    <i class="bi bi-cup-hot me-1"></i>Suave 20 dias: ~${chillPages} p/dia (~${chillMins}m)
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        const dailyPaceGuideHtml = `
+            <div class="mt-3 p-3 rounded-3 shadow-sm" style="background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.25);">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                    <div class="fw-bold small text-white d-flex align-items-center gap-2">
+                        <i class="bi bi-clock-history text-warning fs-5"></i>
+                        <span>Sugestões de Ritmo de Leitura Diária (Páginas por Dia)</span>
+                    </div>
+                    <span class="badge bg-white text-dark small fw-semibold shadow-sm">
+                        <i class="bi bi-stopwatch me-1 text-primary"></i>~${estReadingMinutes} min/dia sugeridos
+                    </span>
+                </div>
+                
+                <div class="row g-2">
+                    <div class="col-md-4 col-sm-6">
+                        <div class="p-2 px-3 rounded-3 h-100 shadow-sm" style="background: rgba(255, 255, 255, 0.95); color: #1e293b;">
+                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                <span class="small fw-bold" style="color: #0f172a;"><i class="bi bi-bullseye text-primary me-1"></i>Para Fechar a Meta</span>
+                                <span class="badge bg-primary text-white fw-bold">${pagesPerDayNeeded} págs/dia</span>
+                            </div>
+                            <div class="text-muted" style="font-size: 0.72rem;">
+                                Conclui os <strong>${readingGoal} livros</strong> em ${currentYear} (~${pagesPerDayNeeded * 7} págs/semana, ~${estReadingMinutes} min/dia).
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-sm-6">
+                        <div class="p-2 px-3 rounded-3 h-100 shadow-sm" style="background: rgba(255, 255, 255, 0.95); color: #1e293b;">
+                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                <span class="small fw-bold" style="color: #0f172a;"><i class="bi bi-cup-hot text-warning me-1"></i>Hábito Diário Leve</span>
+                                <span class="badge bg-warning text-dark fw-bold">~${Math.max(10, Math.round(avgUnreadPages / 20))} págs/dia</span>
+                            </div>
+                            <div class="text-muted" style="font-size: 0.72rem;">
+                                Basta ler <strong>${Math.max(5, Math.round(avgUnreadPages / 40))} págs de manhã</strong> e <strong>${Math.max(5, Math.round(avgUnreadPages / 40))} antes de dormir</strong> (~15 min diários).
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-12">
+                        <div class="p-2 px-3 rounded-3 h-100 shadow-sm" style="background: rgba(255, 255, 255, 0.95); color: #1e293b;">
+                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                <span class="small fw-bold" style="color: #0f172a;"><i class="bi bi-calendar2-week text-success me-1"></i>Fins de Semana</span>
+                                <span class="badge bg-success text-white fw-bold">~${Math.ceil((pagesPerDayNeeded * 7) / 2)} págs/dia</span>
+                            </div>
+                            <div class="text-muted" style="font-size: 0.72rem;">
+                                Para quem tem a semana corrida: compense lendo aos sábados e domingos (~${Math.ceil((pagesPerDayNeeded * 7) / 2)} págs).
+                            </div>
+                        </div>
+                    </div>
+
+                    ${currentReadingPacingHtml}
+                </div>
+            </div>
+        `;
+
         // Leituras rápidas no acervo (< 260 págs) para acelerar o ritmo
         const quickReads = unreadBooks
             .filter(b => {
@@ -2043,19 +2136,36 @@
         if (quickReads.length > 0) {
             quickReadsHtml = `
                 <div class="mt-3 pt-3 border-top border-white border-opacity-25">
-                    <div class="small fw-semibold text-white mb-2 opacity-90"><i class="bi bi-lightning-charge-fill text-warning me-1"></i>Leituras Rápidas no seu Acervo para acelerar o ritmo:</div>
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <div class="small fw-semibold text-white opacity-95">
+                            <i class="bi bi-lightning-charge-fill text-warning me-1"></i>Leituras Rápidas no seu Acervo para acelerar o ritmo:
+                        </div>
+                        <span class="small text-light opacity-75" style="font-size: 0.75rem;">(Clique para detalhes)</span>
+                    </div>
                     <div class="row g-2">
-                        ${quickReads.map(b => `
-                            <div class="col-sm-6 col-md-3">
-                                <div class="p-2 rounded-3 bg-white bg-opacity-15 text-white d-flex align-items-center justify-content-between" style="cursor: pointer;" onclick="showBookDetails('${b.id}')" title="Clique para abrir ${b.title.replace(/'/g, "\\'")}">
-                                    <div class="text-truncate me-2">
-                                        <div class="small fw-bold text-truncate">${b.title}</div>
-                                        <div style="font-size: 0.72rem; opacity: 0.85;">${b.authors ? b.authors.split(',')[0] : ''}</div>
+                        ${quickReads.map(b => {
+                            const pCount = parseInt(String(b.pages).match(/\d+/) || [0], 10) || 200;
+                            const estDays = Math.max(1, Math.ceil(pCount / Math.max(5, pagesPerDayNeeded)));
+                            return `
+                                <div class="col-sm-6 col-md-3">
+                                    <div class="p-2 px-3 rounded-3 shadow-sm d-flex align-items-center justify-content-between h-100" style="background: rgba(255, 255, 255, 0.95); color: #1e293b; border: 1px solid rgba(255,255,255,0.6); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)';" onmouseout="this.style.transform='none'; this.style.boxShadow='none';" onclick="showBookDetails('${b.id}')" title="Clique para abrir: ${b.title.replace(/'/g, "\\'")}">
+                                        <div class="d-flex align-items-center gap-2 overflow-hidden me-2">
+                                            <div id="qrCover_${b.id}" style="width: 34px; height: 48px; border-radius: 4px; background: #e2e8f0; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.15);">
+                                                <i class="bi bi-book text-muted small"></i>
+                                            </div>
+                                            <div class="overflow-hidden">
+                                                <div class="small fw-bold text-truncate" style="color: #0f172a; max-width: 170px;" title="${b.title.replace(/"/g, '&quot;')}">${b.title}</div>
+                                                <div class="text-truncate" style="font-size: 0.72rem; color: #64748b;">${b.authors ? b.authors.split(',')[0] : 'Autor não informado'}</div>
+                                                <div style="font-size: 0.68rem; color: #2563eb; font-weight: 600;">~${estDays} ${estDays === 1 ? 'dia' : 'dias'} de leitura</div>
+                                            </div>
+                                        </div>
+                                        <span class="badge bg-primary text-white small text-nowrap px-2 py-1 fw-bold">
+                                            ${pCount}p
+                                        </span>
                                     </div>
-                                    <span class="badge bg-white text-dark small text-nowrap">${b.pages || '200'}p</span>
                                 </div>
-                            </div>
-                        `).join('')}
+                            `;
+                        }).join('')}
                     </div>
                 </div>
             `;
@@ -2136,41 +2246,51 @@
                     <!-- Métricas de Ritmo em Mini-cards -->
                     <div class="row g-3 mb-3">
                         <div class="col-md-3 col-6">
-                            <div class="p-3 rounded-3 bg-white bg-opacity-15">
-                                <div class="small opacity-75 text-uppercase fw-semibold" style="font-size: 0.72rem;">Progresso Anual</div>
-                                <div class="fs-4 fw-bold text-white">${booksReadThisYear} <span class="fs-6 fw-normal opacity-75">/ ${readingGoal} livros</span></div>
-                                <div class="small opacity-75">${pagesReadThisYear.toLocaleString('pt-BR')} págs lidas</div>
+                            <div class="p-3 rounded-3 shadow-sm h-100" style="background: rgba(255, 255, 255, 0.95); color: #1e293b; border: 1px solid rgba(255, 255, 255, 0.3);">
+                                <div class="text-uppercase fw-semibold mb-1" style="font-size: 0.72rem; color: #475569; letter-spacing: 0.5px;">
+                                    <i class="bi bi-calendar-check text-primary me-1"></i>Progresso Anual
+                                </div>
+                                <div class="fs-4 fw-bold" style="color: #0f172a;">${booksReadThisYear} <span class="fs-6 fw-normal text-muted">/ ${readingGoal} livros</span></div>
+                                <div class="small text-muted mt-1"><i class="bi bi-check2-circle text-success me-1"></i>${pagesReadThisYear.toLocaleString('pt-BR')} págs lidas</div>
                             </div>
                         </div>
                         <div class="col-md-3 col-6">
-                            <div class="p-3 rounded-3 bg-white bg-opacity-15">
-                                <div class="small opacity-75 text-uppercase fw-semibold" style="font-size: 0.72rem;">Ritmo por Livro</div>
-                                <div class="fs-4 fw-bold text-white">${booksLeft > 0 ? '1 a cada ' + daysPerBook + 'd' : 'Concluído!'}</div>
-                                <div class="small opacity-75">${daysRemaining} dias restantes</div>
+                            <div class="p-3 rounded-3 shadow-sm h-100" style="background: rgba(255, 255, 255, 0.95); color: #1e293b; border: 1px solid rgba(255, 255, 255, 0.3);">
+                                <div class="text-uppercase fw-semibold mb-1" style="font-size: 0.72rem; color: #475569; letter-spacing: 0.5px;">
+                                    <i class="bi bi-hourglass-split text-info me-1"></i>Ritmo por Livro
+                                </div>
+                                <div class="fs-4 fw-bold" style="color: #0f172a;">${booksLeft > 0 ? '1 a cada ' + daysPerBook + 'd' : 'Concluído!'}</div>
+                                <div class="small text-muted mt-1"><i class="bi bi-clock-history me-1"></i>${daysRemaining} dias restantes</div>
                             </div>
                         </div>
                         <div class="col-md-3 col-6">
-                            <div class="p-3 rounded-3 bg-white bg-opacity-15">
-                                <div class="small opacity-75 text-uppercase fw-semibold" style="font-size: 0.72rem;">Ritmo de Páginas</div>
-                                <div class="fs-4 fw-bold text-white">~${pagesPerDayNeeded} <span class="fs-6 fw-normal opacity-75">págs/dia</span></div>
-                                <div class="small opacity-75">para fechar ${readingGoal} livros</div>
+                            <div class="p-3 rounded-3 shadow-sm h-100" style="background: rgba(255, 255, 255, 0.95); color: #1e293b; border: 1px solid rgba(255, 255, 255, 0.3);">
+                                <div class="text-uppercase fw-semibold mb-1" style="font-size: 0.72rem; color: #475569; letter-spacing: 0.5px;">
+                                    <i class="bi bi-book-half text-warning me-1"></i>Meta Diária
+                                </div>
+                                <div class="fs-4 fw-bold" style="color: #0f172a;">~${pagesPerDayNeeded} <span class="fs-6 fw-normal text-muted">págs/dia</span></div>
+                                <div class="small text-muted mt-1"><i class="bi bi-flag me-1"></i>para fechar ${readingGoal} livros</div>
                             </div>
                         </div>
                         <div class="col-md-3 col-6">
-                            <div class="p-3 rounded-3 bg-white bg-opacity-15">
-                                <div class="small opacity-75 text-uppercase fw-semibold" style="font-size: 0.72rem;">Projeção Final</div>
-                                <div class="fs-4 fw-bold text-white">~${projectedEndYear} <span class="fs-6 fw-normal opacity-75">livros</span></div>
-                                <div class="small opacity-75">${currentPaceMonthly.toFixed(1)} livros/mês</div>
+                            <div class="p-3 rounded-3 shadow-sm h-100" style="background: rgba(255, 255, 255, 0.95); color: #1e293b; border: 1px solid rgba(255, 255, 255, 0.3);">
+                                <div class="text-uppercase fw-semibold mb-1" style="font-size: 0.72rem; color: #475569; letter-spacing: 0.5px;">
+                                    <i class="bi bi-graph-up-arrow text-success me-1"></i>Projeção Final
+                                </div>
+                                <div class="fs-4 fw-bold" style="color: #0f172a;">~${projectedEndYear} <span class="fs-6 fw-normal text-muted">livros</span></div>
+                                <div class="small text-muted mt-1"><i class="bi bi-bar-chart me-1"></i>${currentPaceMonthly.toFixed(1)} livros/mês</div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Barra de Progresso Geral -->
-                    <div class="progress bg-white bg-opacity-25 mb-1" style="height: 18px; border-radius: 9px;">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning text-dark fw-bold" role="progressbar" style="width: ${percentGoal}%; font-size: 0.8rem;" aria-valuenow="${percentGoal}" aria-valuemin="0" aria-valuemax="100">
-                            ${percentGoal}% (${booksReadThisYear}/${readingGoal})
+                    <div class="progress shadow-sm mb-1" style="height: 20px; border-radius: 10px; background: rgba(0, 0, 0, 0.25);">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning text-dark fw-bold" role="progressbar" style="width: ${percentGoal}%; font-size: 0.82rem;" aria-valuenow="${percentGoal}" aria-valuemin="0" aria-valuemax="100">
+                            ${percentGoal}% (${booksReadThisYear}/${readingGoal} livros)
                         </div>
                     </div>
+
+                    ${dailyPaceGuideHtml}
 
                     ${quickReadsHtml}
                 </div>
@@ -2315,6 +2435,17 @@
         `;
 
         container.html(html);
+
+        // Carrega capas assíncronas para as leituras rápidas sugeridas
+        if (quickReads && quickReads.length > 0) {
+            quickReads.forEach(b => {
+                fetchCover(b).then(url => {
+                    if (url && url !== 'fallback') {
+                        $(`#qrCover_${b.id}`).html(`<img src="${url}" alt="Capa" style="width: 100%; height: 100%; object-fit: cover;">`);
+                    }
+                });
+            });
+        }
 
         // Dispara a busca inicial de recomendações com o primeiro autor favorito
         if (radarAuthors.length > 0) {
