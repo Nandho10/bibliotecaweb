@@ -213,6 +213,7 @@
                 <button class="btn active" data-view="cards" title="Visualização em Cards"><i class="bi bi-view-list"></i></button>
                 <button class="btn" data-view="table" title="Visualização em Tabela"><i class="bi bi-table"></i></button>
                 <button class="btn" data-view="stats" title="Estatísticas"><i class="bi bi-bar-chart-fill"></i></button>
+                <button class="btn" data-view="insights" title="Inteligência & Recomendações"><i class="bi bi-stars text-warning"></i></button>
                 <button class="btn border-start ms-2" onclick="openColumnsModal()" title="Configurar Colunas da Tabela"><i class="bi bi-gear"></i></button>
             </div>
             <div id="authContainer"></div>
@@ -321,6 +322,7 @@
             <div id="cardsContainer" class="row g-4 card-view"></div>
             <div id="coversContainer" class="row g-3 cover-view" style="display: none;"></div>
             <div id="statsContainer" class="row g-4 p-2" style="display: none;"></div>
+            <div id="insightsContainer" class="row g-4 p-2" style="display: none;"></div>
 
             <div class="table-responsive" id="tableContainer" style="display: none;">
                 <table id="booksTable" class="table table-striped table-hover" style="width:100%">
@@ -1124,11 +1126,12 @@
         $(this).addClass('active');
         currentView = $(this).data('view');
         
-        $('#tableContainer, #cardsContainer, #coversContainer, #statsContainer').hide();
+        $('#tableContainer, #cardsContainer, #coversContainer, #statsContainer, #insightsContainer').hide();
         if(currentView === 'table') $('#tableContainer').show();
         if(currentView === 'cards') $('#cardsContainer').show();
         if(currentView === 'covers') $('#coversContainer').show();
         if(currentView === 'stats') $('#statsContainer').show();
+        if(currentView === 'insights') $('#insightsContainer').show();
         
         applyFiltersAndRender();
     });
@@ -1264,6 +1267,8 @@
             renderCoversView(filteredBooksData, groupVal);
         } else if (currentView === 'stats') {
             renderStatsView(filteredBooksData);
+        } else if (currentView === 'insights') {
+            renderInsightsView(allBooksData);
         }
     }
 
@@ -1736,6 +1741,760 @@
         if (val && !isNaN(parseInt(val, 10)) && parseInt(val, 10) > 0) {
             localStorage.setItem(`readingGoal_${year}`, parseInt(val, 10));
             applyFiltersAndRender();
+        }
+    }
+
+    // ----- INTELIGÊNCIA LITERÁRIA & RECOMENDAÇÕES (INSIGHTS ENGINE) -----
+    window._radarRecommendations = [];
+
+    function renderInsightsView(books) {
+        const container = $('#insightsContainer');
+        container.empty();
+
+        if (!books || books.length === 0) {
+            container.html(`
+                <div class="col-12 text-center py-5">
+                    <i class="bi bi-stars fs-1 text-warning d-block mb-3"></i>
+                    <h4>Nenhum dado encontrado para gerar inteligência</h4>
+                    <p class="text-muted">Adicione ou sincronize livros para ativar os insights e recomendações.</p>
+                </div>
+            `);
+            return;
+        }
+
+        // 1. DADOS DE LEITURA & METAS
+        const currentYear = new Date().getFullYear();
+        const today = new Date();
+        const startOfYear = new Date(currentYear, 0, 1);
+        const dayOfYear = Math.floor((today - startOfYear) / (1000 * 60 * 60 * 24)) + 1;
+        const totalDaysInYear = (currentYear % 4 === 0) ? 366 : 365;
+        const daysRemaining = Math.max(1, totalDaysInYear - dayOfYear);
+        const readingGoal = parseInt(localStorage.getItem(`readingGoal_${currentYear}`) || '15', 10);
+
+        let booksReadThisYear = 0;
+        let pagesReadThisYear = 0;
+        let readBooks = [];
+        let unreadBooks = [];
+        let readingBooks = [];
+        let totalPages = 0;
+        let unreadPages = 0;
+
+        let genreRatings = {};
+        let authorRatings = {};
+        let formatCounts = { 'Capa Dura': 0, 'Brochura': 0, 'E-book': 0, 'Outros': 0 };
+
+        books.forEach(b => {
+            const raw = b.raw_data || {};
+            const p = parseInt(String(b.pages).match(/\d+/) || [0], 10) || 0;
+            totalPages += p;
+
+            const fmt = (b.formato || '').toLowerCase();
+            if (fmt.includes('dura')) formatCounts['Capa Dura']++;
+            else if (fmt.includes('brochura')) formatCounts['Brochura']++;
+            else if (fmt.includes('e-book') || fmt.includes('ebook') || fmt.includes('digital')) formatCounts['E-book']++;
+            else formatCounts['Outros']++;
+
+            let noteScore = 0;
+            const rawNote = String(b.nota || raw['Nota'] || '').trim().toUpperCase();
+            if (rawNote === 'S' || rawNote === '5') noteScore = 5;
+            else if (rawNote === 'A' || rawNote === '4') noteScore = 4;
+            else if (rawNote === 'B' || rawNote === '3') noteScore = 3;
+            else if (rawNote === 'C' || rawNote === '2') noteScore = 2;
+            else if (rawNote === 'D' || rawNote === '1') noteScore = 1;
+
+            const g = b.genre || 'Geral';
+            if (!genreRatings[g]) genreRatings[g] = { totalScore: 0, ratedCount: 0, totalBooks: 0 };
+            genreRatings[g].totalBooks++;
+            if (noteScore > 0) {
+                genreRatings[g].totalScore += noteScore;
+                genreRatings[g].ratedCount++;
+            }
+
+            if (b.authors) {
+                b.authors.split(',').forEach(a => {
+                    const author = a.trim();
+                    if (!author) return;
+                    if (!authorRatings[author]) authorRatings[author] = { totalScore: 0, ratedCount: 0, totalBooks: 0 };
+                    authorRatings[author].totalBooks++;
+                    if (noteScore > 0) {
+                        authorRatings[author].totalScore += noteScore;
+                        authorRatings[author].ratedCount++;
+                    }
+                });
+            }
+
+            if (b.status === 'Lido') {
+                readBooks.push(b);
+                const readYear = String(raw['Ano de Leitura'] || b.ano_leitura || '');
+                if (readYear.includes(String(currentYear)) || (!readYear && currentYear === 2026)) {
+                    booksReadThisYear++;
+                    pagesReadThisYear += p;
+                }
+            } else if (b.status === 'Lendo') {
+                readingBooks.push(b);
+                unreadBooks.push(b);
+                unreadPages += p;
+            } else {
+                unreadBooks.push(b);
+                unreadPages += p;
+            }
+        });
+
+        if (booksReadThisYear === 0 && readBooks.length > 0) {
+            booksReadThisYear = readBooks.length;
+            pagesReadThisYear = readBooks.reduce((acc, b) => acc + (parseInt(String(b.pages).match(/\d+/) || [0], 10) || 0), 0);
+        }
+
+        const percentGoal = Math.min(100, Math.round((booksReadThisYear / readingGoal) * 100));
+        const booksLeft = Math.max(0, readingGoal - booksReadThisYear);
+        const daysPerBook = booksLeft > 0 ? Math.round(daysRemaining / booksLeft) : 0;
+        const avgUnreadPages = unreadBooks.length > 0 ? Math.round(unreadPages / unreadBooks.length) : 280;
+        const pagesLeftToGoal = booksLeft * avgUnreadPages;
+        const pagesPerDayNeeded = booksLeft > 0 ? Math.ceil(pagesLeftToGoal / daysRemaining) : 0;
+
+        const currentPaceMonthly = booksReadThisYear / Math.max(0.5, (dayOfYear / 30.5));
+        const projectedEndYear = Math.round(currentPaceMonthly * 12);
+
+        let paceBadge = '';
+        let paceText = '';
+        if (booksLeft === 0) {
+            paceBadge = `<span class="badge bg-success py-1 px-3"><i class="bi bi-trophy-fill me-1"></i>Meta Concluída!</span>`;
+            paceText = `Espetacular! Você já concluiu <strong>${booksReadThisYear} de ${readingGoal} livros</strong> programados para ${currentYear}!`;
+        } else if (projectedEndYear >= readingGoal) {
+            paceBadge = `<span class="badge bg-success-subtle text-success border border-success py-1 px-3"><i class="bi bi-speedometer2 me-1"></i>No Ritmo Perfeito</span>`;
+            paceText = `Você está lendo em média <strong>${currentPaceMonthly.toFixed(1)} livros/mês</strong>. Mantendo esse ritmo, fechará o ano com <strong>${projectedEndYear} livros</strong> lidos!`;
+        } else {
+            paceBadge = `<span class="badge bg-warning-subtle text-warning-emphasis border border-warning py-1 px-3"><i class="bi bi-hourglass-split me-1"></i>Acelerar um Pouco</span>`;
+            paceText = `No ritmo atual você projetará <strong>${projectedEndYear} livros</strong> até o fim do ano (faltarão ${readingGoal - projectedEndYear}). Veja as leituras rápidas sugeridas abaixo para retomar o fôlego!`;
+        }
+
+        // Leituras rápidas no acervo (< 260 págs) para acelerar o ritmo
+        const quickReads = unreadBooks
+            .filter(b => {
+                const p = parseInt(String(b.pages).match(/\d+/) || [0], 10) || 0;
+                return p > 50 && p <= 260;
+            })
+            .slice(0, 4);
+
+        let quickReadsHtml = '';
+        if (quickReads.length > 0) {
+            quickReadsHtml = `
+                <div class="mt-3 pt-3 border-top border-white border-opacity-25">
+                    <div class="small fw-semibold text-white mb-2 opacity-90"><i class="bi bi-lightning-charge-fill text-warning me-1"></i>Leituras Rápidas no seu Acervo para acelerar o ritmo:</div>
+                    <div class="row g-2">
+                        ${quickReads.map(b => `
+                            <div class="col-sm-6 col-md-3">
+                                <div class="p-2 rounded-3 bg-white bg-opacity-15 text-white d-flex align-items-center justify-content-between" style="cursor: pointer;" onclick="showBookDetails('${b.id}')" title="Clique para abrir ${b.title.replace(/'/g, "\\'")}">
+                                    <div class="text-truncate me-2">
+                                        <div class="small fw-bold text-truncate">${b.title}</div>
+                                        <div style="font-size: 0.72rem; opacity: 0.85;">${b.authors ? b.authors.split(',')[0] : ''}</div>
+                                    </div>
+                                    <span class="badge bg-white text-dark small text-nowrap">${b.pages || '200'}p</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Top Gênero Qualitativo
+        let topGenreByRating = null;
+        let maxGenreAvg = 0;
+        Object.entries(genreRatings).forEach(([genre, stats]) => {
+            if (stats.ratedCount >= 1) {
+                const avg = stats.totalScore / stats.ratedCount;
+                if (avg > maxGenreAvg) {
+                    maxGenreAvg = avg;
+                    topGenreByRating = { genre, avg: avg.toFixed(1), count: stats.totalBooks };
+                }
+            }
+        });
+
+        // Top Gênero Quantitativo
+        const topGenreByVolume = Object.entries(genreRatings).sort((a,b) => b[1].totalBooks - a[1].totalBooks)[0] || ['Ficção', { totalBooks: 0 }];
+
+        // Top 3 Autores Mais Bem Avaliados
+        const topRatedAuthors = Object.entries(authorRatings)
+            .filter(([_, stats]) => stats.ratedCount >= 1)
+            .map(([author, stats]) => ({ author, avg: (stats.totalScore / stats.ratedCount).toFixed(1), count: stats.totalBooks }))
+            .sort((a,b) => b.avg - a.avg || b.count - a.count)
+            .slice(0, 3);
+
+        // Horas estimadas para ler a fila toda
+        const estimatedHoursLeft = Math.round(unreadPages / 50);
+
+        // Categorias não lidas para o filtro do Oráculo
+        const unreadGenres = [...new Set(unreadBooks.map(b => b.genre).filter(Boolean))].sort();
+
+        // Autores para o Radar de Compra / Desejos
+        const radarAuthors = topRatedAuthors.length > 0 
+            ? topRatedAuthors.map(a => a.author) 
+            : [...new Set(books.map(b => b.authors ? b.authors.split(',')[0].trim() : '').filter(Boolean))].slice(0, 3);
+        
+        const topRadarGenre = topGenreByRating ? topGenreByRating.genre : topGenreByVolume[0];
+
+        const html = `
+            <!-- Banner de Apresentação da Inteligência -->
+            <div class="col-12 mb-2">
+                <div class="card shadow-sm border-0 rounded-4 p-4 text-white" style="background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%);">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <div>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <span class="badge bg-warning text-dark fw-bold px-2 py-1"><i class="bi bi-stars me-1"></i>IA & INSIGHTS</span>
+                                <h3 class="fw-bold mb-0 text-white">Central de Inteligência & Recomendações</h3>
+                            </div>
+                            <p class="mb-0 text-light opacity-75 small">
+                                Assistente personalizado: análise preditiva de metas, oráculo de escolha de leitura e radar de recomendações baseado no seu gosto.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MÓDULO 1: RITMO & PACING DA META -->
+            <div class="col-12 mb-3">
+                <div class="card shadow-sm border-0 rounded-4 p-4 text-white" style="background: linear-gradient(135deg, #4338ca 0%, #3b82f6 100%);">
+                    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                        <div>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <h4 class="fw-bold mb-0 text-white"><i class="bi bi-speedometer me-2"></i>Calculadora de Ritmo & Metas ${currentYear}</h4>
+                                ${paceBadge}
+                            </div>
+                            <p class="mb-0 text-light opacity-90 small">
+                                ${paceText}
+                            </p>
+                        </div>
+                        <button class="btn btn-sm btn-light rounded-pill px-3 fw-semibold shadow-sm text-primary" onclick="changeReadingGoal(${currentYear})">
+                            <i class="bi bi-pencil me-1"></i> Alterar Meta (${readingGoal})
+                        </button>
+                    </div>
+
+                    <!-- Métricas de Ritmo em Mini-cards -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-3 col-6">
+                            <div class="p-3 rounded-3 bg-white bg-opacity-15">
+                                <div class="small opacity-75 text-uppercase fw-semibold" style="font-size: 0.72rem;">Progresso Anual</div>
+                                <div class="fs-4 fw-bold text-white">${booksReadThisYear} <span class="fs-6 fw-normal opacity-75">/ ${readingGoal} livros</span></div>
+                                <div class="small opacity-75">${pagesReadThisYear.toLocaleString('pt-BR')} págs lidas</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="p-3 rounded-3 bg-white bg-opacity-15">
+                                <div class="small opacity-75 text-uppercase fw-semibold" style="font-size: 0.72rem;">Ritmo por Livro</div>
+                                <div class="fs-4 fw-bold text-white">${booksLeft > 0 ? '1 a cada ' + daysPerBook + 'd' : 'Concluído!'}</div>
+                                <div class="small opacity-75">${daysRemaining} dias restantes</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="p-3 rounded-3 bg-white bg-opacity-15">
+                                <div class="small opacity-75 text-uppercase fw-semibold" style="font-size: 0.72rem;">Ritmo de Páginas</div>
+                                <div class="fs-4 fw-bold text-white">~${pagesPerDayNeeded} <span class="fs-6 fw-normal opacity-75">págs/dia</span></div>
+                                <div class="small opacity-75">para fechar ${readingGoal} livros</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="p-3 rounded-3 bg-white bg-opacity-15">
+                                <div class="small opacity-75 text-uppercase fw-semibold" style="font-size: 0.72rem;">Projeção Final</div>
+                                <div class="fs-4 fw-bold text-white">~${projectedEndYear} <span class="fs-6 fw-normal opacity-75">livros</span></div>
+                                <div class="small opacity-75">${currentPaceMonthly.toFixed(1)} livros/mês</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Barra de Progresso Geral -->
+                    <div class="progress bg-white bg-opacity-25 mb-1" style="height: 18px; border-radius: 9px;">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning text-dark fw-bold" role="progressbar" style="width: ${percentGoal}%; font-size: 0.8rem;" aria-valuenow="${percentGoal}" aria-valuemin="0" aria-valuemax="100">
+                            ${percentGoal}% (${booksReadThisYear}/${readingGoal})
+                        </div>
+                    </div>
+
+                    ${quickReadsHtml}
+                </div>
+            </div>
+
+            <!-- MÓDULO 2: ORÁCULO DE LEITURA (O QUE LER AGORA?) -->
+            <div class="col-lg-7 mb-3">
+                <div class="card shadow-sm border-0 rounded-4 p-4 h-100 bg-body">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <h5 class="fw-bold mb-0 text-primary d-flex align-items-center gap-2">
+                            <i class="bi bi-compass-fill text-warning"></i> Oráculo de Leitura: O que ler agora?
+                        </h5>
+                        <span class="badge bg-primary-subtle text-primary border border-primary small">Matchmaker</span>
+                    </div>
+                    <p class="small text-muted mb-3">
+                        Defina suas preferências do momento e o algoritmo selecionará a melhor opção disponível na sua fila de leitura com base nas suas maiores notas.
+                    </p>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-sm-4">
+                            <label class="form-label small fw-semibold text-muted mb-1">Situação:</label>
+                            <select class="form-select form-select-sm" id="oracleSituacao">
+                                <option value="all">Todas as situações</option>
+                                <option value="adquirido" selected>Apenas no Acervo (Adquirido)</option>
+                                <option value="desejo">Lista de Desejos</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label small fw-semibold text-muted mb-1">Duração / Páginas:</label>
+                            <select class="form-select form-select-sm" id="oracleDuration">
+                                <option value="all">Qualquer tamanho</option>
+                                <option value="short">⚡ Rápido (até 220 págs)</option>
+                                <option value="medium">📖 Médio (221 a 400 págs)</option>
+                                <option value="long">📚 Calhamaço (+400 págs)</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label small fw-semibold text-muted mb-1">Categoria:</label>
+                            <select class="form-select form-select-sm" id="oracleGenre">
+                                <option value="all">Todas as categorias</option>
+                                ${unreadGenres.map(g => `<option value="${g}">${g}</option>`).join('')}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="d-grid mb-3">
+                        <button class="btn btn-primary rounded-pill fw-semibold py-2 shadow-sm" onclick="runReadingOracle()">
+                            <i class="bi bi-magic me-2"></i>Sortear Próxima Leitura Inteligente
+                        </button>
+                    </div>
+
+                    <div id="oracleResultArea">
+                        <div class="p-4 rounded-3 border text-center text-muted bg-light" style="border-style: dashed !important;">
+                            <i class="bi bi-dice-5 fs-2 text-secondary d-block mb-1"></i>
+                            <div class="small fw-semibold">Clique no botão acima para consultar o Oráculo</div>
+                            <div style="font-size: 0.75rem;">O algoritmo analisará ${unreadBooks.length} livros não lidos do seu catálogo.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MÓDULO 3: DNA LITERÁRIO & AFINIDADES -->
+            <div class="col-lg-5 mb-3">
+                <div class="card shadow-sm border-0 rounded-4 p-4 h-100 bg-body">
+                    <h5 class="fw-bold mb-3 text-primary d-flex align-items-center gap-2">
+                        <i class="bi bi-fingerprint text-info"></i> Seu DNA Literário
+                    </h5>
+
+                    <div class="d-flex flex-column gap-3">
+                        <div class="p-3 rounded-3 bg-light border-0">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="small fw-bold text-muted text-uppercase" style="font-size: 0.72rem;">Categoria Mais Amada</div>
+                                <span class="badge bg-warning text-dark"><i class="bi bi-star-fill me-1"></i>${topGenreByRating ? topGenreByRating.avg + ' ★' : 'Sem notas'}</span>
+                            </div>
+                            <h5 class="fw-bold mb-1 text-primary">${topGenreByRating ? topGenreByRating.genre : 'Ficção Geral'}</h5>
+                            <div class="small text-muted" style="font-size: 0.78rem;">
+                                Onde você dá as maiores notas vs. ${topGenreByVolume[0]} (sua maior quantidade: ${topGenreByVolume[1].totalBooks} obras).
+                            </div>
+                        </div>
+
+                        <div class="p-3 rounded-3 bg-light border-0">
+                            <div class="small fw-bold text-muted text-uppercase mb-2" style="font-size: 0.72rem;">Top Autores com Maior Aprovação</div>
+                            ${topRatedAuthors.length > 0 ? topRatedAuthors.map((a, i) => `
+                                <div class="d-flex justify-content-between align-items-center mb-1 pb-1 ${i < topRatedAuthors.length - 1 ? 'border-bottom' : ''}">
+                                    <span class="small fw-semibold text-truncate me-2">${i+1}. ${a.author}</span>
+                                    <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle text-nowrap"><i class="bi bi-star-fill text-warning me-1"></i>${a.avg} ★ <small class="text-muted">(${a.count})</small></span>
+                                </div>
+                            `).join('') : '<div class="small text-muted">Cadastre notas nos seus livros lidos para montar seu ranking.</div>'}
+                        </div>
+
+                        <div class="p-3 rounded-3 bg-light border-0">
+                            <div class="small fw-bold text-muted text-uppercase mb-2" style="font-size: 0.72rem;">Padrão da sua Estante</div>
+                            <div class="d-flex justify-content-between small text-secondary mb-1">
+                                <span><i class="bi bi-book me-1"></i>Capa Dura: <b>${formatCounts['Capa Dura']}</b></span>
+                                <span><i class="bi bi-journal me-1"></i>Brochura: <b>${formatCounts['Brochura']}</b></span>
+                                <span><i class="bi bi-tablet me-1"></i>E-book: <b>${formatCounts['E-book']}</b></span>
+                            </div>
+                            <div class="small text-muted pt-2 border-top" style="font-size: 0.78rem;">
+                                <i class="bi bi-clock-history me-1"></i>Você tem cerca de <strong>${estimatedHoursLeft} horas de leitura</strong> aguardando na fila (${unreadPages.toLocaleString('pt-BR')} págs não lidas).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MÓDULO 4: RADAR DE PRÓXIMAS COMPRAS & DESEJOS -->
+            <div class="col-12 mb-3">
+                <div class="card shadow-sm border-0 rounded-4 p-4 bg-body">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                        <div>
+                            <h5 class="fw-bold mb-1 text-primary d-flex align-items-center gap-2">
+                                <i class="bi bi-radar text-danger"></i> Radar de Próximas Leituras & Compras
+                            </h5>
+                            <p class="small text-muted mb-0">
+                                Sugestões de obras que <strong>ainda não estão no seu acervo</strong>, baseadas nos seus autores favoritos e gêneros de maior satisfação.
+                            </p>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-1 flex-wrap" id="radarFilterPills">
+                            <span class="small fw-semibold text-muted me-1">Buscar por:</span>
+                            ${radarAuthors.map((author, idx) => `
+                                <button class="btn btn-sm ${idx === 0 ? 'btn-primary' : 'btn-outline-secondary'} rounded-pill px-3 py-1" onclick="fetchRadarRecommendations('inauthor:${encodeURIComponent(author)}', '${author.replace(/'/g, "\\'")}', this)">
+                                    ${author}
+                                </button>
+                            `).join('')}
+                            ${topRadarGenre ? `
+                                <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-1" onclick="fetchRadarRecommendations('subject:${encodeURIComponent(topRadarGenre)}', '${topRadarGenre.replace(/'/g, "\\'")}', this)">
+                                    ${topRadarGenre}
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+
+                    <div id="radarRecommendationsArea" class="row g-3">
+                        <div class="col-12 text-center py-4 text-muted">
+                            <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
+                            Buscando sugestões personalizadas na Google Books API...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        container.html(html);
+
+        // Dispara a busca inicial de recomendações com o primeiro autor favorito
+        if (radarAuthors.length > 0) {
+            fetchRadarRecommendations(`inauthor:${encodeURIComponent(radarAuthors[0])}`, radarAuthors[0], $('#radarFilterPills button.btn-primary')[0]);
+        }
+    }
+
+    function runReadingOracle() {
+        if (!allBooksData || allBooksData.length === 0) return;
+
+        const situacaoFilter = $('#oracleSituacao').val();
+        const durationFilter = $('#oracleDuration').val();
+        const genreFilter = $('#oracleGenre').val();
+
+        let candidates = allBooksData.filter(b => {
+            if (b.status === 'Lido') return false;
+
+            if (situacaoFilter !== 'all') {
+                const aq = (b.aquisicao || '').toLowerCase();
+                if (situacaoFilter === 'adquirido' && aq !== 'adquirido') return false;
+                if (situacaoFilter === 'desejo' && aq !== 'desejo') return false;
+            }
+
+            let p = parseInt(String(b.pages).match(/\d+/) || [0], 10) || 0;
+            if (durationFilter === 'short' && (p <= 0 || p > 220)) return false;
+            if (durationFilter === 'medium' && (p < 221 || p > 400)) return false;
+            if (durationFilter === 'long' && p < 401) return false;
+
+            if (genreFilter !== 'all' && b.genre !== genreFilter) return false;
+
+            return true;
+        });
+
+        if (candidates.length === 0) {
+            $('#oracleResultArea').html(`
+                <div class="alert alert-info border-0 rounded-3 text-center py-4 my-2">
+                    <i class="bi bi-search fs-3 text-primary d-block mb-2"></i>
+                    <h6 class="fw-bold mb-1">Nenhum livro não lido encontrado para estes filtros</h6>
+                    <p class="small text-muted mb-0">Tente relaxar os filtros de tamanho ou categoria para encontrar opções na sua fila.</p>
+                </div>
+            `);
+            return;
+        }
+
+        const authorScores = {};
+        const genreScores = {};
+        allBooksData.filter(b => b.status === 'Lido').forEach(b => {
+            let noteScore = 0;
+            const rawNote = String(b.nota || b.raw_data?.['Nota'] || '').trim().toUpperCase();
+            if (rawNote === 'S' || rawNote === '5') noteScore = 5;
+            else if (rawNote === 'A' || rawNote === '4') noteScore = 4;
+            else if (rawNote === 'B' || rawNote === '3') noteScore = 3;
+            else if (rawNote === 'C' || rawNote === '2') noteScore = 2;
+            else if (rawNote === 'D' || rawNote === '1') noteScore = 1;
+
+            if (b.authors) {
+                b.authors.split(',').forEach(a => {
+                    const author = a.trim();
+                    if (!author) return;
+                    if (!authorScores[author]) authorScores[author] = { total: 0, count: 0 };
+                    authorScores[author].total += noteScore;
+                    authorScores[author].count++;
+                });
+            }
+            if (b.genre) {
+                if (!genreScores[b.genre]) genreScores[b.genre] = { total: 0, count: 0 };
+                genreScores[b.genre].total += noteScore;
+                genreScores[b.genre].count++;
+            }
+        });
+
+        candidates.forEach(b => {
+            let score = 50;
+            let reasons = [];
+
+            if (b.authors) {
+                b.authors.split(',').forEach(a => {
+                    const author = a.trim();
+                    if (authorScores[author] && authorScores[author].count > 0) {
+                        const avg = authorScores[author].total / authorScores[author].count;
+                        if (avg >= 4) {
+                            score += 35;
+                            reasons.push(`Autor com alta aprovação (${author})`);
+                        }
+                    }
+                });
+            }
+
+            if (b.genre && genreScores[b.genre] && genreScores[b.genre].count > 0) {
+                const avg = genreScores[b.genre].total / genreScores[b.genre].count;
+                if (avg >= 3.8) {
+                    score += 25;
+                    reasons.push(`Categoria com suas maiores notas (${b.genre})`);
+                }
+            }
+
+            if ((b.aquisicao || '').toLowerCase() === 'adquirido') {
+                score += 20;
+                reasons.push('Já está no seu acervo físico');
+            }
+
+            if (b.status === 'Lendo') {
+                score += 30;
+                reasons.push('Já está em andamento');
+            }
+
+            if (b.synopsis) score += 10;
+
+            b._oracleScore = score;
+            b._oracleReasons = reasons.length > 0 ? reasons : ['Excelente opção para sua próxima leitura'];
+        });
+
+        candidates.sort((a,b) => b._oracleScore - a._oracleScore);
+        const topPool = candidates.slice(0, Math.min(3, candidates.length));
+        const chosen = topPool[Math.floor(Math.random() * topPool.length)];
+
+        renderOracleChosenCard(chosen);
+    }
+
+    function renderOracleChosenCard(book) {
+        const container = $('#oracleResultArea');
+        const pTheme = getPastelThemeForGenre(book.genre);
+        const coverId = 'oracleCover_' + book.id;
+        
+        let reasonsHtml = (book._oracleReasons || ['Livro de destaque na sua fila']).map(r => `
+            <span class="badge bg-light text-dark border me-1 mb-1"><i class="bi bi-check2-circle text-success me-1"></i>${r}</span>
+        `).join('');
+
+        const cardHtml = `
+            <div class="card shadow-sm border-0 rounded-4 p-3 theme-pastel-card" style="--card-bg-light: ${pTheme.bgLight}; --card-border-light: ${pTheme.borderLight}; --card-bg-dark: ${pTheme.bgDark}; --card-border-dark: ${pTheme.borderDark};">
+                <div class="row g-3 align-items-center">
+                    <div class="col-sm-4 col-md-3 text-center">
+                        <div id="${coverId}" style="height: 190px; display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="showBookDetails('${book.id}')" title="Clique para ver a ficha completa">
+                            <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+                        </div>
+                    </div>
+                    <div class="col-sm-8 col-md-9">
+                        <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
+                            ${book.genre ? `<span class="badge" style="background-color: ${pTheme.badgeBg}; color: ${pTheme.badgeText}; border: 1px solid ${pTheme.borderLight}; font-size: 0.75rem;"><i class="bi bi-bookmark-fill me-1"></i>${book.genre}</span>` : ''}
+                            <span class="badge bg-secondary-subtle text-secondary border small">${book.pages ? book.pages + ' págs' : 'Páginas n/i'}</span>
+                            ${book.aquisicao ? `<span class="badge bg-success-subtle text-success border border-success small"><i class="bi bi-check-circle me-1"></i>${book.aquisicao}</span>` : ''}
+                        </div>
+                        <h4 class="card-title fw-bold mb-1" style="cursor: pointer;" onclick="showBookDetails('${book.id}')">${book.title}</h4>
+                        <p class="text-secondary small mb-2"><i class="bi bi-person me-1"></i>${book.authors || 'Autor não informado'} &bull; <i class="bi bi-building me-1"></i>${book.selo || book.grupo || book.publisher || 'Editora n/i'}</p>
+                        
+                        <div class="mb-3">
+                            <div class="fw-semibold text-primary small text-uppercase mb-1" style="font-size: 0.72rem;"><i class="bi bi-magic me-1"></i>Por que ler agora:</div>
+                            <div class="d-flex flex-wrap">${reasonsHtml}</div>
+                        </div>
+
+                        ${book.synopsis ? `<p class="small text-muted mb-3" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-style: italic;">"${book.synopsis.substring(0, 180)}..."</p>` : ''}
+
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <button class="btn btn-sm btn-primary rounded-pill px-3 shadow-sm" onclick="showBookDetails('${book.id}')">
+                                <i class="bi bi-card-text me-1"></i> Abrir Ficha da Obra
+                            </button>
+                            <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="runReadingOracle()">
+                                <i class="bi bi-arrow-repeat me-1"></i> Sortear Outro
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        container.html(cardHtml).show();
+
+        fetchCover(book).then(url => {
+            const el = document.getElementById(coverId);
+            if (!el) return;
+            if (url === 'fallback') {
+                el.innerHTML = getFallbackCoverHtml(book);
+            } else {
+                el.innerHTML = `<img src="${url}" alt="Capa" class="img-fluid rounded-2 shadow-sm" style="max-height: 180px; object-fit: contain;">`;
+            }
+        });
+    }
+
+    async function fetchRadarRecommendations(query, label, activeBtn) {
+        if (activeBtn) {
+            $('#radarFilterPills button').removeClass('btn-primary').addClass('btn-outline-secondary');
+            $(activeBtn).removeClass('btn-outline-secondary').addClass('btn-primary');
+        }
+
+        const area = $('#radarRecommendationsArea');
+        area.html(`
+            <div class="col-12 text-center py-4 text-muted">
+                <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
+                Buscando obras de <strong>${label}</strong> que não estão no seu acervo...
+            </div>
+        `);
+
+        try {
+            const url = `https://www.googleapis.com/books/v1/volumes?q=${query}&langRestrict=pt&maxResults=10`;
+            const res = await fetch(url);
+            const data = await res.json();
+
+            if (!data.items || data.items.length === 0) {
+                area.html(`
+                    <div class="col-12 text-center py-4 text-muted">
+                        <i class="bi bi-info-circle me-1"></i>Nenhuma obra adicional encontrada nas bases para ${label}.
+                    </div>
+                `);
+                return;
+            }
+
+            const existingTitles = new Set(allBooksData.map(b => (b.title || '').toLowerCase().trim()));
+            const existingIsbns = new Set(allBooksData.map(b => (b.isbn || '').replace(/\D/g, '')).filter(Boolean));
+
+            const freshBooks = [];
+            data.items.forEach(item => {
+                const info = item.volumeInfo || {};
+                const title = (info.title || '').trim();
+                if (!title) return;
+
+                const cleanTitle = title.toLowerCase().trim();
+                if (existingTitles.has(cleanTitle)) return;
+
+                const isDuplicate = allBooksData.some(b => {
+                    const bt = (b.title || '').toLowerCase().trim();
+                    return bt && (bt === cleanTitle || bt.includes(cleanTitle) || cleanTitle.includes(bt));
+                });
+                if (isDuplicate) return;
+
+                let isbn = '';
+                if (info.industryIdentifiers) {
+                    const i13 = info.industryIdentifiers.find(id => id.type === 'ISBN_13');
+                    const i10 = info.industryIdentifiers.find(id => id.type === 'ISBN_10');
+                    isbn = (i13 || i10 || {}).identifier || '';
+                }
+                if (isbn && existingIsbns.has(isbn.replace(/\D/g, ''))) return;
+
+                let cover = info.imageLinks ? (info.imageLinks.thumbnail || info.imageLinks.smallThumbnail || '') : '';
+                if (cover) cover = cover.replace('http:', 'https:');
+
+                freshBooks.push({
+                    title: title,
+                    authors: (info.authors || []).join(', ') || label,
+                    isbn: isbn,
+                    pages: info.pageCount || '',
+                    publisher: info.publisher || '',
+                    genre: info.categories ? info.categories[0] : 'Literatura',
+                    cover_url: cover,
+                    synopsis: info.description || '',
+                    publishedDate: info.publishedDate ? info.publishedDate.split('-')[0] : '',
+                    amazonUrl: isbn ? `https://www.amazon.com.br/s?k=${isbn.replace(/[^0-9X]/gi, '')}` : `https://www.amazon.com.br/s?k=${encodeURIComponent(title + ' ' + (info.authors || []).join(' '))}`
+                });
+            });
+
+            if (freshBooks.length === 0) {
+                area.html(`
+                    <div class="col-12 text-center py-4 text-muted">
+                        <i class="bi bi-check-circle-fill text-success me-1"></i>Parabéns! Parece que você já tem as principais obras encontradas de <strong>${label}</strong>!
+                    </div>
+                `);
+                return;
+            }
+
+            window._radarRecommendations = freshBooks.slice(0, 4);
+
+            let cardsHtml = '';
+            window._radarRecommendations.forEach((b, idx) => {
+                const coverHtml = b.cover_url 
+                    ? `<img src="${b.cover_url}" alt="${b.title.replace(/"/g, '&quot;')}" class="img-fluid rounded-2 shadow-sm" style="max-height: 140px; object-fit: contain;">`
+                    : `<div class="rounded-2 bg-light d-flex align-items-center justify-content-center text-secondary border" style="height: 140px; width: 100%;"><i class="bi bi-book fs-1"></i></div>`;
+
+                cardsHtml += `
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card h-100 shadow-sm border-0 rounded-3 p-3 bg-light">
+                            <div class="text-center mb-2" style="height: 145px; display: flex; align-items: center; justify-content: center;">
+                                ${coverHtml}
+                            </div>
+                            <div class="d-flex flex-column flex-grow-1">
+                                <span class="badge bg-primary-subtle text-primary border border-primary small mb-1 align-self-start" style="font-size: 0.7rem;">
+                                    <i class="bi bi-sparkles me-1"></i>Sugerido por afinidade
+                                </span>
+                                <h6 class="fw-bold mb-1 text-truncate" title="${b.title.replace(/"/g, '&quot;')}">${b.title}</h6>
+                                <p class="small text-muted mb-2 text-truncate" title="${b.authors.replace(/"/g, '&quot;')}">${b.authors}</p>
+                                <div class="small text-secondary mb-3 mt-auto">
+                                    <span>${b.pages ? b.pages + ' págs' : ''}</span>
+                                    ${b.publishedDate ? `<span>&bull; ${b.publishedDate}</span>` : ''}
+                                </div>
+                                <div class="d-grid gap-1">
+                                    <button class="btn btn-sm btn-outline-primary rounded-pill py-1" onclick="addRecommendedToWishlistByIndex(${idx}, this)" title="Adicionar à lista de desejos no seu acervo">
+                                        <i class="bi bi-bookmark-plus me-1"></i>+ Lista de Desejos
+                                    </button>
+                                    <a href="${b.amazonUrl}" target="_blank" class="btn btn-sm btn-outline-secondary rounded-pill py-1" title="Ver preço na Amazon">
+                                        <i class="bi bi-cart me-1"></i>Ver na Amazon
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            area.html(cardsHtml);
+        } catch(err) {
+            console.error("Erro ao buscar recomendações do radar:", err);
+            area.html(`
+                <div class="col-12 text-center py-4 text-muted">
+                    Não foi possível carregar recomendações online no momento: ${err.message}
+                </div>
+            `);
+        }
+    }
+
+    async function addRecommendedToWishlistByIndex(index, btnEl) {
+        const bookData = window._radarRecommendations[index];
+        if (!bookData) return;
+
+        if (!currentUser) {
+            alert('Para adicionar livros à sua Lista de Desejos, conecte-se com sua conta Google no topo.');
+            return;
+        }
+
+        const originalText = $(btnEl).html();
+        $(btnEl).prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>Adicionando...');
+
+        try {
+            const payload = {
+                title: bookData.title || 'Sem título',
+                authors: bookData.authors || '',
+                isbn: bookData.isbn || '',
+                pages: String(bookData.pages || ''),
+                publisher: bookData.publisher || '',
+                genre: bookData.genre || 'Literatura',
+                cover_url: bookData.cover_url || '',
+                synopsis: bookData.synopsis || '',
+                aquisicao: 'Desejo',
+                status: 'Aguardando',
+                addedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            await db.collection('books').add(payload);
+            $(btnEl).removeClass('btn-outline-primary').addClass('btn-success').html('<i class="bi bi-check-circle-fill me-1"></i>Adicionado!');
+        } catch (err) {
+            console.error("Erro ao adicionar à wishlist:", err);
+            $(btnEl).prop('disabled', false).html(originalText);
+            if (err.code === 'permission-denied' || (err.message && err.message.toLowerCase().includes('permission'))) {
+                alert(`Permissão negada pelo Firebase Firestore.\n\nVocê está conectado como: ${currentUser.email}.\nAs Regras de Segurança (Rules) no Firebase Console ainda não autorizaram a gravação.`);
+            } else {
+                alert('Erro ao salvar livro: ' + err.message);
+            }
         }
     }
 
