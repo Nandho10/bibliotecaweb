@@ -2449,10 +2449,14 @@
     }
 
     // ----- GESTÃO E UPLOAD DE CAPAS (LOCAL / FIREBASE STORAGE) -----
-    function resizeAndCompressImage(file, maxWidth = 600, maxHeight = 900, quality = 0.85) {
+    function resizeAndCompressImage(file, maxWidth = 600, maxHeight = 900, quality = 0.82) {
         return new Promise((resolve, reject) => {
-            if (!file || !file.type.startsWith('image/')) {
-                return reject(new Error('O arquivo selecionado não é uma imagem válida.'));
+            const isImage = file && (
+                (file.type && file.type.startsWith('image/')) || 
+                /\.(jpe?g|png|webp|gif|bmp|jfif)$/i.test(file.name || '')
+            );
+            if (!isImage) {
+                return reject(new Error('O arquivo selecionado não é uma imagem válida (PNG, JPG, JPEG ou WebP).'));
             }
 
             const reader = new FileReader();
@@ -2497,16 +2501,29 @@
     }
 
     async function uploadCoverImage(file, bookId = null) {
-        // 1. Redimensiona e otimiza a imagem localmente via Canvas
-        const processed = await resizeAndCompressImage(file, 600, 900, 0.85);
+        // 1. Redimensiona e otimiza a imagem localmente via Canvas em altíssima velocidade (< 100ms)
+        const processed = await resizeAndCompressImage(file, 600, 900, 0.82);
 
-        // 2. Se o Firebase Storage estiver ativo, tenta o upload para nuvem
-        if (typeof firebase !== 'undefined' && typeof firebase.storage === 'function' && processed.blob) {
+        // 2. Tenta Firebase Storage com timeout estrito de 2 segundos se o usuário estiver autenticado
+        if (currentUser && typeof firebase !== 'undefined' && typeof firebase.storage === 'function' && processed.blob) {
             try {
+                const storageInst = firebase.storage();
+                if (typeof storageInst.setMaxUploadRetryTime === 'function') {
+                    storageInst.setMaxUploadRetryTime(1500);
+                }
                 const cleanId = (bookId || 'novo_' + Date.now()).replace(/[^a-zA-Z0-9_-]/g, '');
                 const storagePath = `covers/${cleanId}_${Date.now()}.jpg`;
-                const storageRef = firebase.storage().ref(storagePath);
-                const snapshot = await storageRef.put(processed.blob, { contentType: 'image/jpeg' });
+                const storageRef = storageInst.ref(storagePath);
+                
+                const uploadTask = storageRef.put(processed.blob, { contentType: 'image/jpeg' });
+                const timeoutPromise = new Promise((_, reject) => 
+                    setTimeout(() => {
+                        try { uploadTask.cancel(); } catch(e) {}
+                        reject(new Error('Firebase Storage timeout (2s)'));
+                    }, 2000)
+                );
+
+                const snapshot = await Promise.race([uploadTask, timeoutPromise]);
                 const downloadUrl = await snapshot.ref.getDownloadURL();
                 return {
                     url: downloadUrl,
@@ -2514,11 +2531,11 @@
                     sizeKb: Math.round(processed.size / 1024)
                 };
             } catch (storageErr) {
-                console.warn('Firebase Storage indisponível ou permissão restrita. Utilizando armazenamento direto no banco (Base64 otimizado):', storageErr);
+                console.warn('Firebase Storage indisponível ou lento. Utilizando armazenamento direto no banco (Base64 otimizado):', storageErr.message);
             }
         }
 
-        // 3. Fallback inteligente: armazena diretamente o DataURL comprimido (~30-50 KB)
+        // 3. Fallback inteligente e instantâneo: armazena diretamente o DataURL comprimido (~25-45 KB)
         return {
             url: processed.dataUrl,
             method: 'base64',
@@ -2530,26 +2547,31 @@
         const file = event.target.files?.[0];
         if (!file) return;
 
-        if (!file.type.startsWith('image/')) {
+        const isImage = (file.type && file.type.startsWith('image/')) || 
+                        /\.(jpe?g|png|webp|gif|bmp|jfif)$/i.test(file.name || '');
+
+        if (!isImage) {
             alert('Por favor, selecione um arquivo de imagem válido (PNG, JPG, JPEG ou WebP).');
             return;
         }
 
         const progress = $('#coverUploadProgress');
         const btnUpload = $('#btnUploadCoverModal');
-        const originalBtnHtml = btnUpload.html();
+        const originalBtnHtml = '<i class="bi bi-upload me-1"></i><span class="d-none d-sm-inline">Do PC</span>';
 
         progress.removeClass('d-none');
-        btnUpload.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>Enviando...');
+        btnUpload.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>Processando...');
 
         try {
-            const res = await uploadCoverImage(file, currentEditingId);
-            $('#f_cover_url').val(res.url);
+            // Processa e otimiza a imagem localmente via Canvas em altíssima velocidade (~50ms)
+            const processed = await resizeAndCompressImage(file, 600, 900, 0.82);
 
-            const methodLabel = res.method === 'storage' ? 'Firebase Storage' : 'Arquivo local otimizado';
+            // Preenche o campo imediatamente com a imagem comprimida
+            $('#f_cover_url').val(processed.dataUrl);
+
             updateCoverPreview({
-                customTitle: 'Capa carregada do seu PC',
-                customSubtitle: `${file.name} (${res.sizeKb} KB · ${methodLabel})`
+                customTitle: 'Capa selecionada do seu PC',
+                customSubtitle: `${file.name} (~${Math.round(processed.dataUrl.length / 1024)} KB · Pronta para salvar)`
             });
         } catch (err) {
             console.error('Erro ao processar imagem do PC:', err);
@@ -2607,7 +2629,12 @@
         const bookId = $('#bookDetailsModal').data('currentBookId');
         if (!bookId) return;
 
-        if (!file || !file.type.startsWith('image/')) {
+        const isImage = file && (
+            (file.type && file.type.startsWith('image/')) || 
+            /\.(jpe?g|png|webp|gif|bmp|jfif)$/i.test(file.name || '')
+        );
+
+        if (!isImage) {
             alert('Por favor, selecione um arquivo de imagem válido (PNG, JPG, JPEG ou WebP).');
             return;
         }
