@@ -1419,8 +1419,15 @@
       </div>
       
       <div class="modal-footer px-4 py-3 bg-body-tertiary border-top d-flex justify-content-between align-items-center">
-        <button type="button" class="btn btn-outline-secondary px-3" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-success px-4 shadow-sm fw-semibold" onclick="saveBook()"><i class="bi bi-check2-circle me-1"></i>Salvar Livro</button>
+        <div>
+          <button type="button" class="btn btn-outline-danger px-3 d-none" id="btnDeleteBookModal" onclick="deleteCurrentEditingBook()" title="Excluir este livro permanentemente do acervo">
+            <i class="bi bi-trash3 me-1"></i>Excluir Livro
+          </button>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <button type="button" class="btn btn-outline-secondary px-3" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-success px-4 shadow-sm fw-semibold" onclick="saveBook()"><i class="bi bi-check2-circle me-1"></i>Salvar Livro</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1522,6 +1529,9 @@
               </button>
               <button class="btn btn-outline-info btn-sm rounded-pill d-flex align-items-center justify-content-center gap-2" id="detailShareBtn">
                 <i class="bi bi-share"></i> Compartilhar
+              </button>
+              <button class="btn btn-outline-danger btn-sm rounded-pill d-flex align-items-center justify-content-center gap-2" id="detailDeleteBtn" onclick="deleteCurrentDetailBook()" title="Excluir este livro permanentemente do acervo">
+                <i class="bi bi-trash3"></i> Excluir Livro
               </button>
             </div>
           </div>
@@ -5191,6 +5201,7 @@ service cloud.firestore {
         $('.dynamic-select').val(null).trigger('change');
         clearCoverModal();
         document.getElementById('bookModalLabel').innerText = 'Novo Livro';
+        $('#btnDeleteBookModal').addClass('d-none');
         updateAllRequiredLabels();
         $('#tab-basico-btn').tab('show');
         bookModal.show();
@@ -5254,6 +5265,7 @@ service cloud.firestore {
         $('#f_heranca_traducao').prop('checked', !!b.heranca_traducao);
 
         updateAllRequiredLabels();
+        $('#btnDeleteBookModal').removeClass('d-none');
         $('#tab-basico-btn').tab('show');
         bookModal.show();
     }
@@ -5278,19 +5290,48 @@ service cloud.firestore {
         el.val(isMultiple ? values : values[0]).trigger('change');
     }
 
+    function deleteCurrentEditingBook() {
+        if (!currentEditingId) return;
+        deleteBook(currentEditingId);
+    }
+
+    function deleteCurrentDetailBook() {
+        const bookId = $('#bookDetailsModal').data('currentBookId');
+        if (!bookId) return;
+        deleteBook(bookId);
+    }
+
     async function deleteBook(id) {
-        if(confirm('Tem certeza que deseja apagar este livro?')) {
+        const b = cachedBooks[id] || (allBooksData && allBooksData.find(item => item.id === id));
+        const bookTitle = b ? `"${b.title}"` : 'este livro';
+        if (confirm(`Tem certeza que deseja excluir ${bookTitle} permanentemente do seu acervo?`)) {
             try {
                 await db.collection('books').doc(id).delete();
+                
+                // Fecha modais caso estejam abertos
+                if (bookModal) bookModal.hide();
+                const detailModalEl = document.getElementById('bookDetailsModal');
+                if (detailModalEl) {
+                    const bsDetailModal = bootstrap.Modal.getInstance(detailModalEl);
+                    if (bsDetailModal) bsDetailModal.hide();
+                }
+
+                const toastEl = $(`
+                    <div class="alert alert-danger alert-dismissible fade show shadow position-fixed bottom-0 end-0 m-3" style="z-index: 1090;" role="alert">
+                        <i class="bi bi-trash3-fill me-2"></i>Livro <strong>${bookTitle}</strong> foi excluído do acervo.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `).appendTo('body');
+                setTimeout(() => toastEl.alert('close'), 4000);
             } catch (e) {
                 if (e.code === 'permission-denied' || (e.message && e.message.toLowerCase().includes('permission'))) {
                     if (currentUser) {
-                        alert(`Permissão negada pelo Firebase Firestore.\n\nVocê está conectado como: ${currentUser.email}.\nAs Regras de Segurança (Rules) no Firebase Console ainda não autorizaram a alteração.`);
+                        alert(`Permissão negada pelo Firebase Firestore.\n\nVocê está conectado como: ${currentUser.email}.\nAs Regras de Segurança (Rules) no Firebase Console ainda não autorizaram a exclusão.`);
                     } else {
                         alert('Permissão negada: É necessário estar conectado com sua conta Google de administrador.');
                     }
                 } else {
-                    alert('Erro ao apagar: ' + e.message);
+                    alert('Erro ao excluir livro: ' + e.message);
                 }
             }
         }
