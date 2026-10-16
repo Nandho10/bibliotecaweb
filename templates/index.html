@@ -1145,11 +1145,18 @@
                         <select class="form-select dynamic-select" id="f_tradutor" data-category="tradutores" multiple></select>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label class="form-label fw-semibold text-danger" for="f_aquisicao">Situação (Acervo) *</label>
                         <select class="form-select dynamic-select" id="f_aquisicao" data-category="aquisicoes_status" required></select>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold" for="f_preco"><i class="bi bi-tag me-1"></i>Preço Pago</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light fw-semibold">R$</span>
+                            <input type="number" step="0.01" min="0" class="form-control" id="f_preco" placeholder="0,00">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
                         <label class="form-label fw-semibold d-flex justify-content-between align-items-center mb-1" for="f_cover_url">
                             <span><i class="bi bi-image me-1"></i>Capa do Livro</span>
                             <span class="text-muted fw-normal" style="font-size: 0.75rem;">URL ou Arquivo do PC</span>
@@ -3011,6 +3018,15 @@
                 // Avaliação em estrelas
                 const ratingBadge = getRatingStarsHtml(book.nota || book.raw_data?.['Nota']);
 
+                // Preço pago
+                let precoBadge = '';
+                if (book.preco !== undefined && book.preco !== null && book.preco !== '') {
+                    const pNum = parseFloat(String(book.preco).replace(',', '.'));
+                    if (!isNaN(pNum) && pNum > 0) {
+                        precoBadge = `<span class="badge bg-light text-dark border d-inline-flex align-items-center" style="font-size: 0.75rem; padding: 3px 8px;" title="Preço pago"><i class="bi bi-tag-fill text-success me-1"></i>R$ ${pNum.toFixed(2).replace('.', ',')}</span>`;
+                    }
+                }
+
                 const card = $(`
                     <div class="col-md-6 col-lg-4">
                         <div class="card theme-pastel-card" style="--card-bg-light: ${pTheme.bgLight}; --card-border-light: ${pTheme.borderLight}; --card-bg-dark: ${pTheme.bgDark}; --card-border-dark: ${pTheme.borderDark};">
@@ -3035,6 +3051,7 @@
                                     <div class="d-flex align-items-center gap-2 flex-wrap">
                                         ${book.isbn ? `<a href="https://www.amazon.com.br/s?k=${book.isbn.replace(/[^0-9X]/gi, '')}" target="_blank" class="btn btn-sm btn-amazon-sleek shadow-sm" title="Buscar ISBN na Amazon" onclick="event.stopPropagation()"><i class="bi bi-amazon"></i></a>` : `<a href="https://www.amazon.com.br/s?k=${encodeURIComponent(book.title + ' ' + book.authors)}" target="_blank" class="btn btn-sm btn-amazon-sleek shadow-sm" title="Buscar Título na Amazon" onclick="event.stopPropagation()"><i class="bi bi-amazon"></i></a>`}
                                         ${aquisicaoBadge}
+                                        ${precoBadge}
                                     </div>
                                     <div class="d-flex align-items-center gap-1">
                                         <button class="btn btn-action-sleek" onclick="event.stopPropagation(); showBookDetails('${book.id}')" title="Ver ficha completa"><i class="bi bi-eye"></i></button>
@@ -4888,6 +4905,12 @@
         if (raw['Mês de leitura'] || raw['Ano de Leitura']) {
             personalItems.push(`<div><strong>Quando li:</strong> ${[raw['Mês de leitura'], raw['Ano de Leitura']].filter(Boolean).join('/')}</div>`);
         }
+        if (book.preco !== undefined && book.preco !== null && book.preco !== '') {
+            const pVal = parseFloat(String(book.preco).replace(',', '.'));
+            if (!isNaN(pVal) && pVal > 0) {
+                personalItems.push(`<div><strong>Preço pago:</strong> <span class="badge bg-success-subtle text-success border border-success">R$ ${pVal.toFixed(2).replace('.', ',')}</span></div>`);
+            }
+        }
         if (raw['Como adquiri']) {
             personalItems.push(`<div><strong>Como adquiri:</strong> ${raw['Como adquiri']}</div>`);
         }
@@ -5266,6 +5289,7 @@ service cloud.firestore {
                 nota: data.nota || getRaw(raw, ['Nota']),
                 synopsis: data.synopsis || getRaw(raw, ['Sinopse', 'Synopsis', 'Descricao', 'Descrição']) || '',
                 aquisicao: data.aquisicao || getRaw(raw, ['Aquisição', 'Aquisicao', 'Situação']) || '',
+                preco: (data.preco !== undefined && data.preco !== null && data.preco !== '') ? data.preco : (getRaw(raw, ['Preço Pago', 'Preço', 'Preco', 'Valor', 'Preço pago']) || ''),
                 cover_url: data.cover_url || '',
                 heranca_fase: data.heranca_fase || getRaw(raw, ['Fase do Plano', 'Herança Fase']) || '',
                 heranca_ano: normalizeHerancaAno(data.heranca_ano || getRaw(raw, ['Ano do Plano', 'Herança Ano']) || ''),
@@ -5297,6 +5321,7 @@ service cloud.firestore {
         form.reset();
         form.classList.remove('was-validated');
         $('.dynamic-select').val(null).trigger('change');
+        $('#f_preco').val('');
         clearCoverModal();
         document.getElementById('bookModalLabel').innerText = 'Novo Livro';
         $('#btnDeleteBookModal').addClass('d-none');
@@ -5320,6 +5345,12 @@ service cloud.firestore {
         document.getElementById('f_indicacao').value = b.indicacao;
         document.getElementById('f_releitura').value = b.releitura;
         document.getElementById('f_melhores').value = b.melhores;
+        let pVal = (b.preco !== undefined && b.preco !== null) ? b.preco : '';
+        if (typeof pVal === 'number') {
+            document.getElementById('f_preco').value = pVal;
+        } else {
+            document.getElementById('f_preco').value = pVal ? String(pVal).replace('R$', '').replace(/\s/g, '').replace(',', '.') : '';
+        }
         document.getElementById('f_cover_url').value = b.cover_url || '';
         updateCoverPreview();
         document.getElementById('f_synopsis').value = b.synopsis || (b.raw_data && b.raw_data['Sinopse']) || '';
@@ -5489,6 +5520,14 @@ service cloud.firestore {
 
         const synopsisVal = document.getElementById('f_synopsis') ? document.getElementById('f_synopsis').value : '';
         const notaVal = document.getElementById('f_nota').value;
+        const precoInput = document.getElementById('f_preco') ? document.getElementById('f_preco').value.trim() : '';
+        let precoNum = null;
+        if (precoInput !== '') {
+            const parsed = parseFloat(precoInput.replace(',', '.'));
+            if (!isNaN(parsed)) {
+                precoNum = parsed;
+            }
+        }
 
         const raw = {
             'Melhores do ano?': document.getElementById('f_melhores').value,
@@ -5501,6 +5540,7 @@ service cloud.firestore {
             'Formato': getS2Val('#f_formato'),
             'Status': getS2Val('#f_status'),
             'Aquisição': aquisicao,
+            'Preço Pago': precoNum !== null ? precoNum : precoInput,
             'Gênero do autor': getS2Val('#f_genero_autor'),
             'Indicação': document.getElementById('f_indicacao').value,
             'Por que li?': getS2Val('#f_porque_li'),
@@ -5532,6 +5572,7 @@ service cloud.firestore {
             cover_url: document.getElementById('f_cover_url').value,
             status: getS2Val('#f_status'),
             aquisicao: aquisicao,
+            preco: precoNum !== null ? precoNum : '',
             nota: notaVal,
             synopsis: synopsisVal,
             heranca_fase: $('#f_heranca_fase').val(),
@@ -5586,7 +5627,7 @@ service cloud.firestore {
         const columns = [
             'ID', 'ISBN', 'Título', 'Autor(es)', 'Tradutor(es)', 
             'País', 'Ano de Publicação', 'Selo', 'Grupo Editorial', 'Coleção',
-            'Gênero Literário', 'Formato', 'Status', 'Aquisição', 'Gênero do Autor', 
+            'Gênero Literário', 'Formato', 'Status', 'Aquisição', 'Preço Pago', 'Gênero do Autor', 
             'Indicação', 'Por que li?', 'Como adquiri', 'Mês de leitura', 
             'Ano de leitura', 'Releitura?', 'Nota', 'Páginas',
             'Herança Fase', 'Herança Ano', 'Herança Papel', 'Herança Ordem', 'Herança Livro-Tombo Motivo'
@@ -5599,7 +5640,7 @@ service cloud.firestore {
             let row = [
                 b.id, b.isbn, b.title, b.authors, b.tradutor, b.pais, 
                 b.ano_pub, b.selo, b.grupo, b.colecao, b.genre, b.formato, 
-                b.status, b.aquisicao, b.genero_autor, b.indicacao, b.porque_li, 
+                b.status, b.aquisicao, (b.preco !== undefined && b.preco !== null && b.preco !== '') ? b.preco : '', b.genero_autor, b.indicacao, b.porque_li, 
                 b.como_adquiri, b.mes_leitura, b.ano_leitura, b.releitura, 
                 b.nota, b.pages,
                 b.heranca_fase || '', b.heranca_ano || '', b.heranca_papel || '', b.heranca_ordem || '', b.heranca_motivo || ''
@@ -6188,9 +6229,16 @@ service cloud.firestore {
     async function quickMarkHerancaAcquired(bookId) {
         const b = cachedBooks[bookId];
         if (!b) return;
+        const precoAtual = (b.preco !== undefined && b.preco !== null && b.preco !== '') ? b.preco : '';
+        const precoInput = prompt(
+            `🎉 Parabéns pela aquisição de "${b.title}" para a Biblioteca Herança!\n\nInforme o Preço Pago em R$ (opcional, ex: 89,90):`,
+            precoAtual
+        );
+        if (precoInput === null) return; // Cancelou
+
         const motivoAtual = b.heranca_motivo || '';
         const novoMotivo = prompt(
-            `🎉 Parabéns pela aquisição de "${b.title}" para a Biblioteca Herança!\n\nDeseja já registrar a frase do Livro-Tombo ("Por que este livro entrou na herança?")?\n(Deixe em branco se preferir preencher depois)`,
+            `Deseja já registrar a frase do Livro-Tombo ("Por que este livro entrou na herança?")?\n(Deixe em branco se preferir preencher depois)`,
             motivoAtual
         );
         if (novoMotivo === null) return; // Cancelou
@@ -6200,6 +6248,13 @@ service cloud.firestore {
                 aquisicao: 'Adquirido',
                 'raw_data.Aquisição': 'Adquirido'
             };
+            if (precoInput.trim() !== '') {
+                const parsedPreco = parseFloat(precoInput.trim().replace('R$', '').replace(/\s/g, '').replace(',', '.'));
+                if (!isNaN(parsedPreco)) {
+                    updateObj.preco = parsedPreco;
+                    updateObj['raw_data.Preço Pago'] = parsedPreco;
+                }
+            }
             if (novoMotivo.trim() !== '') {
                 updateObj.heranca_motivo = novoMotivo.trim();
                 updateObj['raw_data.Por que entrou na herança?'] = novoMotivo.trim();
@@ -6261,6 +6316,14 @@ service cloud.firestore {
 
         const pctTotal840 = Math.min(100, ((acquiredHeranca.length / totalTargetPlan) * 100)).toFixed(1);
 
+        // Métricas Financeiras e Avaliação Patrimonial da Herança
+        const acquiredWithPrice = acquiredHeranca.filter(b => b.preco !== undefined && b.preco !== null && b.preco !== '' && !isNaN(parseFloat(String(b.preco).replace(',', '.'))));
+        const totalInvestidoHeranca = acquiredWithPrice.reduce((sum, b) => sum + parseFloat(String(b.preco).replace(',', '.')), 0);
+        const countLivrosComPreco = acquiredWithPrice.length;
+        const precoMedioObra = countLivrosComPreco > 0 ? (totalInvestidoHeranca / countLivrosComPreco) : 75.0;
+        const valorEstimadoAcervoAtual = totalInvestidoHeranca + ((acquiredHeranca.length - countLivrosComPreco) * precoMedioObra);
+        const valorEstimadoPlanoCompleto = totalTargetPlan * precoMedioObra;
+
         // Ano selecionado no seletor interativo (1 a 35)
         const booksOfSelectedYear = herancaBooks.filter(b => getBookHerancaYearNum(b) === currentSelectedHerancaYear)
             .sort((a, b) => (parseInt(a.heranca_ordem, 10) || 99) - (parseInt(b.heranca_ordem, 10) || 99));
@@ -6268,6 +6331,10 @@ service cloud.firestore {
         const acquiredInYear = booksOfSelectedYear.filter(isBookAcquiredInHeranca).length;
         const totalInYear = booksOfSelectedYear.length || (currentSelectedHerancaYear >= 31 ? 12 : 24);
         const pctYear = totalInYear > 0 ? Math.min(100, Math.round((acquiredInYear / totalInYear) * 100)) : 0;
+
+        // Investimento no ano selecionado
+        const acquiredYearWithPrice = booksOfSelectedYear.filter(b => isBookAcquiredInHeranca(b) && b.preco !== undefined && b.preco !== null && b.preco !== '' && !isNaN(parseFloat(String(b.preco).replace(',', '.'))));
+        const totalInvestidoAno = acquiredYearWithPrice.reduce((sum, b) => sum + parseFloat(String(b.preco).replace(',', '.')), 0);
 
         // Dupla da Vez no Ano Selecionado (Próximo Pilar + Próximo Prazer ainda não adquiridos)
         const pendingInYear = booksOfSelectedYear.filter(b => !isBookAcquiredInHeranca(b));
@@ -6343,6 +6410,11 @@ service cloud.firestore {
             else if (b.heranca_papel === 'Aposta Recente') papelBadge = `<span class="badge bg-purple-subtle text-primary border">◇ Aposta</span>`;
             else if (b.heranca_papel === 'Vaga Livre') papelBadge = `<span class="badge bg-success-subtle text-success border border-success">🌱 Vaga Livre</span>`;
 
+            const pNum = (b.preco !== undefined && b.preco !== null && b.preco !== '') ? parseFloat(String(b.preco).replace(',', '.')) : null;
+            const precoBadge = (pNum !== null && !isNaN(pNum) && pNum > 0)
+                ? `<span class="badge bg-light text-dark border" title="Preço pago"><i class="bi bi-tag-fill text-success me-1"></i>R$ ${pNum.toFixed(2).replace('.', ',')}</span>`
+                : (isAcq ? `<span class="badge bg-light text-muted border" style="cursor: pointer;" onclick="event.stopPropagation(); editBook('${b.id}')" title="Adicionar preço pago"><i class="bi bi-tag me-1"></i>+ Preço</span>` : '');
+
             return `
                 <div class="col-md-6 col-xl-4">
                     <div class="p-3 rounded-3 border h-100 d-flex flex-column justify-content-between" style="background: ${isAcq ? 'rgba(16, 185, 129, 0.05)' : 'var(--surface-color)'}; border-color: ${isAcq ? '#a7f3d0' : 'var(--border-color)'} !important;">
@@ -6353,7 +6425,8 @@ service cloud.firestore {
                                     ${mesBadge}
                                     ${papelBadge}
                                 </div>
-                                <div class="d-flex align-items-center gap-1">
+                                <div class="d-flex align-items-center gap-1 flex-wrap">
+                                    ${precoBadge}
                                     ${isAcq
                                         ? `<span class="badge bg-success-subtle text-success border border-success"><i class="bi bi-check-circle-fill me-1"></i>Adquirido</span>`
                                         : `<span class="badge bg-warning-subtle text-warning-emphasis border border-warning"><i class="bi bi-bookmark-heart me-1"></i>Falta Adquirir</span>`
@@ -6493,6 +6566,89 @@ service cloud.firestore {
                 </div>
             </div>
 
+            <!-- PATRIMÔNIO & AVALIAÇÃO ESTIMADA DO ACERVO -->
+            <div class="col-12">
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-body" style="border-left: 5px solid #10b981 !important;">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3 pb-2 border-bottom">
+                        <div>
+                            <h5 class="fw-bold text-success mb-1 d-flex align-items-center gap-2">
+                                <i class="bi bi-cash-coin fs-4"></i> Patrimônio & Avaliação Estimada do Acervo
+                            </h5>
+                            <p class="small text-muted mb-0">
+                                Controle de investimento e projeção financeira para as 840 obras do plano de 35 anos.
+                            </p>
+                        </div>
+                        <div class="small text-muted">
+                            <span class="badge bg-light text-dark border px-2 py-1">
+                                <i class="bi bi-tag-fill me-1 text-success"></i>${countLivrosComPreco} de ${acquiredHeranca.length} adquiridos com preço informado
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <!-- Total Investido Real -->
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="p-3 rounded-3 bg-light border h-100">
+                                <div class="text-uppercase small fw-bold text-muted mb-1" style="font-size: 0.75rem;">
+                                    <i class="bi bi-wallet2 text-success me-1"></i>Total Investido (Real)
+                                </div>
+                                <h3 class="fw-bold text-dark mb-1">
+                                    R$ ${totalInvestidoHeranca.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                </h3>
+                                <div class="small text-muted" style="font-size: 0.75rem;">
+                                    ${countLivrosComPreco > 0 ? `Soma de ${countLivrosComPreco} obras com valor pago registrado` : 'Nenhum preço pago cadastrado ainda'}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Preço Médio por Obra -->
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="p-3 rounded-3 bg-light border h-100">
+                                <div class="text-uppercase small fw-bold text-muted mb-1" style="font-size: 0.75rem;">
+                                    <i class="bi bi-graph-up text-primary me-1"></i>Preço Médio por Volume
+                                </div>
+                                <h3 class="fw-bold text-dark mb-1">
+                                    R$ ${precoMedioObra.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                </h3>
+                                <div class="small text-muted" style="font-size: 0.75rem;">
+                                    ${countLivrosComPreco > 0 ? 'Média real calculada sobre seus livros' : 'Benchmark de referência (R$ 75,00/volume)'}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Valor Estimado do Acervo Atual -->
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="p-3 rounded-3 bg-success bg-opacity-10 border border-success border-opacity-25 h-100">
+                                <div class="text-uppercase small fw-bold text-success mb-1" style="font-size: 0.75rem;">
+                                    <i class="bi bi-shield-check me-1"></i>Valor Estimado do Acervo Atual
+                                </div>
+                                <h3 class="fw-bold text-success mb-1">
+                                    R$ ${valorEstimadoAcervoAtual.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                </h3>
+                                <div class="small text-muted" style="font-size: 0.75rem;">
+                                    Patrimônio físico atual (${acquiredHeranca.length} obras na estante)
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Projeção da Biblioteca Completa (840 Livros) -->
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="p-3 rounded-3 bg-warning bg-opacity-10 border border-warning border-opacity-25 h-100">
+                                <div class="text-uppercase small fw-bold text-warning-emphasis mb-1" style="font-size: 0.75rem;">
+                                    <i class="bi bi-gem me-1"></i>Projeção Completa (840 Obras)
+                                </div>
+                                <h3 class="fw-bold text-dark mb-1">
+                                    R$ ${valorEstimadoPlanoCompleto.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                </h3>
+                                <div class="small text-muted" style="font-size: 0.75rem;">
+                                    Patrimônio total estimado para 2061 (35 anos)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- EXPLORADOR ANUAL E DUPLA DO MÊS (1 PILAR + 1 PRAZER) -->
             <div class="col-12">
                 <div class="card border-0 shadow-sm rounded-4 p-4 bg-body">
@@ -6525,11 +6681,15 @@ service cloud.firestore {
                                 <div class="progress mb-2" style="height: 10px;">
                                     <div class="progress-bar bg-success" role="progressbar" style="width: ${pctYear}%"></div>
                                 </div>
-                                <div class="small text-muted">
+                                <div class="small text-muted mb-2">
                                     ${acquiredInYear >= totalInYear && totalInYear > 0
                                         ? '<span class="text-success fw-semibold"><i class="bi bi-trophy-fill me-1"></i>Todos os livros deste ano já foram conquistados!</span>'
                                         : `Restam <strong>${totalInYear - acquiredInYear} livros</strong> para fechar o Ano ${currentSelectedHerancaYear}.`
                                     }
+                                </div>
+                                <div class="pt-2 border-top d-flex justify-content-between align-items-center small">
+                                    <span class="text-muted"><i class="bi bi-cash me-1"></i>Investido no ano:</span>
+                                    <strong class="text-success">R$ ${totalInvestidoAno.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
                                 </div>
                             </div>
                         </div>
@@ -6681,6 +6841,7 @@ service cloud.firestore {
                         ${b.tradutor ? `<span><strong>Tradução:</strong> ${b.tradutor}</span>` : ''}
                         ${b.ano_pub ? `<span><strong>Ano Ed.:</strong> ${b.ano_pub}</span>` : ''}
                         ${b.heranca_papel ? `<span><strong>Papel:</strong> ${b.heranca_papel}</span>` : ''}
+                        ${(b.preco !== undefined && b.preco !== null && b.preco !== '' && !isNaN(parseFloat(String(b.preco).replace(',', '.'))) && parseFloat(String(b.preco).replace(',', '.')) > 0) ? `<span><strong>Preço Pago:</strong> R$ ${parseFloat(String(b.preco).replace(',', '.')).toFixed(2).replace('.', ',')}</span>` : ''}
                         ${specs.length > 0 ? `<span><strong>Padrão Físico:</strong> ${specs.join(' · ')}</span>` : ''}
                     </div>
                     <div class="tombo-quote">
