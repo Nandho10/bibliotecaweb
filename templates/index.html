@@ -929,6 +929,7 @@
                     <option value="none">Sem Agrupamento</option>
                     <option value="heranca_fase">⏳ Fase do Plano Herança</option>
                     <option value="heranca_ano">⏳ Ano do Plano Herança</option>
+                    <option value="heranca_papel">🏛️ Papel na Herança</option>
                     <option value="authors">Autor</option>
                     <option value="selo">Selo/Editora</option>
                     <option value="colecao">Coleção</option>
@@ -2099,6 +2100,7 @@
         status: [],
         aquisicao: [],
         heranca_fases: [],
+        heranca_papeis: [],
         selos: [],
         autores: []
     };
@@ -2108,7 +2110,7 @@
     let coverCache = {};
 
     function clearSidebarFilters() {
-        sidebarState = { status: [], aquisicao: [], heranca_fases: [], selos: [], autores: [] };
+        sidebarState = { status: [], aquisicao: [], heranca_fases: [], heranca_papeis: [], selos: [], autores: [] };
         $('.sidebar-filter-checkbox').prop('checked', false);
         applyFiltersAndRender();
     }
@@ -2132,20 +2134,36 @@
         });
         const uAutores = [...allAuthors].sort();
 
-        const buildCheckboxes = (title, items, key) => {
+        const buildCheckboxes = (title, items, key, customLabels = {}) => {
             if(items.length === 0) return '';
             let html = `<div class="mb-3">
                 <h6 class="fw-bold mb-2" style="font-size:13px; text-transform:uppercase; color:var(--primary-color)">${title}</h6>
                 <div style="max-height: 150px; overflow-y: auto; font-size: 13px;">`;
             
-            items.forEach(item => {
-                let isChecked = sidebarState[key].includes(item) ? 'checked' : '';
+            items.forEach((item, idx) => {
+                let isChecked = (sidebarState[key] && sidebarState[key].includes(item)) ? 'checked' : '';
+                let labelText = (customLabels && customLabels[item]) ? customLabels[item] : item;
+                
+                let count = 0;
+                if (key === 'status') count = allBooksData.filter(b => b.status === item).length;
+                else if (key === 'aquisicao') count = allBooksData.filter(b => (item === 'Não informado' ? !b.aquisicao : b.aquisicao === item)).length;
+                else if (key === 'heranca_fases') count = allBooksData.filter(b => b.heranca_fase === item).length;
+                else if (key === 'heranca_papeis') count = allBooksData.filter(b => b.heranca_papel === item).length;
+                else if (key === 'selos') count = allBooksData.filter(b => b.selo === item).length;
+                else if (key === 'autores') count = allBooksData.filter(b => (b.authors || '').includes(item)).length;
+
+                const countBadge = count > 0 ? `<span class="badge rounded-pill bg-light text-muted border ms-1" style="font-size: 0.7rem; font-weight: 500;">${count}</span>` : '';
+                const inputId = `filter-${key}-${idx}`;
+
                 html += `
-                    <div class="form-check">
-                        <input class="form-check-input sidebar-filter-checkbox" type="checkbox" value="${item.replace(/"/g, '&quot;')}" data-key="${key}" ${isChecked}>
-                        <label class="form-check-label text-truncate d-block" title="${item.replace(/"/g, '&quot;')}">
-                            ${item}
-                        </label>
+                    <div class="form-check d-flex align-items-center justify-content-between mb-1">
+                        <div class="d-flex align-items-center text-truncate flex-grow-1 me-1">
+                            <input class="form-check-input sidebar-filter-checkbox me-2 flex-shrink-0" type="checkbox" value="${item.replace(/"/g, '&quot;')}" data-key="${key}" ${isChecked} id="${inputId}">
+                            <label class="form-check-label text-truncate" for="${inputId}" style="cursor: pointer;" title="${item.replace(/"/g, '&quot;')}">
+                                ${labelText}
+                            </label>
+                        </div>
+                        ${countBadge}
                     </div>
                 `;
             });
@@ -2161,6 +2179,39 @@
         const uHerancaFases = [...new Set(allBooksData.map(b => b.heranca_fase).filter(Boolean))].sort();
         if (uHerancaFases.length > 0) {
             contentHtml += buildCheckboxes('⏳ Biblioteca Herança (Fases)', uHerancaFases, 'heranca_fases');
+        }
+
+        // Filtro do Papel na Herança (Pilar, Prazer, Livro de Luxo, Aposta Recente, Vaga Livre)
+        const papelPriority = {
+            'Pilar': 1,
+            'Prazer': 2,
+            'Livro de Luxo': 3,
+            'Aposta Recente': 4,
+            'Vaga Livre': 5
+        };
+        const papelIcons = {
+            'Pilar': '🏛️ Pilar',
+            'Prazer': '☕ Prazer',
+            'Livro de Luxo': '✨ Livro de Luxo',
+            'Aposta Recente': '◇ Aposta Recente',
+            'Vaga Livre': '🌱 Vaga Livre'
+        };
+
+        let uHerancaPapeis = [...new Set(allBooksData.map(b => b.heranca_papel).filter(Boolean))];
+        if (uHerancaPapeis.length === 0 && allBooksData.some(b => b.heranca_fase || b.heranca_ano)) {
+            uHerancaPapeis = ['Pilar', 'Prazer', 'Livro de Luxo', 'Aposta Recente', 'Vaga Livre'];
+        } else if (uHerancaPapeis.length === 0 && allBooksData.length > 0) {
+            uHerancaPapeis = ['Pilar', 'Prazer', 'Livro de Luxo', 'Aposta Recente'];
+        }
+
+        if (uHerancaPapeis.length > 0) {
+            uHerancaPapeis.sort((a, b) => {
+                const pA = papelPriority[a] || 99;
+                const pB = papelPriority[b] || 99;
+                if (pA !== pB) return pA - pB;
+                return a.localeCompare(b);
+            });
+            contentHtml += buildCheckboxes('🏛️ Papel na Herança', uHerancaPapeis, 'heranca_papeis', papelIcons);
         }
 
         contentHtml += buildCheckboxes('Selos/Editoras', uSelos, 'selos');
@@ -2246,6 +2297,12 @@
                 passHeranca = sidebarState.heranca_fases.includes(b.heranca_fase);
             }
 
+            // Filtro de Papel no Plano Herança
+            let passHerancaPapel = true;
+            if (sidebarState.heranca_papeis && sidebarState.heranca_papeis.length > 0) {
+                passHerancaPapel = sidebarState.heranca_papeis.includes(b.heranca_papel);
+            }
+
             let passAutor = true;
             if (sidebarState.autores.length > 0) {
                 passAutor = sidebarState.autores.some(a => (b.authors||'').includes(a));
@@ -2258,7 +2315,7 @@
                 passSearch = title.includes(searchText) || isbn.includes(searchText);
             }
             
-            return passFormat && passQuickStatus && passStatus && passAq && passSelo && passHeranca && passAutor && passSearch;
+            return passFormat && passQuickStatus && passStatus && passAq && passSelo && passHeranca && passHerancaPapel && passAutor && passSearch;
         });
 
         const sortVal = $('#sortSelect').val() || 'recentes';
@@ -2353,6 +2410,11 @@
                 if (groupVal === 'heranca_ano') {
                     rawA = normalizeHerancaAno(rawA);
                     rawB = normalizeHerancaAno(rawB);
+                } else if (groupVal === 'heranca_papel') {
+                    const papelPriority = { 'Pilar': 1, 'Prazer': 2, 'Livro de Luxo': 3, 'Aposta Recente': 4, 'Vaga Livre': 5 };
+                    const pA = papelPriority[rawA] || 99;
+                    const pB = papelPriority[rawB] || 99;
+                    if (pA !== pB) return pA - pB;
                 }
                 return rawA.toLowerCase().localeCompare(rawB.toLowerCase(), undefined, { numeric: true });
             });
@@ -2868,12 +2930,30 @@
             });
         }
 
-        const keys = Object.keys(groups).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+        let keys = Object.keys(groups);
+        if (groupField === 'heranca_papel') {
+            const papelPriority = { 'Pilar': 1, 'Prazer': 2, 'Livro de Luxo': 3, 'Aposta Recente': 4, 'Vaga Livre': 5 };
+            keys.sort((a, b) => (papelPriority[a] || 99) - (papelPriority[b] || 99) || a.localeCompare(b));
+        } else {
+            keys.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+        }
+
         keys.forEach((k, idx) => {
             let rowTarget = container;
             if (groupField !== 'none') {
                 const groupId = 'group-cards-' + idx;
                 const isCollapsed = collapsedGroupKeys.has(k);
+                let groupLabel = k;
+                if (groupField === 'heranca_papel') {
+                    const papelIcons = {
+                        'Pilar': '🏛️ Pilar',
+                        'Prazer': '☕ Prazer',
+                        'Livro de Luxo': '✨ Livro de Luxo',
+                        'Aposta Recente': '◇ Aposta Recente',
+                        'Vaga Livre': '🌱 Vaga Livre'
+                    };
+                    groupLabel = papelIcons[k] || k;
+                }
                 const header = $(`
                     <div class="col-12 mt-4 mb-2">
                         <div class="group-section-header d-flex justify-content-between align-items-center ${isCollapsed ? 'collapsed' : ''}" 
@@ -2883,7 +2963,7 @@
                              title="Clique para expandir ou retrair este grupo">
                             <div class="d-flex align-items-center gap-2">
                                 <i class="bi bi-chevron-down group-chevron fs-6 text-primary" id="chevron-${groupId}" style="${isCollapsed ? 'transform: rotate(-90deg);' : ''}"></i>
-                                <h5 class="m-0 fw-semibold text-secondary" style="font-size: 1.05rem;">${k}</h5>
+                                <h5 class="m-0 fw-semibold text-secondary" style="font-size: 1.05rem;">${groupLabel}</h5>
                                 <span class="badge bg-light text-dark border ms-1">${groups[k].length}</span>
                             </div>
                             <span class="text-muted small group-status-text" id="label-${groupId}" style="font-size: 0.8rem;">
@@ -2996,12 +3076,30 @@
             });
         }
 
-        const keys = Object.keys(groups).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+        let keys = Object.keys(groups);
+        if (groupField === 'heranca_papel') {
+            const papelPriority = { 'Pilar': 1, 'Prazer': 2, 'Livro de Luxo': 3, 'Aposta Recente': 4, 'Vaga Livre': 5 };
+            keys.sort((a, b) => (papelPriority[a] || 99) - (papelPriority[b] || 99) || a.localeCompare(b));
+        } else {
+            keys.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+        }
+
         keys.forEach((k, idx) => {
             let rowTarget = container;
             if (groupField !== 'none') {
                 const groupId = 'group-covers-' + idx;
                 const isCollapsed = collapsedGroupKeys.has(k);
+                let groupLabel = k;
+                if (groupField === 'heranca_papel') {
+                    const papelIcons = {
+                        'Pilar': '🏛️ Pilar',
+                        'Prazer': '☕ Prazer',
+                        'Livro de Luxo': '✨ Livro de Luxo',
+                        'Aposta Recente': '◇ Aposta Recente',
+                        'Vaga Livre': '🌱 Vaga Livre'
+                    };
+                    groupLabel = papelIcons[k] || k;
+                }
                 const header = $(`
                     <div class="col-12 mt-4 mb-2">
                         <div class="group-section-header d-flex justify-content-between align-items-center ${isCollapsed ? 'collapsed' : ''}" 
@@ -3011,7 +3109,7 @@
                              title="Clique para expandir ou retrair este grupo">
                             <div class="d-flex align-items-center gap-2">
                                 <i class="bi bi-chevron-down group-chevron fs-6 text-primary" id="chevron-${groupId}" style="${isCollapsed ? 'transform: rotate(-90deg);' : ''}"></i>
-                                <h5 class="m-0 fw-semibold text-secondary" style="font-size: 1.05rem;">${k}</h5>
+                                <h5 class="m-0 fw-semibold text-secondary" style="font-size: 1.05rem;">${groupLabel}</h5>
                                 <span class="badge bg-light text-dark border ms-1">${groups[k].length}</span>
                             </div>
                             <span class="text-muted small group-status-text" id="label-${groupId}" style="font-size: 0.8rem;">
@@ -6222,8 +6320,15 @@ service cloud.firestore {
             `;
         }).join('');
 
-        // Lista dos 24 livros do Ano Selecionado
-        const yearBooksListHtml = booksOfSelectedYear.length > 0 ? booksOfSelectedYear.map(b => {
+        // Lista dos livros do Ano Selecionado (respeitando filtro de papel na herança se ativo)
+        const displayYearBooks = booksOfSelectedYear.filter(b => {
+            if (sidebarState.heranca_papeis && sidebarState.heranca_papeis.length > 0) {
+                return sidebarState.heranca_papeis.includes(b.heranca_papel);
+            }
+            return true;
+        });
+
+        const yearBooksListHtml = displayYearBooks.length > 0 ? displayYearBooks.map(b => {
             const isAcq = isBookAcquiredInHeranca(b);
             const isRead = b.status === 'Lido';
             const ordemNum = b.heranca_ordem || '-';
@@ -6236,6 +6341,7 @@ service cloud.firestore {
             else if (b.heranca_papel === 'Prazer') papelBadge = `<span class="badge bg-info-subtle text-info-emphasis border border-info-subtle">☕ Prazer</span>`;
             else if (b.heranca_papel === 'Livro de Luxo') papelBadge = `<span class="badge bg-warning text-dark border border-warning">✨ Livro de Luxo</span>`;
             else if (b.heranca_papel === 'Aposta Recente') papelBadge = `<span class="badge bg-purple-subtle text-primary border">◇ Aposta</span>`;
+            else if (b.heranca_papel === 'Vaga Livre') papelBadge = `<span class="badge bg-success-subtle text-success border border-success">🌱 Vaga Livre</span>`;
 
             return `
                 <div class="col-md-6 col-xl-4">
