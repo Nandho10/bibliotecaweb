@@ -178,6 +178,44 @@
         .theme-toggle { cursor: pointer; font-size: 1.2rem; color: var(--text-muted); transition: color 0.2s; background: none; border: none; padding: 0;}
         .theme-toggle:hover { color: var(--primary-color); }
 
+        /* ----- SEÇÕES DE AGRUPAMENTO EXPANSÍVEIS / RETRÁTEIS ----- */
+        .group-section-header {
+            cursor: pointer;
+            user-select: none;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 9px 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            transition: all 0.2s ease;
+        }
+        .group-section-header:hover {
+            background-color: rgba(62, 84, 107, 0.08);
+            border-color: var(--primary-light);
+            transform: translateY(-1px);
+        }
+        [data-bs-theme="dark"] .group-section-header:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-color: var(--primary-light);
+        }
+        .group-section-header .group-chevron {
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-block;
+        }
+        .group-section-header.collapsed .group-chevron {
+            transform: rotate(-90deg);
+        }
+        .group-section-header .badge {
+            font-size: 0.8rem;
+            background-color: var(--bg-body) !important;
+            color: var(--text-main) !important;
+            border: 1px solid var(--border-color) !important;
+        }
+        .group-section-header h5 {
+            color: var(--text-main) !important;
+            font-size: 1.05rem;
+        }
+
         /* ----- RESPONSIVIDADE MOBILE & CONTROLE DE SCROLL LATERAL ----- */
         *, *::before, *::after {
             box-sizing: border-box;
@@ -410,6 +448,9 @@
                     <option value="genre">Categoria literária</option>
                     <option value="formato">Formato</option>
                 </select>
+                <button type="button" class="btn btn-sm btn-outline-secondary ms-1 py-1 px-2 text-nowrap d-flex align-items-center gap-1 shadow-sm" id="btnToggleAllGroups" onclick="toggleAllGroupSections()" style="display: none; font-size: 0.78rem; height: 31px;" title="Expandir ou recolher todos os grupos">
+                    <i class="bi bi-arrows-collapse" id="iconToggleAll"></i> <span id="textToggleAll" class="d-none d-sm-inline">Recolher Todos</span>
+                </button>
             </div>
         </div>
 
@@ -1224,6 +1265,8 @@
     let currentEditingId = null;
     let cachedBooks = {}; 
     let globalDropdownLists = {};
+    let collapsedGroupKeys = new Set();
+    let lastGroupVal = 'none';
 
     const bookModal = new bootstrap.Modal(document.getElementById('bookModal'));
     const listsModal = new bootstrap.Modal(document.getElementById('listsModal'));
@@ -1235,7 +1278,23 @@
         order: [], // Preserva a ordem original do array enviada pelo nosso Javascript
         rowGroup: {
             enable: false,
-            dataSrc: 'authors'
+            dataSrc: 'authors',
+            startRender: function (rows, group) {
+                return $(`
+                    <tr class="dtrg-group cursor-pointer user-select-none" style="cursor: pointer; background-color: var(--surface-color);">
+                        <td colspan="20" class="fw-semibold py-2 px-3 border-bottom">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-chevron-down dtrg-toggle-icon text-primary transition-icon"></i>
+                                    <span class="text-main">${group}</span>
+                                    <span class="badge bg-light text-dark border ms-1">${rows.count()}</span>
+                                </div>
+                                <span class="small text-muted fw-normal dtrg-hint"><i class="bi bi-arrows-collapse me-1"></i>Retrair</span>
+                            </div>
+                        </td>
+                    </tr>
+                `);
+            }
         },
         columns: [
             { 
@@ -1339,6 +1398,25 @@
                 }
             }
         ]
+    });
+
+    // Clique na linha de cabeçalho do grupo da tabela para expandir/retrair
+    $('#booksTable tbody').on('click', 'tr.dtrg-group', function () {
+        let nextTr = $(this).next();
+        const isVisible = nextTr.is(':visible');
+        while (nextTr.length && !nextTr.hasClass('dtrg-group')) {
+            nextTr.toggle(!isVisible);
+            nextTr = nextTr.next();
+        }
+        const icon = $(this).find('.dtrg-toggle-icon');
+        const hint = $(this).find('.dtrg-hint');
+        if (isVisible) {
+            icon.removeClass('bi-chevron-down').addClass('bi-chevron-right');
+            hint.html('<i class="bi bi-arrows-expand me-1"></i>Expandir');
+        } else {
+            icon.removeClass('bi-chevron-right').addClass('bi-chevron-down');
+            hint.html('<i class="bi bi-arrows-collapse me-1"></i>Retrair');
+        }
     });
 
     const columnsModalElement = document.getElementById('columnsModal');
@@ -1648,13 +1726,21 @@
         
         const groupVal = $('#groupSelect').val() || 'none';
 
+        if (groupVal !== lastGroupVal) {
+            collapsedGroupKeys.clear();
+            lastGroupVal = groupVal;
+        }
+
         if (groupVal !== 'none') {
+            $('#btnToggleAllGroups').show();
             // Ordenação estável pelo agrupamento para manter a ordenação secundária do usuário
             filteredBooksData.sort((a, b) => {
                 let valA = (a[groupVal] || 'Não Classificado').toLowerCase();
                 let valB = (b[groupVal] || 'Não Classificado').toLowerCase();
                 return valA.localeCompare(valB, undefined, { numeric: true });
             });
+        } else {
+            $('#btnToggleAllGroups').hide();
         }
 
         if(currentView === 'table') {
@@ -1876,10 +1962,39 @@
             });
         }
 
-        const keys = Object.keys(groups).sort();
-        keys.forEach(k => {
+        const keys = Object.keys(groups).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+        keys.forEach((k, idx) => {
+            let rowTarget = container;
             if (groupField !== 'none') {
-                container.append(`<div class="col-12 mt-4 mb-1"><h5 class="border-bottom pb-2 text-secondary">${k} <span class="badge bg-light text-dark border ms-2">${groups[k].length}</span></h5></div>`);
+                const groupId = 'group-cards-' + idx;
+                const isCollapsed = collapsedGroupKeys.has(k);
+                const header = $(`
+                    <div class="col-12 mt-4 mb-2">
+                        <div class="group-section-header d-flex justify-content-between align-items-center ${isCollapsed ? 'collapsed' : ''}" 
+                             id="header-${groupId}"
+                             data-group-key="${encodeURIComponent(k)}"
+                             onclick="toggleViewSection('${groupId}')"
+                             title="Clique para expandir ou retrair este grupo">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-chevron-down group-chevron fs-6 text-primary" id="chevron-${groupId}" style="${isCollapsed ? 'transform: rotate(-90deg);' : ''}"></i>
+                                <h5 class="m-0 fw-semibold text-secondary" style="font-size: 1.05rem;">${k}</h5>
+                                <span class="badge bg-light text-dark border ms-1">${groups[k].length}</span>
+                            </div>
+                            <span class="text-muted small group-status-text" id="label-${groupId}" style="font-size: 0.8rem;">
+                                ${isCollapsed ? '<i class="bi bi-arrows-expand me-1"></i>Expandir' : '<i class="bi bi-arrows-collapse me-1"></i>Retrair'}
+                            </span>
+                        </div>
+                    </div>
+                `);
+                container.append(header);
+
+                const groupWrapper = $(`
+                    <div class="col-12 group-items-row" id="${groupId}" style="${isCollapsed ? 'display: none;' : ''}">
+                        <div class="row g-4"></div>
+                    </div>
+                `);
+                container.append(groupWrapper);
+                rowTarget = groupWrapper.find('.row');
             }
             
             groups[k].forEach(book => {
@@ -1944,7 +2059,7 @@
                         </div>
                     </div>
                 `);
-                container.append(card);
+                rowTarget.append(card);
                 
                 fetchCover(book).then(url => {
                     if(url === 'fallback') {
@@ -1955,6 +2070,7 @@
                 });
             });
         });
+        updateToggleAllButton();
     }
 
     function renderCoversView(books, groupField = 'none') {
@@ -1971,10 +2087,39 @@
             });
         }
 
-        const keys = Object.keys(groups).sort();
-        keys.forEach(k => {
+        const keys = Object.keys(groups).sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+        keys.forEach((k, idx) => {
+            let rowTarget = container;
             if (groupField !== 'none') {
-                container.append(`<div class="col-12 mt-4 mb-1"><h5 class="border-bottom pb-2 text-secondary">${k} <span class="badge bg-light text-dark border ms-2">${groups[k].length}</span></h5></div>`);
+                const groupId = 'group-covers-' + idx;
+                const isCollapsed = collapsedGroupKeys.has(k);
+                const header = $(`
+                    <div class="col-12 mt-4 mb-2">
+                        <div class="group-section-header d-flex justify-content-between align-items-center ${isCollapsed ? 'collapsed' : ''}" 
+                             id="header-${groupId}"
+                             data-group-key="${encodeURIComponent(k)}"
+                             onclick="toggleViewSection('${groupId}')"
+                             title="Clique para expandir ou retrair este grupo">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-chevron-down group-chevron fs-6 text-primary" id="chevron-${groupId}" style="${isCollapsed ? 'transform: rotate(-90deg);' : ''}"></i>
+                                <h5 class="m-0 fw-semibold text-secondary" style="font-size: 1.05rem;">${k}</h5>
+                                <span class="badge bg-light text-dark border ms-1">${groups[k].length}</span>
+                            </div>
+                            <span class="text-muted small group-status-text" id="label-${groupId}" style="font-size: 0.8rem;">
+                                ${isCollapsed ? '<i class="bi bi-arrows-expand me-1"></i>Expandir' : '<i class="bi bi-arrows-collapse me-1"></i>Retrair'}
+                            </span>
+                        </div>
+                    </div>
+                `);
+                container.append(header);
+
+                const groupWrapper = $(`
+                    <div class="col-12 group-items-row" id="${groupId}" style="${isCollapsed ? 'display: none;' : ''}">
+                        <div class="row g-3"></div>
+                    </div>
+                `);
+                container.append(groupWrapper);
+                rowTarget = groupWrapper.find('.row');
             }
             
             groups[k].forEach(book => {
@@ -1988,7 +2133,7 @@
                         </div>
                     </div>
                 `);
-                container.append(card);
+                rowTarget.append(card);
                 
                 fetchCover(book).then(url => {
                     if(url === 'fallback') {
@@ -1999,6 +2144,76 @@
                 });
             });
         });
+        updateToggleAllButton();
+    }
+
+    function toggleViewSection(groupId) {
+        const $target = $('#' + groupId);
+        const $header = $('#header-' + groupId);
+        const $chevron = $('#chevron-' + groupId);
+        const $label = $('#label-' + groupId);
+        const groupKey = decodeURIComponent($header.attr('data-group-key') || '');
+
+        $target.slideToggle(200, function() {
+            const isVisible = $target.is(':visible');
+            if (isVisible) {
+                if (groupKey) collapsedGroupKeys.delete(groupKey);
+                $header.removeClass('collapsed');
+                $chevron.css('transform', 'rotate(0deg)');
+                $label.html('<i class="bi bi-arrows-collapse me-1"></i>Retrair');
+            } else {
+                if (groupKey) collapsedGroupKeys.add(groupKey);
+                $header.addClass('collapsed');
+                $chevron.css('transform', 'rotate(-90deg)');
+                $label.html('<i class="bi bi-arrows-expand me-1"></i>Expandir');
+            }
+            updateToggleAllButton();
+        });
+    }
+
+    function toggleAllGroupSections() {
+        const wrappers = $('.group-items-row');
+        const headers = $('.group-section-header');
+        if (wrappers.length === 0) return;
+
+        const anyOpen = wrappers.filter(':visible').length > 0;
+        
+        if (anyOpen) {
+            wrappers.slideUp(200);
+            headers.addClass('collapsed');
+            headers.find('.group-chevron').css('transform', 'rotate(-90deg)');
+            headers.find('.group-status-text').html('<i class="bi bi-arrows-expand me-1"></i>Expandir');
+            headers.each(function() {
+                const key = decodeURIComponent($(this).attr('data-group-key') || '');
+                if (key) collapsedGroupKeys.add(key);
+            });
+        } else {
+            wrappers.slideDown(200);
+            headers.removeClass('collapsed');
+            headers.find('.group-chevron').css('transform', 'rotate(0deg)');
+            headers.find('.group-status-text').html('<i class="bi bi-arrows-collapse me-1"></i>Retrair');
+            collapsedGroupKeys.clear();
+        }
+        updateToggleAllButton();
+    }
+
+    function updateToggleAllButton() {
+        const wrappers = $('.group-items-row');
+        if (wrappers.length === 0) {
+            $('#btnToggleAllGroups').hide();
+            return;
+        }
+        $('#btnToggleAllGroups').show();
+        const anyOpen = wrappers.filter(':visible').length > 0;
+        const icon = $('#iconToggleAll');
+        const text = $('#textToggleAll');
+        if (anyOpen) {
+            icon.removeClass('bi-arrows-expand').addClass('bi-arrows-collapse');
+            text.text('Recolher Todos');
+        } else {
+            icon.removeClass('bi-arrows-collapse').addClass('bi-arrows-expand');
+            text.text('Expandir Todos');
+        }
     }
 
     function renderStatsView(books) {
