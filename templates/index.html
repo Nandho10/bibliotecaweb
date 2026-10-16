@@ -564,6 +564,86 @@
             border-color: var(--accent-gold) !important;
         }
 
+        /* ==========================================================================
+           📑 ABAS DO MODAL DE EDIÇÃO/CADASTRO (SISTEMA SEM ROLAGEM)
+           ========================================================================== */
+        .modal-tabs-header {
+            background: var(--bg-body) !important;
+            border-bottom: 1px solid var(--border-color) !important;
+        }
+        .modal-nav-pills {
+            background: rgba(0, 0, 0, 0.04);
+            padding: 4px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+        [data-bs-theme="dark"] .modal-nav-pills {
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .modal-nav-pills .nav-link {
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.86rem;
+            border-radius: 9px;
+            padding: 7px 12px;
+            transition: all 0.2s cubic-bezier(0.2, 0, 0.1, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid transparent;
+        }
+        .modal-nav-pills .nav-link:hover {
+            color: var(--primary-color);
+            background: rgba(0, 0, 0, 0.03);
+        }
+        [data-bs-theme="dark"] .modal-nav-pills .nav-link:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.06);
+        }
+        .modal-nav-pills .nav-link.active {
+            background: var(--surface-color) !important;
+            color: var(--primary-color) !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+            border-color: var(--border-color) !important;
+            border-bottom: 2px solid var(--accent-gold) !important;
+        }
+        [data-bs-theme="dark"] .modal-nav-pills .nav-link.active {
+            background: #1e2530 !important;
+            color: #FAF5EB !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+            border-bottom: 2px solid var(--accent-gold) !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+        }
+        .modal-tab-content-pane {
+            min-height: 380px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        .select2-container {
+            width: 100% !important;
+        }
+        .select2-container--bootstrap-5 .select2-selection {
+            min-height: 38px;
+            border-radius: 10px !important;
+            border-color: var(--border-color) !important;
+            background-color: var(--surface-color) !important;
+            color: var(--text-main) !important;
+        }
+        @media (max-width: 768px) {
+            .modal-nav-pills {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                white-space: nowrap;
+                scrollbar-width: none;
+            }
+            .modal-nav-pills::-webkit-scrollbar { display: none; }
+            .modal-nav-pills .nav-link {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+        }
+
         /* Pastel Cards Theming */
         .card-view .card.theme-pastel-card {
             background: linear-gradient(135deg, var(--card-bg-light, var(--surface-color)) 0%, #ffffff 100%) !important;
@@ -989,20 +1069,54 @@
 
 <!-- Modal CRUD Livro -->
 <div class="modal fade" id="bookModal" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="bookModalLabel">Cadastrar/Editar Livro</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0 rounded-4 overflow-hidden">
+      <div class="modal-header border-bottom pb-2 pt-3 px-4 d-flex justify-content-between align-items-center">
+        <div>
+          <h5 class="modal-title fw-bold" id="bookModalLabel">Cadastrar/Editar Livro</h5>
+          <div class="text-muted small" style="font-size: 0.8rem;">Alterne entre as abas para preencher ou editar sem precisar rolar</div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
       </div>
-      <div class="modal-body">
+      
+      <!-- Navegação por Abas -->
+      <div class="modal-tabs-header px-4 pt-3 pb-2">
+        <ul class="nav nav-pills nav-fill modal-nav-pills gap-1" id="bookModalTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="tab-basico-btn" data-bs-toggle="pill" data-bs-target="#tab-basico" type="button" role="tab" aria-controls="tab-basico" aria-selected="true">
+              <i class="bi bi-book me-1"></i> <span>Básico</span>
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-editoracao-btn" data-bs-toggle="pill" data-bs-target="#tab-editoracao" type="button" role="tab" aria-controls="tab-editoracao" aria-selected="false">
+              <i class="bi bi-building me-1"></i> <span>Editoração</span>
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-classificacao-btn" data-bs-toggle="pill" data-bs-target="#tab-classificacao" type="button" role="tab" aria-controls="tab-classificacao" aria-selected="false">
+              <i class="bi bi-tags me-1"></i> <span>Classificação</span>
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-heranca-btn" data-bs-toggle="pill" data-bs-target="#tab-heranca" type="button" role="tab" aria-controls="tab-heranca" aria-selected="false">
+              <i class="bi bi-hourglass-split text-warning me-1"></i> <span>Herança</span>
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-avaliacao-btn" data-bs-toggle="pill" data-bs-target="#tab-avaliacao" type="button" role="tab" aria-controls="tab-avaliacao" aria-selected="false">
+              <i class="bi bi-star-fill text-warning me-1"></i> <span>Avaliação</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="modal-body px-4 py-3">
         <form id="bookForm" class="needs-validation" novalidate>
-            <!-- Informações Básicas -->
-            <div class="card mb-3 shadow-sm border-0">
-                <div class="card-header bg-light text-primary fw-bold">
-                    <i class="bi bi-book me-2"></i>Informações Básicas
-                </div>
-                <div class="card-body row g-3">
+          <div class="tab-content" id="bookModalTabContent">
+            
+            <!-- Aba 1: Básico -->
+            <div class="tab-pane fade show active modal-tab-content-pane" id="tab-basico" role="tabpanel" aria-labelledby="tab-basico-btn">
+                <div class="row g-3">
                     <div class="col-md-4">
                         <label class="form-label fw-semibold text-danger" for="f_isbn">ISBN-13 *</label>
                         <div class="input-group">
@@ -1018,7 +1132,7 @@
                     </div>
                     <div class="col-md-8">
                         <label class="form-label fw-semibold text-danger" for="f_title">Título *</label>
-                        <input type="text" class="form-control" id="f_title" required>
+                        <input type="text" class="form-control" id="f_title" placeholder="Título completo da obra" required>
                     </div>
                     
                     <div class="col-md-6">
@@ -1040,7 +1154,7 @@
                             <span class="text-muted fw-normal" style="font-size: 0.75rem;">URL ou Arquivo do PC</span>
                         </label>
                         <div class="input-group">
-                            <input type="text" class="form-control" id="f_cover_url" placeholder="Cole a URL (ex: Amazon) ou envie do PC..." oninput="updateCoverPreview()">
+                            <input type="text" class="form-control" id="f_cover_url" placeholder="Cole a URL ou envie do PC..." oninput="updateCoverPreview()">
                             <button class="btn btn-outline-primary" type="button" id="btnUploadCoverModal" onclick="$('#f_cover_file').click()" title="Escolher imagem do computador">
                                 <i class="bi bi-upload me-1"></i><span class="d-none d-sm-inline">Do PC</span>
                             </button>
@@ -1068,12 +1182,9 @@
                 </div>
             </div>
 
-            <!-- Editoração -->
-            <div class="card mb-3 shadow-sm border-0">
-                <div class="card-header bg-light text-primary fw-bold">
-                    <i class="bi bi-building me-2"></i>Editoração e Publicação
-                </div>
-                <div class="card-body row g-3">
+            <!-- Aba 2: Editoração -->
+            <div class="tab-pane fade modal-tab-content-pane" id="tab-editoracao" role="tabpanel" aria-labelledby="tab-editoracao-btn">
+                <div class="row g-3">
                     <div class="col-md-4">
                         <label class="form-label fw-semibold text-danger" for="f_grupo">Grupo *</label>
                         <select class="form-select dynamic-select" id="f_grupo" data-category="grupos" required></select>
@@ -1093,21 +1204,18 @@
                     </div>
                     <div class="col-md-4">
                         <label class="form-label fw-semibold" for="f_ano_pub">Ano de Publicação</label>
-                        <input type="text" class="form-control" id="f_ano_pub">
+                        <input type="text" class="form-control" id="f_ano_pub" placeholder="Ex: 2022">
                     </div>
                     <div class="col-md-4">
                         <label class="form-label fw-semibold text-danger" for="f_pages">Número de páginas *</label>
-                        <input type="number" class="form-control" id="f_pages" required>
+                        <input type="number" class="form-control" id="f_pages" placeholder="Ex: 309" required>
                     </div>
                 </div>
             </div>
 
-            <!-- Detalhes do Livro -->
-            <div class="card mb-3 shadow-sm border-0">
-                <div class="card-header bg-light text-primary fw-bold">
-                    <i class="bi bi-tags me-2"></i>Classificação
-                </div>
-                <div class="card-body row g-3">
+            <!-- Aba 3: Classificação -->
+            <div class="tab-pane fade modal-tab-content-pane" id="tab-classificacao" role="tabpanel" aria-labelledby="tab-classificacao-btn">
+                <div class="row g-3">
                     <div class="col-md-6">
                         <label class="form-label fw-semibold">Categoria literária</label>
                         <select class="form-select dynamic-select" id="f_genre" data-category="generos_literarios"></select>
@@ -1131,21 +1239,23 @@
                     </div>
                     <div class="col-12">
                         <label class="form-label fw-semibold" for="f_synopsis">Sinopse da Obra</label>
-                        <textarea class="form-control" id="f_synopsis" rows="3" placeholder="Sinopse ou descrição do livro..."></textarea>
+                        <textarea class="form-control" id="f_synopsis" rows="5" placeholder="Sinopse ou descrição do livro..."></textarea>
                     </div>
                 </div>
             </div>
 
-            <!-- Biblioteca Herança (Plano 35 Anos) -->
-            <div class="card mb-3 shadow-sm border-0" style="border-left: 4px solid #b45309 !important;">
-                <div class="card-header bg-warning bg-opacity-10 text-dark fw-bold d-flex justify-content-between align-items-center">
-                    <span><i class="bi bi-hourglass-split text-warning me-2"></i>Biblioteca Herança (Plano 35 Anos · 2026-2061)</span>
-                    <span class="badge bg-warning text-dark border small fw-normal">Livro-Tombo de Família</span>
-                </div>
-                <div class="card-body row g-3">
-                    <div class="col-md-3">
+            <!-- Aba 4: Herança -->
+            <div class="tab-pane fade modal-tab-content-pane" id="tab-heranca" role="tabpanel" aria-labelledby="tab-heranca-btn">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <div class="p-2 px-3 rounded-3 bg-warning bg-opacity-10 border border-warning border-opacity-25 d-flex justify-content-between align-items-center">
+                            <span class="small fw-semibold text-dark"><i class="bi bi-hourglass-split text-warning me-1"></i>Biblioteca Herança (Plano 35 Anos · 2026-2061)</span>
+                            <span class="badge bg-warning text-dark border small fw-normal">Livro-Tombo de Família</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
                         <label class="form-label fw-semibold" for="f_heranca_fase">Fase do Plano</label>
-                        <select class="form-select form-select-sm" id="f_heranca_fase">
+                        <select class="form-select" id="f_heranca_fase">
                             <option value="">Não faz parte do plano</option>
                             <option value="Fase I">Fase I (Anos 1 a 5) — A Pedra Fundamental</option>
                             <option value="Fase II">Fase II (Anos 6 a 10) — Os Grandes Universos</option>
@@ -1156,9 +1266,9 @@
                             <option value="Fase VII">Fase VII (Anos 31 a 35) — Coroamento</option>
                         </select>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <label class="form-label fw-semibold" for="f_heranca_ano">Ano do Plano / Meta</label>
-                        <select class="form-select form-select-sm" id="f_heranca_ano">
+                        <select class="form-select" id="f_heranca_ano">
                             <option value="">Nenhum</option>
                             <option value="Ano 1 (2026) — Os Alicerces">Ano 1 (2026) — Os Alicerces</option>
                             <option value="Ano 2 (2027) — O Grande Romance">Ano 2 (2027) — O Grande Romance</option>
@@ -1197,26 +1307,26 @@
                             <option value="Ano 35 (2060-2061) — O Fechamento do Círculo">Ano 35 (2060-2061) — O Fechamento do Círculo</option>
                         </select>
                     </div>
-                    <div class="col-md-3">
-                        <label class="form-label fw-semibold" for="f_heranca_papel">Papel no Plano</label>
-                        <select class="form-select form-select-sm" id="f_heranca_papel">
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold" for="f_heranca_papel">Papel</label>
+                        <select class="form-select" id="f_heranca_papel">
                             <option value="">Não classificado</option>
-                            <option value="Pilar">🏛️ Pilar (Obra mestra e densa)</option>
-                            <option value="Prazer">☕ Prazer (Leitura ágil / fôlego)</option>
-                            <option value="Livro de Luxo">✨ Livro de Luxo (1 por ano · Colecionador)</option>
-                            <option value="Aposta Recente">◇ Aposta Recente (Substituível)</option>
-                            <option value="Vaga Livre">🌱 Vaga Livre (Herdeiro / Escolha futura)</option>
+                            <option value="Pilar">🏛️ Pilar</option>
+                            <option value="Prazer">☕ Prazer</option>
+                            <option value="Livro de Luxo">✨ Luxo</option>
+                            <option value="Aposta Recente">◇ Aposta</option>
+                            <option value="Vaga Livre">🌱 Vaga</option>
                         </select>
                     </div>
-                    <div class="col-md-3">
-                        <label class="form-label fw-semibold" for="f_heranca_ordem">Nº de Ordem no Ano (1 a 24)</label>
-                        <input type="number" class="form-control form-control-sm" id="f_heranca_ordem" min="1" max="24" placeholder="Ex: 1 (Janeiro)">
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold" for="f_heranca_ordem">Nº Ordem</label>
+                        <input type="number" class="form-control" id="f_heranca_ordem" min="1" max="24" placeholder="1-24">
                     </div>
 
                     <!-- Padrão Físico da Edição (Capa dura, costura, papel alcalino) -->
                     <div class="col-12">
                         <label class="form-label fw-semibold mb-1 d-block"><i class="bi bi-patch-check text-primary me-1"></i>Padrão Físico da Edição de Herança</label>
-                        <div class="d-flex flex-wrap gap-3 p-2 bg-light rounded border">
+                        <div class="d-flex flex-wrap gap-3 p-2 bg-light rounded-3 border">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="f_heranca_capadura">
                                 <label class="form-check-label small" for="f_heranca_capadura">
@@ -1226,19 +1336,19 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="f_heranca_costurado">
                                 <label class="form-check-label small" for="f_heranca_costurado">
-                                    <strong>Caderno Costurado</strong> (não apenas colado)
+                                    <strong>Caderno Costurado</strong>
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="f_heranca_papelalcalino">
                                 <label class="form-check-label small" for="f_heranca_papelalcalino">
-                                    <strong>Papel Alcalino / Pólen</strong> (livre de ácido, dura gerações)
+                                    <strong>Papel Alcalino / Pólen</strong>
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="f_heranca_traducao">
                                 <label class="form-check-label small" for="f_heranca_traducao">
-                                    <strong>Tradução de Referência</strong> (direta do original com notas)
+                                    <strong>Tradução de Referência</strong>
                                 </label>
                             </div>
                         </div>
@@ -1255,15 +1365,12 @@
                 </div>
             </div>
 
-            <!-- Leitura e Avaliação -->
-            <div class="card mb-0 shadow-sm border-0">
-                <div class="card-header bg-light text-primary fw-bold">
-                    <i class="bi bi-star me-2"></i>Leitura e Avaliação
-                </div>
-                <div class="card-body row g-3">
+            <!-- Aba 5: Avaliação -->
+            <div class="tab-pane fade modal-tab-content-pane" id="tab-avaliacao" role="tabpanel" aria-labelledby="tab-avaliacao-btn">
+                <div class="row g-3">
                     <div class="col-md-6">
                         <label class="form-label fw-semibold">Indicação</label>
-                        <input type="text" class="form-control" id="f_indicacao">
+                        <input type="text" class="form-control" id="f_indicacao" placeholder="Quem indicou este livro?">
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-semibold">Por que li?</label>
@@ -1280,7 +1387,7 @@
                     </div>
                     <div class="col-md-4">
                         <label class="form-label fw-semibold">Releitura?</label>
-                        <input type="text" class="form-control" id="f_releitura">
+                        <input type="text" class="form-control" id="f_releitura" placeholder="Sim / Não">
                     </div>
 
                     <div class="col-md-6">
@@ -1302,15 +1409,18 @@
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-semibold">Melhores do ano?</label>
-                        <input type="text" class="form-control" id="f_melhores">
+                        <input type="text" class="form-control" id="f_melhores" placeholder="Ex: Sim (2024)">
                     </div>
                 </div>
             </div>
+
+          </div>
         </form>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-success" onclick="saveBook()">Salvar</button>
+      
+      <div class="modal-footer px-4 py-3 bg-body-tertiary border-top d-flex justify-content-between align-items-center">
+        <button type="button" class="btn btn-outline-secondary px-3" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-success px-4 shadow-sm fw-semibold" onclick="saveBook()"><i class="bi bi-check2-circle me-1"></i>Salvar Livro</button>
       </div>
     </div>
   </div>
@@ -4091,7 +4201,24 @@
             tags: true, // PERMITE DIGITAR VALOR NOVO
             dropdownParent: $('#bookModal .modal-content'),
             placeholder: 'Selecione ou digite novo...',
-            allowClear: true
+            allowClear: true,
+            width: '100%'
+        });
+
+        // Redimensionar Select2 para 100% ao alternar entre as abas do modal
+        $(document).on('shown.bs.tab', '#bookModalTabs button[data-bs-toggle="pill"]', function () {
+            $('#bookModal .dynamic-select').each(function() {
+                if ($(this).data('select2')) {
+                    $(this).select2({
+                        theme: 'bootstrap-5',
+                        tags: true,
+                        dropdownParent: $('#bookModal .modal-content'),
+                        placeholder: 'Selecione ou digite novo...',
+                        allowClear: true,
+                        width: '100%'
+                    });
+                }
+            });
         });
 
         // Quando o usuário digitar algo novo e selecionar, interceptamos para salvar na lista global
@@ -5038,6 +5165,7 @@ service cloud.firestore {
         clearCoverModal();
         document.getElementById('bookModalLabel').innerText = 'Novo Livro';
         updateAllRequiredLabels();
+        $('#tab-basico-btn').tab('show');
         bookModal.show();
     }
 
@@ -5099,6 +5227,7 @@ service cloud.firestore {
         $('#f_heranca_traducao').prop('checked', !!b.heranca_traducao);
 
         updateAllRequiredLabels();
+        $('#tab-basico-btn').tab('show');
         bookModal.show();
     }
 
@@ -5164,6 +5293,21 @@ service cloud.firestore {
         const aquisicao = getS2Val('#f_aquisicao');
 
         if (!title || !isbn || !pages || !authors || !grupo || !selo || !colecao || !formato || !aquisicao) {
+            if (!isbn || !title || !authors || !aquisicao) {
+                $('#tab-basico-btn').tab('show');
+                alert('Por favor, preencha todos os campos obrigatórios (*) na aba Informações Básicas.');
+                return;
+            }
+            if (!grupo || !selo || !colecao || !pages) {
+                $('#tab-editoracao-btn').tab('show');
+                alert('Por favor, preencha todos os campos obrigatórios (*) na aba Editoração e Publicação.');
+                return;
+            }
+            if (!formato) {
+                $('#tab-classificacao-btn').tab('show');
+                alert('Por favor, selecione o Formato (*) na aba Classificação.');
+                return;
+            }
             alert('Por favor, preencha todos os campos obrigatórios (marcados com *).');
             return;
         }
