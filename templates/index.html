@@ -6324,6 +6324,21 @@ service cloud.firestore {
         const valorEstimadoAcervoAtual = totalInvestidoHeranca + ((acquiredHeranca.length - countLivrosComPreco) * precoMedioObra);
         const valorEstimadoPlanoCompleto = totalTargetPlan * precoMedioObra;
 
+        // Métricas Financeiras do Acervo Geral (todos os livros adquiridos)
+        const parsePrecoGeral = (b) => parseFloat(String(b.preco).replace(',', '.'));
+        const hasPrecoGeral = (b) => b.preco !== undefined && b.preco !== null && b.preco !== '' && !isNaN(parsePrecoGeral(b));
+        const acquiredGeral = (allBooksData || []).filter(b => {
+            const aq = (b.aquisicao || '').toLowerCase();
+            return aq === 'adquirido' || (!aq && b.status === 'Lido');
+        });
+        const acquiredGeralWithPrice = acquiredGeral.filter(hasPrecoGeral);
+        const totalInvestidoGeral = acquiredGeralWithPrice.reduce((sum, b) => sum + parsePrecoGeral(b), 0);
+        const countGeralComPreco = acquiredGeralWithPrice.length;
+        const precoMedioGeral = countGeralComPreco > 0 ? (totalInvestidoGeral / countGeralComPreco) : 75.0;
+        const valorEstimadoGeral = totalInvestidoGeral + ((acquiredGeral.length - countGeralComPreco) * precoMedioGeral);
+        const pctHerancaNoGeral = valorEstimadoGeral > 0 ? Math.min(100, (valorEstimadoAcervoAtual / valorEstimadoGeral) * 100) : 0;
+        const fmtBRL = (v) => v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
         // Ano selecionado no seletor interativo (1 a 35)
         const booksOfSelectedYear = herancaBooks.filter(b => getBookHerancaYearNum(b) === currentSelectedHerancaYear)
             .sort((a, b) => (parseInt(a.heranca_ordem, 10) || 99) - (parseInt(b.heranca_ordem, 10) || 99));
@@ -6642,6 +6657,65 @@ service cloud.firestore {
                                 </h3>
                                 <div class="small text-muted" style="font-size: 0.75rem;">
                                     Patrimônio total estimado para 2061 (35 anos)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ACERVO GERAL (TODOS OS LIVROS) -->
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mt-4 mb-3 pb-2 border-bottom">
+                        <h6 class="fw-bold text-primary mb-0 d-flex align-items-center gap-2">
+                            <i class="bi bi-bookshelf"></i> Acervo Geral (toda a biblioteca)
+                        </h6>
+                        <span class="badge bg-light text-dark border px-2 py-1">
+                            <i class="bi bi-tag-fill me-1 text-primary"></i>${countGeralComPreco} de ${acquiredGeral.length} adquiridos com preço informado
+                        </span>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="p-3 rounded-3 bg-light border h-100">
+                                <div class="text-uppercase small fw-bold text-muted mb-1" style="font-size: 0.75rem;">
+                                    <i class="bi bi-wallet2 text-primary me-1"></i>Total Investido (Geral)
+                                </div>
+                                <h3 class="fw-bold text-dark mb-1">R$ ${fmtBRL(totalInvestidoGeral)}</h3>
+                                <div class="small text-muted" style="font-size: 0.75rem;">
+                                    ${countGeralComPreco > 0 ? `Soma de ${countGeralComPreco} livros com valor pago registrado` : 'Nenhum preço pago cadastrado ainda'}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="p-3 rounded-3 bg-light border h-100">
+                                <div class="text-uppercase small fw-bold text-muted mb-1" style="font-size: 0.75rem;">
+                                    <i class="bi bi-graph-up text-primary me-1"></i>Preço Médio (Geral)
+                                </div>
+                                <h3 class="fw-bold text-dark mb-1">R$ ${fmtBRL(precoMedioGeral)}</h3>
+                                <div class="small text-muted" style="font-size: 0.75rem;">
+                                    ${countGeralComPreco > 0 ? 'Média real sobre todo o acervo' : 'Benchmark de referência (R$ 75,00/volume)'}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="p-3 rounded-3 bg-primary bg-opacity-10 border border-primary border-opacity-25 h-100">
+                                <div class="text-uppercase small fw-bold text-primary mb-1" style="font-size: 0.75rem;">
+                                    <i class="bi bi-safe me-1"></i>Valor Estimado do Acervo Geral
+                                </div>
+                                <h3 class="fw-bold text-primary mb-1">R$ ${fmtBRL(valorEstimadoGeral)}</h3>
+                                <div class="small text-muted" style="font-size: 0.75rem;">
+                                    Patrimônio físico total (${acquiredGeral.length} livros na estante)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="p-3 rounded-3 bg-light border h-100">
+                                <div class="text-uppercase small fw-bold text-muted mb-1" style="font-size: 0.75rem;">
+                                    <i class="bi bi-pie-chart-fill text-success me-1"></i>Participação da Herança
+                                </div>
+                                <h3 class="fw-bold text-dark mb-1">${pctHerancaNoGeral.toFixed(1)}%</h3>
+                                <div class="progress mb-1" style="height: 6px;">
+                                    <div class="progress-bar bg-success" style="width: ${pctHerancaNoGeral}%;"></div>
+                                </div>
+                                <div class="small text-muted" style="font-size: 0.75rem;">
+                                    Do valor total do acervo pertence à Herança
                                 </div>
                             </div>
                         </div>
