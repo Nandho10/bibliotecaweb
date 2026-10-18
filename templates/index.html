@@ -2346,7 +2346,7 @@
                 <div style="max-height: 150px; overflow-y: auto; font-size: 13px;">`;
             
             items.forEach((item, idx) => {
-                let isChecked = (sidebarState[key] && sidebarState[key].includes(item)) ? 'checked' : '';
+                let isChecked = (sidebarState[key] && sidebarState[key].map(String).includes(String(item))) ? 'checked' : '';
                 let labelText = (customLabels && customLabels[item]) ? customLabels[item] : item;
                 
                 let count = 0;
@@ -2360,12 +2360,13 @@
 
                 const countBadge = count > 0 ? `<span class="badge rounded-pill bg-light text-muted border ms-1" style="font-size: 0.7rem; font-weight: 500;">${count}</span>` : '';
                 const inputId = `filter-${key}-${idx}`;
+                const safeItem = String(item).replace(/"/g, '&quot;');
 
                 html += `
                     <div class="form-check d-flex align-items-center justify-content-between mb-1">
                         <div class="d-flex align-items-center text-truncate flex-grow-1 me-1">
-                            <input class="form-check-input sidebar-filter-checkbox me-2 flex-shrink-0" type="checkbox" value="${item.replace(/"/g, '&quot;')}" data-key="${key}" ${isChecked} id="${inputId}">
-                            <label class="form-check-label text-truncate" for="${inputId}" style="cursor: pointer;" title="${item.replace(/"/g, '&quot;')}">
+                            <input class="form-check-input sidebar-filter-checkbox me-2 flex-shrink-0" type="checkbox" value="${safeItem}" data-key="${key}" ${isChecked} id="${inputId}">
+                            <label class="form-check-label text-truncate" for="${inputId}" style="cursor: pointer;" title="${safeItem}">
                                 ${labelText}
                             </label>
                         </div>
