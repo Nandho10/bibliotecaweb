@@ -24,9 +24,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
     <!-- Google Fonts: Luxury Editorial & Modern Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Playfair+Display:ital,wght@0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <!-- Canvas Confetti for reading celebration -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
     <style>
         :root, [data-bs-theme="light"] {
             --primary-color: #17212B;
@@ -644,6 +645,71 @@
             }
         }
 
+        /* ----- GAMIFICAÇÃO & DIÁRIO DE LEITURA ----- */
+        .reading-streak-flame {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: linear-gradient(135deg, #ffedd5 0%, #fee2e2 100%);
+            color: #ea580c;
+            border: 1px solid #fed7aa;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 0.82rem;
+        }
+        [data-bs-theme="dark"] .reading-streak-flame {
+            background: rgba(234, 88, 12, 0.15);
+            border-color: rgba(234, 88, 12, 0.35);
+            color: #fdba74;
+        }
+        .gamification-badge-card {
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            background: var(--surface-color);
+            transition: transform 0.15s ease;
+        }
+        .gamification-badge-card.unlocked {
+            border-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.08);
+        }
+        .gamification-badge-card.locked {
+            opacity: 0.55;
+            filter: grayscale(80%);
+        }
+        .journal-timeline-item {
+            position: relative;
+            padding-left: 24px;
+            padding-bottom: 14px;
+            border-left: 2px dashed #cbd5e1;
+        }
+        [data-bs-theme="dark"] .journal-timeline-item {
+            border-left-color: #334155;
+        }
+        .journal-timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 4px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #10b981;
+            border: 2px solid #ffffff;
+        }
+        [data-bs-theme="dark"] .journal-timeline-item::before {
+            border-color: #1e293b;
+        }
+        .btn-journal-quick {
+            border-radius: 999px;
+            padding: 2px 10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: all 0.15s ease;
+        }
+
         /* Pastel Cards Theming */
         .card-view .card.theme-pastel-card {
             background: linear-gradient(135deg, var(--card-bg-light, var(--surface-color)) 0%, #ffffff 100%) !important;
@@ -914,6 +980,7 @@
                     <option value="antigos">Mais antigos (Adição)</option>
                     <option value="heranca_ordem">⏳ Ordem do Plano Herança (1º ao 35º Ano)</option>
                     <option value="melhor_nota">Melhor avaliados (⭐)</option>
+                    <option value="ano_compra">Ano de Compra (Mais recentes)</option>
                     <option value="ano_leitura">Ano de Leitura (Recentes)</option>
                     <option value="pub_nova">Mais novos (Publicação)</option>
                     <option value="pub_antiga">Mais antigos (Publicação)</option>
@@ -1054,6 +1121,7 @@
                             <th>Indicação</th>
                             <th>Por que li?</th>
                             <th>Como adquiri</th>
+                            <th>Ano de Compra</th>
                             <th>Mês de leitura</th>
                             <th>Ano de Leitura</th>
                             <th>Releitura?</th>
@@ -1145,16 +1213,20 @@
                         <select class="form-select dynamic-select" id="f_tradutor" data-category="tradutores" multiple></select>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label fw-semibold text-danger" for="f_aquisicao">Situação (Acervo) *</label>
                         <select class="form-select dynamic-select" id="f_aquisicao" data-category="aquisicoes_status" required></select>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label fw-semibold" for="f_preco"><i class="bi bi-tag me-1"></i>Preço Pago</label>
                         <div class="input-group">
                             <span class="input-group-text bg-light fw-semibold">R$</span>
                             <input type="number" step="0.01" min="0" class="form-control" id="f_preco" placeholder="0,00">
                         </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold" for="f_ano_compra"><i class="bi bi-calendar-event me-1"></i>Ano Compra</label>
+                        <input type="number" min="1950" max="2100" class="form-control" id="f_ano_compra" placeholder="Ex: 2024">
                     </div>
                     <div class="col-md-4">
                         <label class="form-label fw-semibold d-flex justify-content-between align-items-center mb-1" for="f_cover_url">
@@ -1526,6 +1598,9 @@
               </button>
               <input type="file" id="detailCoverFileInput" accept="image/png, image/jpeg, image/jpg, image/webp" class="d-none" onchange="if(this.files && this.files[0]) handleDetailCoverUpload(this.files[0])">
 
+              <button class="btn btn-success btn-sm rounded-pill d-flex align-items-center justify-content-center gap-2 fw-semibold shadow-sm" id="detailJournalBtn" title="Registrar leitura diária e ver progresso gamificado">
+                <i class="bi bi-controller"></i> Diário & Gamificação
+              </button>
               <button class="btn btn-primary btn-sm rounded-pill d-flex align-items-center justify-content-center gap-2" id="detailEditBtn">
                 <i class="bi bi-pencil-square"></i> Editar Livro
               </button>
@@ -1601,6 +1676,118 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Diário de Leitura & Gamificação -->
+<div class="modal fade" id="readingJournalModal" tabindex="-1" aria-labelledby="readingJournalModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content shadow-lg border-0 rounded-4 overflow-hidden">
+      <div class="modal-header pb-2 pt-3 px-4 border-bottom d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, rgba(16,185,129,0.08) 0%, rgba(59,130,246,0.05) 100%);">
+        <div>
+          <div class="d-flex align-items-center gap-2 mb-1">
+            <span class="badge bg-success-subtle text-success border border-success px-2 py-1"><i class="bi bi-controller me-1"></i>Gamificação</span>
+            <h5 class="modal-title fw-bold text-dark m-0" id="readingJournalModalLabel">Diário de Leitura</h5>
+          </div>
+          <div class="text-muted small" id="journalBookTitleAuthors">Acompanhe seu ritmo diário e conquiste medalhas</div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+
+      <div class="modal-body px-4 py-3">
+        <!-- Banner de Status & Streak -->
+        <div class="card border-0 rounded-4 p-3 mb-3 shadow-sm bg-body" style="border-left: 5px solid #10b981 !important;">
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+            <div>
+              <span class="text-uppercase text-muted fw-bold small" style="font-size: 0.72rem;">Progresso Atual da Obra</span>
+              <h3 class="fw-bold mb-0 text-dark" id="journalProgressPages">0 <small class="fs-6 fw-normal text-muted">/ 0 pág (0%)</small></h3>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <span class="reading-streak-flame" id="journalStreakBadge" title="Dias consecutivos com leitura registrada">
+                <i class="bi bi-fire"></i> <span id="journalStreakCount">0</span> dias seguidos
+              </span>
+              <span class="badge bg-light text-dark border px-2 py-1" id="journalStatusBadge">Lendo</span>
+            </div>
+          </div>
+          <div class="progress mb-2" style="height: 12px; border-radius: 999px;">
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" id="journalProgressBar" role="progressbar" style="width: 0%"></div>
+          </div>
+          <div class="d-flex justify-content-between align-items-center small text-muted flex-wrap gap-2">
+            <span id="journalPacingEstimate"><i class="bi bi-speedometer2 me-1"></i>Ritmo: calcule registrando suas sessões</span>
+            <span id="journalTotalSessions"><i class="bi bi-calendar3 me-1"></i>0 sessões registradas</span>
+          </div>
+        </div>
+
+        <!-- Formulário para Registrar Leitura do Dia -->
+        <div class="card bg-light border-0 rounded-4 p-3 mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="fw-bold text-primary mb-0 d-flex align-items-center gap-2">
+              <i class="bi bi-pencil-square"></i> Registrar Leitura do Dia
+            </h6>
+            <small class="text-muted">Avanço por Página Atual</small>
+          </div>
+          <form id="journalSessionForm" onsubmit="saveJournalSession(event)">
+            <div class="row g-2 align-items-end">
+              <div class="col-sm-4">
+                <label class="form-label small fw-semibold text-muted mb-1" for="journalDateInput">Data da Leitura</label>
+                <input type="date" class="form-control form-control-sm" id="journalDateInput" required>
+              </div>
+              <div class="col-sm-4">
+                <label class="form-label small fw-semibold text-muted mb-1" for="journalPageInput">
+                  Parei na Página <span class="text-danger">*</span>
+                </label>
+                <div class="input-group input-group-sm">
+                  <input type="number" min="1" class="form-control" id="journalPageInput" placeholder="Ex: 145" required>
+                  <span class="input-group-text bg-white" id="journalMaxPagesHint">de 300</span>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <button type="submit" class="btn btn-success btn-sm w-100 fw-semibold d-flex align-items-center justify-content-center gap-1 shadow-sm" id="btnSaveJournalSession">
+                  <i class="bi bi-plus-circle-fill"></i> Salvar Avanço
+                </button>
+              </div>
+              <div class="col-12 mt-2">
+                <input type="text" class="form-control form-control-sm" id="journalNotesInput" placeholder="Notas do dia (opcional, ex: 'Capítulo 4 foi incrível!')" maxlength="160">
+              </div>
+            </div>
+          </form>
+          <div id="journalFeedbackMsg" class="small mt-2" style="display: none;"></div>
+        </div>
+
+        <!-- Conquistas & Gamificação Desbloqueáveis -->
+        <div class="mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
+              <i class="bi bi-trophy text-warning"></i> Conquistas deste Livro
+            </h6>
+            <small class="text-muted" id="journalBadgesCount">0 de 4 desbloqueadas</small>
+          </div>
+          <div class="row g-2" id="journalBadgesContainer">
+            <!-- Badges preenchidos via JS -->
+          </div>
+        </div>
+
+        <!-- Linha do Tempo / Histórico de Leituras -->
+        <div>
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
+              <i class="bi bi-clock-history text-secondary"></i> Histórico de Sessões
+            </h6>
+            <button class="btn btn-link btn-sm p-0 text-decoration-none text-muted" type="button" onclick="clearAllJournalSessions()" id="btnClearJournalSessions" style="font-size: 0.75rem; display: none;">
+              <i class="bi bi-trash me-1"></i>Limpar sessões
+            </button>
+          </div>
+          <div id="journalHistoryContainer" style="max-height: 200px; overflow-y: auto;">
+            <!-- Preenchido via JS -->
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer bg-light border-top py-2 px-4 d-flex justify-content-between align-items-center">
+        <div class="small text-muted" id="journalFooterInfo">Seus dados são salvos em tempo real no acervo.</div>
+        <button type="button" class="btn btn-secondary btn-sm px-3" data-bs-dismiss="modal">Fechar</button>
       </div>
     </div>
   </div>
@@ -1925,6 +2112,7 @@
                 render: function(data, type, row) {
                     return `
                         <div class="d-flex align-items-center gap-1">
+                            <button class="btn btn-sm btn-outline-success" onclick="openReadingJournalModal('${data}')" title="Diário de Leitura & Gamificação"><i class="bi bi-controller"></i></button>
                             <button class="btn btn-sm btn-outline-info" onclick="showBookDetails('${data}')" title="Ver detalhes"><i class="bi bi-eye"></i></button>
                             <button class="btn btn-sm btn-outline-primary" onclick="editBook('${data}')" title="Editar"><i class="bi bi-pencil"></i></button>
                             <button class="btn btn-sm btn-outline-danger" onclick="deleteBook('${data}')" title="Excluir"><i class="bi bi-trash"></i></button>
@@ -1986,6 +2174,14 @@
             { data: 'indicacao', defaultContent: '' },
             { data: 'porque_li', defaultContent: '' },
             { data: 'como_adquiri', defaultContent: '' },
+            { 
+                data: 'ano_compra', 
+                defaultContent: '',
+                render: function(data) {
+                    if (!data) return '';
+                    return `<span class="badge bg-light text-dark border"><i class="bi bi-calendar-event me-1 text-primary"></i>${data}</span>`;
+                }
+            },
             { data: 'mes_leitura', defaultContent: '' },
             { data: 'ano_leitura', defaultContent: '' },
             { data: 'releitura', defaultContent: '' },
@@ -2106,6 +2302,7 @@
     let sidebarState = {
         status: [],
         aquisicao: [],
+        anos_compra: [],
         heranca_fases: [],
         heranca_papeis: [],
         selos: [],
@@ -2117,7 +2314,7 @@
     let coverCache = {};
 
     function clearSidebarFilters() {
-        sidebarState = { status: [], aquisicao: [], heranca_fases: [], heranca_papeis: [], selos: [], autores: [] };
+        sidebarState = { status: [], aquisicao: [], anos_compra: [], heranca_fases: [], heranca_papeis: [], selos: [], autores: [] };
         $('.sidebar-filter-checkbox').prop('checked', false);
         applyFiltersAndRender();
     }
@@ -2131,6 +2328,7 @@
         if (allBooksData.some(b => !b.aquisicao)) {
             uAq.push('Não informado');
         }
+        let uAnosCompra = [...new Set(allBooksData.map(b => b.ano_compra).filter(Boolean))].sort((a, b) => b - a);
         const uSelos = [...new Set(allBooksData.map(b => b.selo).filter(Boolean))].sort();
         
         let allAuthors = new Set();
@@ -2154,6 +2352,7 @@
                 let count = 0;
                 if (key === 'status') count = allBooksData.filter(b => b.status === item).length;
                 else if (key === 'aquisicao') count = allBooksData.filter(b => (item === 'Não informado' ? !b.aquisicao : b.aquisicao === item)).length;
+                else if (key === 'anos_compra') count = allBooksData.filter(b => String(b.ano_compra) === String(item)).length;
                 else if (key === 'heranca_fases') count = allBooksData.filter(b => b.heranca_fase === item).length;
                 else if (key === 'heranca_papeis') count = allBooksData.filter(b => b.heranca_papel === item).length;
                 else if (key === 'selos') count = allBooksData.filter(b => b.selo === item).length;
@@ -2180,6 +2379,9 @@
 
         let contentHtml = '';
         contentHtml += buildCheckboxes('Situação (Acervo)', uAq, 'aquisicao');
+        if (uAnosCompra.length > 0) {
+            contentHtml += buildCheckboxes('📅 Ano de Compra', uAnosCompra, 'anos_compra');
+        }
         contentHtml += buildCheckboxes('Status (Leitura)', uStatus, 'status');
         
         // Filtro da Biblioteca Herança (Fases I a VII)
@@ -2296,6 +2498,8 @@
             let passAq = sidebarState.aquisicao.length === 0 || 
                          sidebarState.aquisicao.includes(b.aquisicao) || 
                          (!b.aquisicao && sidebarState.aquisicao.includes('Não informado'));
+            let passAnoCompra = sidebarState.anos_compra.length === 0 ||
+                                (b.ano_compra && sidebarState.anos_compra.map(String).includes(String(b.ano_compra)));
             let passSelo = sidebarState.selos.length === 0 || sidebarState.selos.includes(b.selo);
             
             // Filtro de Fase do Plano Herança
@@ -2322,7 +2526,7 @@
                 passSearch = title.includes(searchText) || isbn.includes(searchText);
             }
             
-            return passFormat && passQuickStatus && passStatus && passAq && passSelo && passHeranca && passHerancaPapel && passAutor && passSearch;
+            return passFormat && passQuickStatus && passStatus && passAq && passAnoCompra && passSelo && passHeranca && passHerancaPapel && passAutor && passSearch;
         });
 
         const sortVal = $('#sortSelect').val() || 'recentes';
@@ -2357,6 +2561,12 @@
                 const nA = notaWeight(a.nota || a.raw_data?.['Nota']);
                 const nB = notaWeight(b.nota || b.raw_data?.['Nota']);
                 return nB - nA;
+            });
+        } else if (sortVal === 'ano_compra') {
+            filteredBooksData.sort((a, b) => {
+                const yA = parseInt(String(a.ano_compra || a.raw_data?.['Ano de Compra'] || 0).match(/\d{4}/) || [0], 10);
+                const yB = parseInt(String(b.ano_compra || b.raw_data?.['Ano de Compra'] || 0).match(/\d{4}/) || [0], 10);
+                return yB - yA;
             });
         } else if (sortVal === 'ano_leitura') {
             filteredBooksData.sort((a, b) => {
@@ -3027,6 +3237,31 @@
                     }
                 }
 
+                // Ano de compra
+                let anoCompraBadge = '';
+                if (book.ano_compra) {
+                    anoCompraBadge = `<span class="badge bg-light text-dark border d-inline-flex align-items-center" style="font-size: 0.72rem; padding: 3px 7px;" title="Comprado em ${book.ano_compra}"><i class="bi bi-calendar-event me-1 text-primary"></i>${book.ano_compra}</span>`;
+                }
+
+                // Progresso gamificado no card
+                const journalPagesDone = parseInt(book.paginas_lidas, 10) || 0;
+                const totalBookP = parseInt(pages, 10) || 0;
+                let readingProgressMiniHtml = '';
+                if (journalPagesDone > 0 && totalBookP > 0) {
+                    const pctCard = Math.min(100, Math.round((journalPagesDone / totalBookP) * 100));
+                    readingProgressMiniHtml = `
+                        <div class="mt-2 pt-1 border-top" style="cursor: pointer;" onclick="event.stopPropagation(); openReadingJournalModal('${book.id}')" title="Clique para abrir o Diário de Leitura">
+                            <div class="d-flex justify-content-between align-items-center small text-muted mb-1" style="font-size: 0.72rem;">
+                                <span class="fw-semibold text-success"><i class="bi bi-controller me-1"></i>${journalPagesDone} / ${totalBookP} pág</span>
+                                <span class="fw-bold">${pctCard}%</span>
+                            </div>
+                            <div class="progress" style="height: 5px;">
+                                <div class="progress-bar ${pctCard >= 100 ? 'bg-success' : 'bg-primary'}" style="width: ${pctCard}%;"></div>
+                            </div>
+                        </div>
+                    `;
+                }
+
                 const card = $(`
                     <div class="col-md-6 col-lg-4">
                         <div class="card theme-pastel-card" style="--card-bg-light: ${pTheme.bgLight}; --card-border-light: ${pTheme.borderLight}; --card-bg-dark: ${pTheme.bgDark}; --card-border-dark: ${pTheme.borderDark};">
@@ -3047,13 +3282,16 @@
                                     ${anoStr}
                                 </div>
                                 ${book.isbn ? `<div class="mb-2" style="font-size: 0.8rem; color: #6c757d;"><i class="bi bi-upc-scan"></i> <span style="cursor:pointer;" class="text-primary text-decoration-underline" onclick="copyISBN('${book.isbn}')" title="Copiar ISBN">${book.isbn}</span></div>` : '<div class="mb-2" style="font-size: 0.8rem; color: transparent;">&nbsp;</div>'}
+                                ${readingProgressMiniHtml}
                                 <div class="mt-auto d-flex justify-content-between align-items-center pt-2">
                                     <div class="d-flex align-items-center gap-2 flex-wrap">
                                         ${book.isbn ? `<a href="https://www.amazon.com.br/s?k=${book.isbn.replace(/[^0-9X]/gi, '')}" target="_blank" class="btn btn-sm btn-amazon-sleek shadow-sm" title="Buscar ISBN na Amazon" onclick="event.stopPropagation()"><i class="bi bi-amazon"></i></a>` : `<a href="https://www.amazon.com.br/s?k=${encodeURIComponent(book.title + ' ' + book.authors)}" target="_blank" class="btn btn-sm btn-amazon-sleek shadow-sm" title="Buscar Título na Amazon" onclick="event.stopPropagation()"><i class="bi bi-amazon"></i></a>`}
                                         ${aquisicaoBadge}
                                         ${precoBadge}
+                                        ${anoCompraBadge}
                                     </div>
                                     <div class="d-flex align-items-center gap-1">
+                                        <button class="btn btn-action-sleek text-success" onclick="event.stopPropagation(); openReadingJournalModal('${book.id}')" title="Diário de Leitura & Gamificação"><i class="bi bi-controller"></i></button>
                                         <button class="btn btn-action-sleek" onclick="event.stopPropagation(); showBookDetails('${book.id}')" title="Ver ficha completa"><i class="bi bi-eye"></i></button>
                                         <button class="btn btn-action-sleek" onclick="event.stopPropagation(); editBook('${book.id}')" title="Editar livro"><i class="bi bi-pencil"></i></button>
                                     </div>
@@ -4911,6 +5149,9 @@
                 personalItems.push(`<div><strong>Preço pago:</strong> <span class="badge bg-success-subtle text-success border border-success">R$ ${pVal.toFixed(2).replace('.', ',')}</span></div>`);
             }
         }
+        if (book.ano_compra) {
+            personalItems.push(`<div><strong>Ano de compra:</strong> <span class="badge bg-light text-dark border"><i class="bi bi-calendar-event me-1 text-primary"></i>${book.ano_compra}</span></div>`);
+        }
         if (raw['Como adquiri']) {
             personalItems.push(`<div><strong>Como adquiri:</strong> ${raw['Como adquiri']}</div>`);
         }
@@ -4962,6 +5203,12 @@
         } else {
             $('#detailHerancaCard').hide();
         }
+
+        $('#detailJournalBtn').off('click').on('click', () => {
+            const detailsModal = bootstrap.Modal.getInstance(document.getElementById('bookDetailsModal'));
+            if (detailsModal) detailsModal.hide();
+            setTimeout(() => openReadingJournalModal(book.id), 250);
+        });
 
         $('#detailEditBtn').off('click').on('click', () => {
             const detailsModal = bootstrap.Modal.getInstance(document.getElementById('bookDetailsModal'));
@@ -5290,6 +5537,9 @@ service cloud.firestore {
                 synopsis: data.synopsis || getRaw(raw, ['Sinopse', 'Synopsis', 'Descricao', 'Descrição']) || '',
                 aquisicao: data.aquisicao || getRaw(raw, ['Aquisição', 'Aquisicao', 'Situação']) || '',
                 preco: (data.preco !== undefined && data.preco !== null && data.preco !== '') ? data.preco : (getRaw(raw, ['Preço Pago', 'Preço', 'Preco', 'Valor', 'Preço pago']) || ''),
+                ano_compra: data.ano_compra || getRaw(raw, ['Ano de Compra', 'Ano Compra', 'Ano de Aquisição', 'Ano Aquisição']) || '',
+                paginas_lidas: data.paginas_lidas !== undefined ? data.paginas_lidas : (getRaw(raw, ['Páginas Lidas', 'Paginas Lidas']) || 0),
+                reading_sessions: Array.isArray(data.reading_sessions) ? data.reading_sessions : (Array.isArray(raw['reading_sessions']) ? raw['reading_sessions'] : []),
                 cover_url: data.cover_url || '',
                 heranca_fase: data.heranca_fase || getRaw(raw, ['Fase do Plano', 'Herança Fase']) || '',
                 heranca_ano: normalizeHerancaAno(data.heranca_ano || getRaw(raw, ['Ano do Plano', 'Herança Ano']) || ''),
@@ -5322,6 +5572,7 @@ service cloud.firestore {
         form.classList.remove('was-validated');
         $('.dynamic-select').val(null).trigger('change');
         $('#f_preco').val('');
+        $('#f_ano_compra').val('');
         clearCoverModal();
         document.getElementById('bookModalLabel').innerText = 'Novo Livro';
         $('#btnDeleteBookModal').addClass('d-none');
@@ -5342,6 +5593,7 @@ service cloud.firestore {
         document.getElementById('f_title').value = b.title;
         document.getElementById('f_ano_pub').value = b.ano_pub;
         document.getElementById('f_pages').value = b.pages;
+        document.getElementById('f_ano_compra').value = b.ano_compra || '';
         document.getElementById('f_indicacao').value = b.indicacao;
         document.getElementById('f_releitura').value = b.releitura;
         document.getElementById('f_melhores').value = b.melhores;
@@ -5541,6 +5793,7 @@ service cloud.firestore {
             'Status': getS2Val('#f_status'),
             'Aquisição': aquisicao,
             'Preço Pago': precoNum !== null ? precoNum : precoInput,
+            'Ano de Compra': document.getElementById('f_ano_compra') ? document.getElementById('f_ano_compra').value.trim() : '',
             'Gênero do autor': getS2Val('#f_genero_autor'),
             'Indicação': document.getElementById('f_indicacao').value,
             'Por que li?': getS2Val('#f_porque_li'),
@@ -5561,6 +5814,8 @@ service cloud.firestore {
             'Tradução Referência Herança': $('#f_heranca_traducao').is(':checked')
         };
 
+        const anoCompraVal = document.getElementById('f_ano_compra') ? document.getElementById('f_ano_compra').value.trim() : '';
+
         const payload = {
             title: title,
             isbn: document.getElementById('f_isbn').value,
@@ -5573,6 +5828,7 @@ service cloud.firestore {
             status: getS2Val('#f_status'),
             aquisicao: aquisicao,
             preco: precoNum !== null ? precoNum : '',
+            ano_compra: anoCompraVal ? parseInt(anoCompraVal, 10) || anoCompraVal : '',
             nota: notaVal,
             synopsis: synopsisVal,
             heranca_fase: $('#f_heranca_fase').val(),
@@ -5627,7 +5883,7 @@ service cloud.firestore {
         const columns = [
             'ID', 'ISBN', 'Título', 'Autor(es)', 'Tradutor(es)', 
             'País', 'Ano de Publicação', 'Selo', 'Grupo Editorial', 'Coleção',
-            'Gênero Literário', 'Formato', 'Status', 'Aquisição', 'Preço Pago', 'Gênero do Autor', 
+            'Gênero Literário', 'Formato', 'Status', 'Aquisição', 'Preço Pago', 'Ano de Compra', 'Páginas Lidas', 'Gênero do Autor', 
             'Indicação', 'Por que li?', 'Como adquiri', 'Mês de leitura', 
             'Ano de leitura', 'Releitura?', 'Nota', 'Páginas',
             'Herança Fase', 'Herança Ano', 'Herança Papel', 'Herança Ordem', 'Herança Livro-Tombo Motivo'
@@ -5640,7 +5896,7 @@ service cloud.firestore {
             let row = [
                 b.id, b.isbn, b.title, b.authors, b.tradutor, b.pais, 
                 b.ano_pub, b.selo, b.grupo, b.colecao, b.genre, b.formato, 
-                b.status, b.aquisicao, (b.preco !== undefined && b.preco !== null && b.preco !== '') ? b.preco : '', b.genero_autor, b.indicacao, b.porque_li, 
+                b.status, b.aquisicao, (b.preco !== undefined && b.preco !== null && b.preco !== '') ? b.preco : '', b.ano_compra || '', b.paginas_lidas || 0, b.genero_autor, b.indicacao, b.porque_li, 
                 b.como_adquiri, b.mes_leitura, b.ano_leitura, b.releitura, 
                 b.nota, b.pages,
                 b.heranca_fase || '', b.heranca_ano || '', b.heranca_papel || '', b.heranca_ordem || '', b.heranca_motivo || ''
@@ -6191,6 +6447,418 @@ service cloud.firestore {
     }
 
     // =========================================================================
+    // DIÁRIO DE LEITURA & GAMIFICAÇÃO (SESSÕES, PÁGINAS, STREAKS & CONQUISTAS)
+    // =========================================================================
+    let currentJournalBookId = null;
+
+    function openReadingJournalModal(bookId) {
+        const book = allBooksData.find(b => b.id === bookId) || cachedBooks[bookId];
+        if (!book) return;
+
+        currentJournalBookId = bookId;
+        $('#readingJournalModal').data('bookId', bookId);
+
+        // Header info
+        $('#journalBookTitleAuthors').html(`
+            <strong class="text-dark">${escapeHtmlStr(book.title)}</strong> · <span class="text-secondary">${escapeHtmlStr(book.authors || 'Autor não informado')}</span>
+        `);
+
+        // Total de páginas
+        const pagesMatch = String(book.pages || '').match(/\d+/);
+        const totalPages = pagesMatch ? parseInt(pagesMatch[0], 10) : 0;
+        const currentPages = parseInt(book.paginas_lidas, 10) || 0;
+
+        $('#journalMaxPagesHint').text(totalPages > 0 ? `de ${totalPages}` : 'páginas');
+        if (totalPages > 0) {
+            $('#journalPageInput').attr('max', totalPages);
+        } else {
+            $('#journalPageInput').removeAttr('max');
+        }
+
+        // Data de hoje como padrão
+        const todayIso = new Date().toISOString().split('T')[0];
+        $('#journalDateInput').val(todayIso);
+
+        // Sugerir última página atingida + 1 (ou a própria) no placeholder
+        $('#journalPageInput').val(currentPages > 0 ? currentPages : '');
+
+        $('#journalNotesInput').val('');
+        $('#journalFeedbackMsg').hide().empty();
+
+        renderJournalModalUI(book);
+
+        const modalEl = document.getElementById('readingJournalModal');
+        const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+        modal.show();
+    }
+
+    function escapeHtmlStr(str) {
+        return String(str || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    function calculateReadingStreak(sessions) {
+        if (!sessions || sessions.length === 0) return 0;
+        // Pega as datas únicas no formato YYYY-MM-DD
+        const dateSet = new Set(sessions.map(s => s.date).filter(Boolean));
+        if (dateSet.size === 0) return 0;
+
+        const parseDate = (str) => {
+            const [y, m, d] = str.split('-').map(n => parseInt(n, 10));
+            return new Date(y, m - 1, d);
+        };
+
+        const sortedDates = [...dateSet].sort().reverse();
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const latestDate = parseDate(sortedDates[0]);
+        const diffDays = Math.round((today - latestDate) / (1000 * 60 * 60 * 24));
+
+        // Se a última leitura foi há mais de 1 dia (ontem ou hoje), o streak quebrou para 0
+        if (diffDays > 1) return 0;
+
+        let streak = 1;
+        let curr = latestDate;
+
+        for (let i = 1; i < sortedDates.length; i++) {
+            const prev = parseDate(sortedDates[i]);
+            const dayStep = Math.round((curr - prev) / (1000 * 60 * 60 * 24));
+            if (dayStep === 1) {
+                streak++;
+                curr = prev;
+            } else {
+                break;
+            }
+        }
+        return streak;
+    }
+
+    function getGamificationBadges(book, sessions, currentPages, totalPages) {
+        const sessionCount = (sessions || []).length;
+        const maxPagesInOneDay = (sessions || []).reduce((max, s) => Math.max(max, parseInt(s.pages_read, 10) || 0), 0);
+        const pct = totalPages > 0 ? (currentPages / totalPages) : (currentPages > 0 ? 0.5 : 0);
+        const isFinished = book.status === 'Lido' || (totalPages > 0 && currentPages >= totalPages);
+
+        return [
+            {
+                id: 'primeiro_passo',
+                title: 'Primeiro Passo',
+                icon: '🚀',
+                desc: 'Registrou sua 1ª sessão de leitura nesta obra',
+                unlocked: sessionCount >= 1
+            },
+            {
+                id: 'meio_caminho',
+                title: 'No Meio do Caminho',
+                icon: '⚡',
+                desc: 'Alcançou 50% de leitura do livro',
+                unlocked: pct >= 0.5
+            },
+            {
+                id: 'maratonista',
+                title: 'Modo Foco',
+                icon: '🔥',
+                desc: 'Leu 30 ou mais páginas em um único dia',
+                unlocked: maxPagesInOneDay >= 30
+            },
+            {
+                id: 'concluido',
+                title: 'Livro Conquistado!',
+                icon: '🏆',
+                desc: 'Chegou até a última página e finalizou o livro',
+                unlocked: isFinished
+            }
+        ];
+    }
+
+    function renderJournalModalUI(book) {
+        const pagesMatch = String(book.pages || '').match(/\d+/);
+        const totalPages = pagesMatch ? parseInt(pagesMatch[0], 10) : 0;
+        const currentPages = parseInt(book.paginas_lidas, 10) || 0;
+        const sessions = (book.reading_sessions || []).slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+        const pct = totalPages > 0 ? Math.min(100, Math.round((currentPages / totalPages) * 100)) : (currentPages > 0 ? 100 : 0);
+        
+        // Progresso e Barra
+        $('#journalProgressPages').html(`
+            ${currentPages} <small class="fs-6 fw-normal text-muted">/ ${totalPages > 0 ? totalPages : '?'} pág (${pct}%)</small>
+        `);
+        $('#journalProgressBar').css('width', `${pct}%`).attr('aria-valuenow', pct);
+        if (pct >= 100) {
+            $('#journalProgressBar').removeClass('bg-primary').addClass('bg-success');
+        } else {
+            $('#journalProgressBar').removeClass('bg-success').addClass('bg-primary');
+        }
+
+        // Streak
+        const streak = calculateReadingStreak(sessions);
+        $('#journalStreakCount').text(streak);
+        if (streak > 0) {
+            $('#journalStreakBadge').show();
+        } else {
+            $('#journalStreakBadge').hide();
+        }
+
+        // Status badge
+        let stBadgeClass = 'bg-warning-subtle text-warning border-warning';
+        if (book.status === 'Lido' || pct >= 100) stBadgeClass = 'bg-success-subtle text-success border-success';
+        $('#journalStatusBadge').attr('class', `badge ${stBadgeClass} border px-2 py-1`).text(book.status || (pct >= 100 ? 'Lido' : 'Lendo'));
+
+        // Ritmo & Estimativa
+        const totalSessions = sessions.length;
+        $('#journalTotalSessions').html(`<i class="bi bi-calendar3 me-1"></i>${totalSessions} sessões registradas`);
+
+        if (totalSessions > 0 && totalPages > 0 && currentPages < totalPages) {
+            const pagesLeft = Math.max(0, totalPages - currentPages);
+            const totalPagesLogged = sessions.reduce((s, item) => s + (parseInt(item.pages_read, 10) || 0), 0);
+            const avgPerPage = Math.max(1, Math.round(totalPagesLogged / totalSessions));
+            const estDays = Math.ceil(pagesLeft / avgPerPage);
+            $('#journalPacingEstimate').html(`
+                <i class="bi bi-speedometer2 me-1 text-primary"></i>Média de <strong>~${avgPerPage} pág/dia</strong> · Faltam <strong>~${estDays} dia(s)</strong> para acabar
+            `);
+        } else if (pct >= 100) {
+            $('#journalPacingEstimate').html(`
+                <i class="bi bi-trophy-fill text-warning me-1"></i><strong>Parabéns! Obra concluída!</strong>
+            `);
+        } else {
+            $('#journalPacingEstimate').html(`
+                <i class="bi bi-info-circle me-1"></i>Comece registrando a leitura de hoje para estimar seu ritmo!
+            `);
+        }
+
+        // Conquistas (Badges)
+        const badges = getGamificationBadges(book, sessions, currentPages, totalPages);
+        const unlockedCount = badges.filter(b => b.unlocked).length;
+        $('#journalBadgesCount').text(`${unlockedCount} de ${badges.length} desbloqueadas`);
+
+        const badgesHtml = badges.map(b => `
+            <div class="col-6 col-md-3">
+                <div class="gamification-badge-card ${b.unlocked ? 'unlocked shadow-sm' : 'locked'}" title="${b.desc}">
+                    <div class="fs-3 mb-1">${b.icon}</div>
+                    <div class="fw-bold small text-truncate ${b.unlocked ? 'text-dark' : 'text-muted'}">${b.title}</div>
+                    <div class="text-muted" style="font-size: 0.68rem; line-height: 1.2;">${b.desc}</div>
+                    <div class="mt-1">
+                        ${b.unlocked ? '<span class="badge bg-warning text-dark border py-0 px-2" style="font-size: 0.65rem;">Conquistado!</span>' : '<span class="badge bg-light text-muted border py-0 px-2" style="font-size: 0.65rem;">Bloqueado</span>'}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+        $('#journalBadgesContainer').html(badgesHtml);
+
+        // Histórico de sessões
+        if (sessions.length > 0) {
+            $('#btnClearJournalSessions').show();
+            const historyHtml = `
+                <div class="ps-2 pt-2">
+                    ${sessions.map((s, idx) => {
+                        const dateFormatted = s.date ? s.date.split('-').reverse().join('/') : '-';
+                        return `
+                            <div class="journal-timeline-item">
+                                <div class="d-flex justify-content-between align-items-center flex-wrap gap-1">
+                                    <div>
+                                        <strong class="text-dark small">${dateFormatted}</strong>
+                                        <span class="badge bg-success-subtle text-success border border-success ms-1 small">
+                                            +${s.pages_read || 0} pág
+                                        </span>
+                                        <span class="small text-muted ms-1">(até pág ${s.page_reached})</span>
+                                    </div>
+                                    <button class="btn btn-link btn-sm text-danger p-0 text-decoration-none" onclick="deleteJournalSessionByIndex(${idx})" title="Excluir esta sessão">
+                                        <i class="bi bi-x-circle"></i>
+                                    </button>
+                                </div>
+                                ${s.notes ? `<div class="small text-secondary fst-italic mt-1" style="font-size: 0.78rem;"><i class="bi bi-chat-left-text me-1"></i>"${escapeHtmlStr(s.notes)}"</div>` : ''}
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+            $('#journalHistoryContainer').html(historyHtml);
+        } else {
+            $('#btnClearJournalSessions').hide();
+            $('#journalHistoryContainer').html(`
+                <div class="text-center py-3 text-muted small bg-light rounded-3 border">
+                    <i class="bi bi-journal-plus fs-4 d-block mb-1 text-secondary opacity-50"></i>
+                    Nenhuma sessão de leitura registrada ainda.<br>Preencha os campos acima para salvar o dia de hoje!
+                </div>
+            `);
+        }
+    }
+
+    async function saveJournalSession(event) {
+        event.preventDefault();
+        const bookId = currentJournalBookId || $('#readingJournalModal').data('bookId');
+        if (!bookId) return;
+
+        const book = allBooksData.find(b => b.id === bookId) || cachedBooks[bookId];
+        if (!book) return;
+
+        const dateVal = $('#journalDateInput').val();
+        const pageReachedVal = parseInt($('#journalPageInput').val(), 10);
+        const notesVal = $('#journalNotesInput').val().trim();
+
+        if (!dateVal || isNaN(pageReachedVal) || pageReachedVal < 1) {
+            alert('Por favor, informe a data e a página atual em que você parou.');
+            return;
+        }
+
+        const pagesMatch = String(book.pages || '').match(/\d+/);
+        const totalPages = pagesMatch ? parseInt(pagesMatch[0], 10) : 0;
+        if (totalPages > 0 && pageReachedVal > totalPages) {
+            const confirmOver = confirm(`A página informada (${pageReachedVal}) é maior que o total de páginas do livro (${totalPages}). Deseja ajustar para a página final (${totalPages})?`);
+            if (confirmOver) {
+                $('#journalPageInput').val(totalPages);
+            } else {
+                return;
+            }
+        }
+
+        const finalPage = (totalPages > 0 && pageReachedVal > totalPages) ? totalPages : pageReachedVal;
+        const prevPages = parseInt(book.paginas_lidas, 10) || 0;
+        const pagesReadInSession = Math.max(1, finalPage - prevPages);
+
+        const newSession = {
+            date: dateVal,
+            page_reached: finalPage,
+            pages_read: pagesReadInSession,
+            notes: notesVal,
+            timestamp: new Date().toISOString()
+        };
+
+        const existingSessions = Array.isArray(book.reading_sessions) ? [...book.reading_sessions] : [];
+        existingSessions.push(newSession);
+
+        const isFinished = totalPages > 0 && finalPage >= totalPages;
+
+        const updatePayload = {
+            paginas_lidas: finalPage,
+            reading_sessions: existingSessions,
+            'raw_data.Páginas Lidas': finalPage,
+            'raw_data.reading_sessions': existingSessions
+        };
+
+        if (isFinished && book.status !== 'Lido') {
+            updatePayload.status = 'Lido';
+            updatePayload['raw_data.Status'] = 'Lido';
+        } else if (!isFinished && (!book.status || book.status === 'Aguardando' || book.status === 'Wishlist')) {
+            updatePayload.status = 'Lendo';
+            updatePayload['raw_data.Status'] = 'Lendo';
+        }
+
+        const btn = $('#btnSaveJournalSession');
+        btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>Salvando...');
+
+        try {
+            await db.collection('books').doc(bookId).update(updatePayload);
+
+            // Atualiza localmente
+            book.paginas_lidas = finalPage;
+            book.reading_sessions = existingSessions;
+            if (updatePayload.status) book.status = updatePayload.status;
+
+            if (cachedBooks[bookId]) {
+                cachedBooks[bookId].paginas_lidas = finalPage;
+                cachedBooks[bookId].reading_sessions = existingSessions;
+                if (updatePayload.status) cachedBooks[bookId].status = updatePayload.status;
+            }
+
+            renderJournalModalUI(book);
+            applyFiltersAndRender();
+
+            // Comemoração se finalizou ou leu bastante
+            if (isFinished) {
+                if (typeof confetti === 'function') {
+                    confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
+                }
+                $('#journalFeedbackMsg').html(`
+                    <div class="alert alert-success py-2 mb-0">
+                        🎉 <strong>Sensacional!</strong> Você concluiu todas as páginas da obra! O livro foi marcado automaticamente como <strong>Lido</strong>.
+                    </div>
+                `).fadeIn();
+            } else {
+                $('#journalFeedbackMsg').html(`
+                    <div class="alert alert-success py-2 mb-0">
+                        <i class="bi bi-check-circle-fill me-1"></i>Avanço de <strong>+${pagesReadInSession} páginas</strong> salvo com sucesso!
+                    </div>
+                `).fadeIn().delay(3000).fadeOut();
+            }
+
+            $('#journalNotesInput').val('');
+        } catch (err) {
+            console.error("Erro ao salvar sessão de leitura:", err);
+            alert("Erro ao salvar avanço: " + err.message);
+        } finally {
+            btn.prop('disabled', false).html('<i class="bi bi-plus-circle-fill"></i> Salvar Avanço');
+        }
+    }
+
+    async function deleteJournalSessionByIndex(sessionIndex) {
+        const bookId = currentJournalBookId;
+        if (!bookId) return;
+        const book = allBooksData.find(b => b.id === bookId) || cachedBooks[bookId];
+        if (!book || !book.reading_sessions) return;
+
+        if (!confirm('Deseja excluir este registro de leitura do histórico?')) return;
+
+        const sessions = [...book.reading_sessions].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+        sessions.splice(sessionIndex, 1);
+
+        // Recalcula a maior página atingida
+        const maxPage = sessions.reduce((max, s) => Math.max(max, parseInt(s.page_reached, 10) || 0), 0);
+
+        try {
+            await db.collection('books').doc(bookId).update({
+                paginas_lidas: maxPage,
+                reading_sessions: sessions,
+                'raw_data.Páginas Lidas': maxPage,
+                'raw_data.reading_sessions': sessions
+            });
+            book.paginas_lidas = maxPage;
+            book.reading_sessions = sessions;
+            if (cachedBooks[bookId]) {
+                cachedBooks[bookId].paginas_lidas = maxPage;
+                cachedBooks[bookId].reading_sessions = sessions;
+            }
+            renderJournalModalUI(book);
+            applyFiltersAndRender();
+        } catch (err) {
+            alert('Erro ao excluir sessão: ' + err.message);
+        }
+    }
+
+    async function clearAllJournalSessions() {
+        const bookId = currentJournalBookId;
+        if (!bookId) return;
+        const book = allBooksData.find(b => b.id === bookId) || cachedBooks[bookId];
+        if (!book) return;
+
+        if (!confirm(`Tem certeza que deseja apagar todo o histórico de leituras de "${book.title}"?`)) return;
+
+        try {
+            await db.collection('books').doc(bookId).update({
+                paginas_lidas: 0,
+                reading_sessions: [],
+                'raw_data.Páginas Lidas': 0,
+                'raw_data.reading_sessions': []
+            });
+            book.paginas_lidas = 0;
+            book.reading_sessions = [];
+            if (cachedBooks[bookId]) {
+                cachedBooks[bookId].paginas_lidas = 0;
+                cachedBooks[bookId].reading_sessions = [];
+            }
+            renderJournalModalUI(book);
+            applyFiltersAndRender();
+        } catch (err) {
+            alert('Erro ao limpar histórico: ' + err.message);
+        }
+    }
+
+    // =========================================================================
     // PAINEL DA JORNADA 35 ANOS (BIBLIOTECA HERANÇA) & LIVRO-TOMBO DE FAMÍLIA
     // =========================================================================
     let currentSelectedHerancaYear = 1;
@@ -6236,6 +6904,13 @@ service cloud.firestore {
         );
         if (precoInput === null) return; // Cancelou
 
+        const anoCompraAtual = b.ano_compra || new Date().getFullYear();
+        const anoCompraInput = prompt(
+            `Informe o Ano de Compra deste livro (opcional):`,
+            anoCompraAtual
+        );
+        if (anoCompraInput === null) return; // Cancelou
+
         const motivoAtual = b.heranca_motivo || '';
         const novoMotivo = prompt(
             `Deseja já registrar a frase do Livro-Tombo ("Por que este livro entrou na herança?")?\n(Deixe em branco se preferir preencher depois)`,
@@ -6253,6 +6928,13 @@ service cloud.firestore {
                 if (!isNaN(parsedPreco)) {
                     updateObj.preco = parsedPreco;
                     updateObj['raw_data.Preço Pago'] = parsedPreco;
+                }
+            }
+            if (anoCompraInput && anoCompraInput.trim() !== '') {
+                const parsedAno = parseInt(anoCompraInput.trim(), 10);
+                if (!isNaN(parsedAno)) {
+                    updateObj.ano_compra = parsedAno;
+                    updateObj['raw_data.Ano de Compra'] = parsedAno;
                 }
             }
             if (novoMotivo.trim() !== '') {
