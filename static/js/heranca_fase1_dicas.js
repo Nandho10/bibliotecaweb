@@ -1558,15 +1558,42 @@ function getHerancaFase1Dica(title, authors) {
     const normT = normalizeHerancaText(title);
     const normA = normalizeHerancaText(authors || '');
 
-    // 1. Mapeamento direto e casos específicos
+    // 1. Correspondência exata normalizada em toda a lista
     for (const item of HERANCA_FASE1_DICAS) {
         const normItemT = normalizeHerancaText(item.titulo);
         if (normT === normItemT) return item;
+    }
+
+    // 2. Títulos compostos específicos tratados prioritariamente para evitar colisões
+    if (normT.includes('paraisoperdido')) {
+        const itemMilton = HERANCA_FASE1_DICAS.find(i => normalizeHerancaText(i.titulo) === 'paraisoperdido');
+        if (itemMilton) return itemMilton;
+    }
+    if (normT.includes('contosinacabados')) {
+        const itemTolkien = HERANCA_FASE1_DICAS.find(i => normalizeHerancaText(i.titulo) === 'contosinacabados');
+        if (itemTolkien) return itemTolkien;
+    }
+    if (normT.includes('contosdeimaginacao')) {
+        const itemPoe = HERANCA_FASE1_DICAS.find(i => normalizeHerancaText(i.titulo).includes('contosdeimaginacao'));
+        if (itemPoe) return itemPoe;
+    }
+    if (normT.includes('olivrodeourodamitologia')) {
+        const itemBulfinch = HERANCA_FASE1_DICAS.find(i => normalizeHerancaText(i.titulo).includes('olivrodeourodamitologia'));
+        if (itemBulfinch) return itemBulfinch;
+    }
+    if (normT.includes('mitosgregos')) {
+        const itemGraves = HERANCA_FASE1_DICAS.find(i => normalizeHerancaText(i.titulo).includes('osmitosgregos'));
+        if (itemGraves) return itemGraves;
+    }
+
+    // 3. Clássicos universais (com proteção contra falsos positivos)
+    for (const item of HERANCA_FASE1_DICAS) {
+        const normItemT = normalizeHerancaText(item.titulo);
 
         if (normItemT === 'biblia' && normT.includes('biblia')) return item;
         if (normItemT === 'inferno' && normT.includes('inferno')) return item;
         if (normItemT === 'purgatorio' && normT.includes('purgatorio')) return item;
-        if (normItemT === 'paraiso' && normT.includes('paraiso')) return item;
+        if (normItemT === 'paraiso' && normT.includes('paraiso') && !normT.includes('perdido')) return item;
         if (normItemT === 'domquixote' && normT.includes('domquixote')) return item;
         if (normItemT.includes('alienista') && normT.includes('alienista')) return item;
         if (normItemT.includes('continente') && normT.includes('continente')) return item;
@@ -1574,10 +1601,12 @@ function getHerancaFase1Dica(title, authors) {
         if (normItemT.includes('trilogiatebana') && normT.includes('trilogiatebana')) return item;
         if (normItemT.includes('medoclassico') && normT.includes('medoclassico')) return item;
         if (normItemT === 'poesia' && normT.includes('poesia') && (normA.includes('pessoa') || normT.includes('pessoa'))) return item;
+        if (normItemT === 'mitologia' && normT.includes('mitologia') && !normT.includes('ouro') && !normT.includes('orixa') && !normT.includes('nordica')) return item;
     }
 
-    // 2. Mapeamento por substring
-    for (const item of HERANCA_FASE1_DICAS) {
+    // 4. Mapeamento por substring (do título mais longo para o mais curto)
+    const sortedByLen = [...HERANCA_FASE1_DICAS].sort((a, b) => b.titulo.length - a.titulo.length);
+    for (const item of sortedByLen) {
         const normItemT = normalizeHerancaText(item.titulo);
         if (normItemT.length >= 5 && (normT.includes(normItemT) || normItemT.includes(normT))) {
             return item;
@@ -1587,11 +1616,85 @@ function getHerancaFase1Dica(title, authors) {
     return null;
 }
 
+/**
+ * Resolve a dica curatorial e prioridade para um livro, mesclando
+ * as regras padrão da curadoria (120 obras) com eventuais personalizações
+ * salvas pelo usuário no banco de dados.
+ * @param {object} book Objeto do livro
+ * @returns {object|null}
+ */
+function resolveBookHerancaDica(book) {
+    if (!book) return null;
+    const defaultDica = (typeof getHerancaFase1Dica === 'function') 
+        ? getHerancaFase1Dica(book.title, book.authors) 
+        : null;
+
+    const customDica = (book.heranca_dica_personalizada !== undefined && book.heranca_dica_personalizada !== null) 
+        ? String(book.heranca_dica_personalizada).trim() 
+        : '';
+    const customPrioRaw = (book.heranca_prioridade_personalizada !== undefined && book.heranca_prioridade_personalizada !== null) 
+        ? String(book.heranca_prioridade_personalizada).trim() 
+        : '';
+    const customPrioridade = customPrioRaw ? parseInt(customPrioRaw, 10) : null;
+
+    let customEditoras = [];
+    if (book.heranca_editoras_personalizadas !== undefined && book.heranca_editoras_personalizadas !== null) {
+        if (Array.isArray(book.heranca_editoras_personalizadas)) {
+            customEditoras = book.heranca_editoras_personalizadas;
+        } else {
+            const str = String(book.heranca_editoras_personalizadas).trim();
+            if (str) {
+                customEditoras = str.split(',').map(s => s.trim()).filter(Boolean);
+            }
+        }
+    }
+
+    const hasCustomDica = !!customDica;
+    const hasCustomPrio = (customPrioridade !== null && !isNaN(customPrioridade));
+    const hasCustomEditoras = (customEditoras.length > 0);
+
+    if (!defaultDica && !hasCustomDica && !hasCustomPrio && !hasCustomEditoras) {
+        return null;
+    }
+
+    const isCustom = hasCustomDica || hasCustomPrio || hasCustomEditoras;
+
+    const prioridadeFinal = hasCustomPrio 
+        ? customPrioridade 
+        : (defaultDica ? defaultDica.prioridade : null);
+
+    const dicaFinal = hasCustomDica 
+        ? customDica 
+        : (defaultDica ? defaultDica.dica : '');
+
+    const editorasFinal = hasCustomEditoras 
+        ? customEditoras 
+        : (defaultDica ? (defaultDica.editoras_sugeridas || []) : []);
+
+    return {
+        prioridade: prioridadeFinal,
+        titulo: book.title || (defaultDica ? defaultDica.titulo : ''),
+        autor: book.authors || (defaultDica ? defaultDica.autor : ''),
+        grupo: defaultDica ? defaultDica.grupo : 'Curadoria Personalizada',
+        dica: dicaFinal,
+        editoras_sugeridas: editorasFinal,
+        candidato_luxo: defaultDica ? !!defaultDica.candidato_luxo : false,
+        ja_possui_ou_verificar: defaultDica ? !!defaultDica.ja_possui_ou_verificar : false,
+        integral: defaultDica ? !!defaultDica.integral : false,
+        is_custom: isCustom,
+        default_dica: defaultDica ? defaultDica.dica : '',
+        default_prioridade: defaultDica ? defaultDica.prioridade : null,
+        default_editoras: defaultDica ? (defaultDica.editoras_sugeridas || []).join(', ') : ''
+    };
+}
+
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         HERANCA_FASE1_DICAS,
         HERANCA_FASE1_GRUPOS,
         HERANCA_REGRAS_COMPRA,
-        getHerancaFase1Dica
+        getHerancaFase1Dica,
+        resolveBookHerancaDica
     };
 }
+

@@ -1334,7 +1334,6 @@
                             <span class="badge bg-warning text-dark border small fw-normal">Livro-Tombo de Família</span>
                         </div>
                     </div>
-                    <div class="col-12" id="herancaEditDicaContainer" style="display: none;"></div>
                     <div class="col-md-4">
                         <label class="form-label fw-semibold" for="f_heranca_fase">Fase do Plano</label>
                         <select class="form-select" id="f_heranca_fase">
@@ -1443,6 +1442,54 @@
                         </label>
                         <textarea class="form-control" id="f_heranca_motivo" rows="2" placeholder="Escreva uma frase ou dedicatória para o seu filho e netos sobre a importância desta obra na estante da família..."></textarea>
                         <div class="form-text small text-muted">Este registro ficará imortalizado no Livro-Tombo de Família e na ficha de herança.</div>
+                    </div>
+
+                    <!-- Recomendação Editorial & Critério de Compra (Personalizável) -->
+                    <div class="col-12">
+                        <div class="p-3 rounded-3 border" style="background: #fffdf5; border-color: #fde68a !important;">
+                            <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+                                <label class="form-label fw-bold text-dark m-0 d-flex align-items-center gap-2">
+                                    <i class="bi bi-lightbulb-fill text-warning fs-5"></i>
+                                    <span>Recomendação Editorial & Critério de Compra</span>
+                                </label>
+                                <div class="d-flex gap-1 align-items-center flex-wrap">
+                                    <span id="herancaDicaStatusBadge" class="badge bg-secondary-subtle text-secondary border small">Original da Curadoria</span>
+                                    <button type="button" class="btn btn-sm btn-outline-primary py-0 px-2 rounded-pill" id="btnCopiarDicaPadrao" onclick="carregarDicaPadraoParaEdicao()" style="font-size: 0.74rem;" title="Carregar texto e prioridade padrão da curadoria para poder editar">
+                                        <i class="bi bi-pencil-square me-1"></i>Preencher com Padrão
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2 rounded-pill" id="btnRestaurarDicaOriginal" onclick="restaurarDicaOriginalCuradoria()" style="font-size: 0.74rem; display: none;" title="Limpar personalizações e restaurar os dados originais da curadoria">
+                                        <i class="bi bi-arrow-counterclockwise me-1"></i>Restaurar Original
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="row g-2 mb-2">
+                                <div class="col-md-3">
+                                    <label class="form-label small fw-semibold text-muted mb-1" for="f_heranca_prioridade_personalizada">
+                                        <i class="bi bi-bullseye text-danger me-1"></i>Prioridade na Fila
+                                    </label>
+                                    <input type="number" class="form-control form-control-sm" id="f_heranca_prioridade_personalizada" min="1" max="999" placeholder="Ex: 49">
+                                    <div class="form-text small" style="font-size:0.70rem;">Ordem 1 a 120 (ou personalizada)</div>
+                                </div>
+                                <div class="col-md-9">
+                                    <label class="form-label small fw-semibold text-muted mb-1" for="f_heranca_editoras_personalizadas">
+                                        <i class="bi bi-building text-primary me-1"></i>Editoras Recomendadas
+                                    </label>
+                                    <input type="text" class="form-control form-control-sm" id="f_heranca_editoras_personalizadas" placeholder="Ex: Editora 34, Companhia das Letras (separadas por vírgula)">
+                                    <div class="form-text small" style="font-size:0.70rem;">Usadas para atalhos de busca na Amazon</div>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label small fw-semibold text-muted mb-1" for="f_heranca_dica_personalizada">
+                                        <i class="bi bi-chat-left-text me-1"></i>Dica Editorial / Orientação de Edição e Tradução
+                                    </label>
+                                    <textarea class="form-control" id="f_heranca_dica_personalizada" rows="3" placeholder="Insira ou edite as orientações de tradução, edição especial, capa dura e comentários críticos..."></textarea>
+                                    <div class="form-text small" style="font-size:0.72rem;">Se preenchido, este texto personalizado substituirá a recomendação padrão em todos os cards, no modal rápido e na ficha do livro.</div>
+                                </div>
+                            </div>
+
+                            <!-- Prévia em tempo real / Informações curadas -->
+                            <div id="herancaEditDicaContainer" style="display: none;"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1923,6 +1970,9 @@
           <i class="bi bi-amazon me-1"></i>Buscar Edição Recomendada na Amazon
         </a>
         <div class="d-flex gap-2">
+          <button type="button" class="btn btn-sm btn-outline-warning text-dark border-warning" id="hdqmEditBtn">
+            <i class="bi bi-pencil me-1"></i>Editar Recomendação
+          </button>
           <button type="button" class="btn btn-sm btn-outline-primary" id="hdqmDetailsBtn">
             <i class="bi bi-eye me-1"></i>Ver Ficha Completa
           </button>
@@ -2162,10 +2212,11 @@
                 data: 'title', 
                 defaultContent: '',
                 render: function(data, type, row) {
-                    const dica = row.heranca_dica_info || (typeof getHerancaFase1Dica === 'function' ? getHerancaFase1Dica(data, row.authors) : null);
+                    const dica = row.heranca_dica_info || (typeof resolveBookHerancaDica === 'function' ? resolveBookHerancaDica(row) : (typeof getHerancaFase1Dica === 'function' ? getHerancaFase1Dica(data, row.authors) : null));
                     let prioBadge = '';
-                    if (dica) {
-                        prioBadge = ` <span class="badge border ms-1" style="background:#fffbeb; color:#92400e; border-color:#f59e0b !important; font-size:11px; cursor:pointer;" onclick="event.stopPropagation(); openHerancaDicaModal('${row.id}')" title="Fase I — Prioridade #${dica.prioridade} de compra (clique para ver a dica de edição)">#${dica.prioridade}</span>`;
+                    if (dica && (dica.prioridade || dica.is_custom)) {
+                        const customMark = dica.is_custom ? ' <i class="bi bi-pencil-fill text-primary" style="font-size:9px;" title="Personalizada"></i>' : '';
+                        prioBadge = ` <span class="badge border ms-1" style="background:#fffbeb; color:#92400e; border-color:#f59e0b !important; font-size:11px; cursor:pointer;" onclick="event.stopPropagation(); openHerancaDicaModal('${row.id}')" title="Fase I — Prioridade #${dica.prioridade || '-'} de compra${dica.is_custom ? ' (Personalizada)' : ''} (clique para ver a dica de edição)">#${dica.prioridade || '-'}${customMark}</span>`;
                     }
                     return `<span style="cursor: pointer; font-weight: 600;" class="text-primary" onclick="showBookDetails('${row.id}')" title="Ver ficha completa">${data}</span>${prioBadge}`;
                 }
@@ -2580,7 +2631,7 @@
                 const getPrio = (x) => {
                     if (x.heranca_prioridade_compra) return parseInt(x.heranca_prioridade_compra, 10);
                     if (x.heranca_dica_info && x.heranca_dica_info.prioridade) return parseInt(x.heranca_dica_info.prioridade, 10);
-                    const d = typeof getHerancaFase1Dica === 'function' ? getHerancaFase1Dica(x.title, x.authors) : null;
+                    const d = typeof resolveBookHerancaDica === 'function' ? resolveBookHerancaDica(x) : (typeof getHerancaFase1Dica === 'function' ? getHerancaFase1Dica(x.title, x.authors) : null);
                     return d ? d.prioridade : 9999;
                 };
                 const pA = getPrio(a);
@@ -3319,11 +3370,16 @@
                 }
 
                 // Dicas de Edição e Prioridade da Fase I (Herança)
-                const dicaInfo = book.heranca_dica_info || (typeof getHerancaFase1Dica === 'function' ? getHerancaFase1Dica(book.title, book.authors) : null);
+                const dicaInfo = book.heranca_dica_info || (typeof resolveBookHerancaDica === 'function' ? resolveBookHerancaDica(book) : (typeof getHerancaFase1Dica === 'function' ? getHerancaFase1Dica(book.title, book.authors) : null));
                 let herancaPrioBadge = '';
                 let herancaDicaBtn = '';
                 if (dicaInfo) {
-                    herancaPrioBadge = `<span class="badge border shadow-sm d-inline-flex align-items-center" style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); color: #92400e; border-color: #f59e0b !important; font-size: 0.70rem; padding: 2px 7px; font-weight: 700;" title="Fase I — Ordem de Prioridade de Compra: #${dicaInfo.prioridade} (1 a 120)"><i class="bi bi-bullseye text-danger me-1"></i>#${dicaInfo.prioridade} Compra</span>`;
+                    if (dicaInfo.prioridade) {
+                        herancaPrioBadge = `<span class="badge border shadow-sm d-inline-flex align-items-center" style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); color: #92400e; border-color: #f59e0b !important; font-size: 0.70rem; padding: 2px 7px; font-weight: 700;" title="Fase I — Ordem de Prioridade de Compra: #${dicaInfo.prioridade}"><i class="bi bi-bullseye text-danger me-1"></i>#${dicaInfo.prioridade} Compra</span>`;
+                    }
+                    if (dicaInfo.is_custom) {
+                        herancaPrioBadge += ` <span class="badge bg-primary-subtle text-primary border border-primary" style="font-size: 0.68rem; padding: 2px 6px;" title="Recomendação personalizada pelo usuário"><i class="bi bi-pencil-fill me-1"></i>Personalizada</span>`;
+                    }
                     if (dicaInfo.candidato_luxo) {
                         herancaPrioBadge += ` <span class="badge bg-warning-subtle text-amber-900 border border-warning" style="font-size: 0.68rem; padding: 2px 6px;" title="Candidato a edição especial / luxo"><i class="bi bi-star-fill text-warning me-1"></i>Luxo</span>`;
                     }
@@ -3458,12 +3514,14 @@
             }
             
             groups[k].forEach(book => {
-                const dicaInfo = book.heranca_dica_info || (typeof getHerancaFase1Dica === 'function' ? getHerancaFase1Dica(book.title, book.authors) : null);
+                const dicaInfo = book.heranca_dica_info || (typeof resolveBookHerancaDica === 'function' ? resolveBookHerancaDica(book) : (typeof getHerancaFase1Dica === 'function' ? getHerancaFase1Dica(book.title, book.authors) : null));
                 const coverId = 'img-cover-' + Math.random().toString(36).substr(2, 9);
+                const prioTitle = dicaInfo ? (dicaInfo.prioridade ? ' · Prioridade #' + dicaInfo.prioridade : ' · Dica Curadoria') : '';
+                const prioBadge = (dicaInfo && (dicaInfo.prioridade || dicaInfo.is_custom)) ? `<span class="position-absolute top-0 start-0 m-1 badge bg-dark bg-opacity-75 text-warning border border-warning shadow-sm" style="font-size: 0.68rem; z-index: 2;" title="Prioridade de Compra: #${dicaInfo.prioridade || '-'}${dicaInfo.is_custom ? ' (Personalizada)' : ''}"><i class="bi bi-bullseye text-danger me-1"></i>#${dicaInfo.prioridade || '-'}${dicaInfo.is_custom ? ' *' : ''}</span>` : '';
                 const card = $(`
                     <div class="col-6 col-md-4 col-lg-2">
-                        <div class="card position-relative" onclick="showBookDetails('${book.id}')" title="${book.title}${dicaInfo ? ' · Prioridade #' + dicaInfo.prioridade : ''}" style="cursor: pointer;">
-                            ${dicaInfo ? `<span class="position-absolute top-0 start-0 m-1 badge bg-dark bg-opacity-75 text-warning border border-warning shadow-sm" style="font-size: 0.68rem; z-index: 2;" title="Prioridade de Compra: #${dicaInfo.prioridade}"><i class="bi bi-bullseye text-danger me-1"></i>#${dicaInfo.prioridade}</span>` : ''}
+                        <div class="card position-relative" onclick="showBookDetails('${book.id}')" title="${book.title}${prioTitle}" style="cursor: pointer;">
+                            ${prioBadge}
                             <div class="card-img-container" id="${coverId}">
                                 <div class="spinner-border spinner-border-sm text-secondary m-auto d-block mt-5" role="status"></div>
                             </div>
@@ -5251,7 +5309,7 @@
         }
 
         // Preenchimento do Card da Biblioteca Herança & Curadoria da Fase I
-        const dicaInfo = book.heranca_dica_info || (typeof getHerancaFase1Dica === 'function' ? getHerancaFase1Dica(book.title, book.authors) : null);
+        const dicaInfo = book.heranca_dica_info || (typeof resolveBookHerancaDica === 'function' ? resolveBookHerancaDica(book) : (typeof getHerancaFase1Dica === 'function' ? getHerancaFase1Dica(book.title, book.authors) : null));
         if (book.heranca_fase || book.heranca_ano || book.heranca_motivo || dicaInfo) {
             $('#detailHerancaBadgePapel').text(book.heranca_papel || (dicaInfo ? `Fase I · Prioridade #${dicaInfo.prioridade}` : 'Plano 35 Anos'));
             
@@ -5274,11 +5332,15 @@
                 dicaCardHtml = `
                     <div class="card border-0 rounded-3 p-3 mt-3 shadow-sm" style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border-left: 4px solid #d97706 !important;">
                         <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-1">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-warning text-dark border fw-bold" style="font-size: 0.82rem;"><i class="bi bi-bullseye text-danger me-1"></i>Prioridade #${dicaInfo.prioridade} de Compra</span>
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                <span class="badge bg-warning text-dark border fw-bold" style="font-size: 0.82rem;"><i class="bi bi-bullseye text-danger me-1"></i>Prioridade #${dicaInfo.prioridade || '-'} de Compra</span>
                                 <span class="badge bg-light text-secondary border small">${dicaInfo.grupo}</span>
+                                ${dicaInfo.is_custom ? '<span class="badge bg-primary-subtle text-primary border border-primary small"><i class="bi bi-pencil-fill me-1"></i>Personalizada</span>' : ''}
                             </div>
-                            <div class="d-flex gap-1 flex-wrap">
+                            <div class="d-flex gap-1 flex-wrap align-items-center">
+                                <button type="button" class="btn btn-xs btn-outline-dark py-0 px-2 rounded-pill shadow-sm" style="font-size:0.74rem;" onclick="$('#bookDetailsModal').modal('hide'); setTimeout(() => editBook('${book.id}', 'heranca'), 250);" title="Editar recomendação editorial e prioridade">
+                                    <i class="bi bi-pencil me-1"></i>Editar Dica
+                                </button>
                                 ${dicaInfo.candidato_luxo ? '<span class="badge bg-warning-subtle text-amber-900 border border-warning">★ Candidato a Edição Especial</span>' : ''}
                                 ${dicaInfo.ja_possui_ou_verificar ? '<span class="badge bg-info-subtle text-info-emphasis border border-info">✓ Verificar Acervo / A Caminho</span>' : ''}
                                 ${dicaInfo.integral ? '<span class="badge bg-secondary-subtle text-dark border">Edição Integral</span>' : ''}
@@ -5352,13 +5414,14 @@
     function openHerancaDicaModal(bookId) {
         const book = cachedBooks[bookId] || allBooksData.find(b => b.id === bookId);
         if (!book) return;
-        const dica = book.heranca_dica_info || (typeof getHerancaFase1Dica === 'function' ? getHerancaFase1Dica(book.title, book.authors) : null);
+        const dica = book.heranca_dica_info || (typeof resolveBookHerancaDica === 'function' ? resolveBookHerancaDica(book) : (typeof getHerancaFase1Dica === 'function' ? getHerancaFase1Dica(book.title, book.authors) : null));
         if (!dica) {
             alert('Nenhuma dica de edição ou prioridade registrada para este livro.');
             return;
         }
 
-        $('#hdqmTitle').html(`<span class="badge bg-warning text-dark me-2">#${dica.prioridade}</span> ${book.title}`);
+        const prioBadge = dica.prioridade ? `<span class="badge bg-warning text-dark me-2">#${dica.prioridade}</span>` : '';
+        $('#hdqmTitle').html(`${prioBadge} ${book.title}`);
         $('#hdqmSubtitle').text(`Fase I · ${dica.grupo} · ${book.authors || dica.autor || 'Autor Clássico'}`);
 
         const editorasBadges = (dica.editoras_sugeridas && dica.editoras_sugeridas.length > 0)
@@ -5369,11 +5432,16 @@
               `).join('')
             : '<span class="text-muted small">Qualquer edição integral confiável com boa tradução</span>';
 
+        const prioPill = dica.prioridade ? `
+            <span class="badge border py-1 px-3 d-inline-flex align-items-center" style="background:#fffbeb; color:#92400e; border-color:#f59e0b !important; font-size:0.82rem; font-weight:700;">
+                <i class="bi bi-bullseye text-danger me-1"></i>#${dica.prioridade} na Fila de Compra (Fase I: 1 a 120)
+            </span>
+        ` : '';
+
         const badgesTop = `
             <div class="d-flex flex-wrap gap-2 mb-3">
-                <span class="badge border py-1 px-3 d-inline-flex align-items-center" style="background:#fffbeb; color:#92400e; border-color:#f59e0b !important; font-size:0.82rem; font-weight:700;">
-                    <i class="bi bi-bullseye text-danger me-1"></i>#${dica.prioridade} na Fila de Compra (Fase I: 1 a 120)
-                </span>
+                ${prioPill}
+                ${dica.is_custom ? '<span class="badge bg-primary-subtle text-primary border border-primary py-1 px-2"><i class="bi bi-pencil-fill me-1"></i>Personalizada pelo Usuário</span>' : ''}
                 <span class="badge bg-light text-secondary border py-1 px-2 d-inline-flex align-items-center">
                     <i class="bi bi-collection me-1"></i>${dica.grupo}
                 </span>
@@ -5410,6 +5478,18 @@
             ? `${book.title} ${dica.editoras_sugeridas[0]}`
             : `${book.title} ${book.authors || ''}`;
         $('#hdqmAmazonSearchBtn').attr('href', `https://www.amazon.com.br/s?k=${encodeURIComponent(searchTarget)}`);
+
+        $('#hdqmEditBtn').off('click').on('click', () => {
+            const qModal = bootstrap.Modal.getInstance(document.getElementById('herancaDicaQuickModal'));
+            if (qModal) qModal.hide();
+            setTimeout(() => {
+                editBook(book.id, 'heranca');
+                setTimeout(() => {
+                    const el = document.getElementById('f_heranca_dica_personalizada');
+                    if (el) el.focus();
+                }, 150);
+            }, 250);
+        });
 
         $('#hdqmDetailsBtn').off('click').on('click', () => {
             const qModal = bootstrap.Modal.getInstance(document.getElementById('herancaDicaQuickModal'));
@@ -5736,9 +5816,18 @@ service cloud.firestore {
                 heranca_costurado: !!(data.heranca_costurado || getRaw(raw, ['Costurado Herança'])),
                 heranca_papelalcalino: !!(data.heranca_papelalcalino || getRaw(raw, ['Papel Alcalino Herança'])),
                 heranca_traducao: !!(data.heranca_traducao || getRaw(raw, ['Tradução Referência Herança'])),
-                heranca_dica_info: typeof getHerancaFase1Dica === 'function' ? getHerancaFase1Dica(data.title || getRaw(raw, ['Título', 'Titulo']) || '', authors) : null,
-                heranca_prioridade_compra: (typeof getHerancaFase1Dica === 'function' && getHerancaFase1Dica(data.title || getRaw(raw, ['Título', 'Titulo']) || '', authors)) ? getHerancaFase1Dica(data.title || getRaw(raw, ['Título', 'Titulo']) || '', authors).prioridade : null
+                heranca_dica_personalizada: data.heranca_dica_personalizada !== undefined ? data.heranca_dica_personalizada : (getRaw(raw, ['Dica de Edição & Curadoria', 'Dica Personalizada', 'heranca_dica_personalizada']) || ''),
+                heranca_prioridade_personalizada: data.heranca_prioridade_personalizada !== undefined ? data.heranca_prioridade_personalizada : (getRaw(raw, ['Prioridade Personalizada', 'Prioridade na Fila de Compra', 'heranca_prioridade_personalizada']) || ''),
+                heranca_editoras_personalizadas: data.heranca_editoras_personalizadas !== undefined ? data.heranca_editoras_personalizadas : (getRaw(raw, ['Editoras Personalizadas', 'Editoras Recomendadas', 'heranca_editoras_personalizadas']) || ''),
+                heranca_dica_info: null,
+                heranca_prioridade_compra: null
             };
+
+            const dicaResolved = typeof resolveBookHerancaDica === 'function' 
+                ? resolveBookHerancaDica(bookObj) 
+                : (typeof getHerancaFase1Dica === 'function' ? getHerancaFase1Dica(data.title || getRaw(raw, ['Título', 'Titulo']) || '', authors) : null);
+            bookObj.heranca_dica_info = dicaResolved;
+            bookObj.heranca_prioridade_compra = (dicaResolved && dicaResolved.prioridade) ? dicaResolved.prioridade : null;
             
             cachedBooks[doc.id] = bookObj;
             booksData.push(bookObj);
@@ -5761,6 +5850,12 @@ service cloud.firestore {
         $('.dynamic-select').val(null).trigger('change');
         $('#f_preco').val('');
         $('#f_ano_compra').val('');
+        $('#f_heranca_dica_personalizada').val('').attr('placeholder', 'Insira ou edite as orientações de tradução, edição especial, capa dura e comentários críticos...');
+        $('#f_heranca_prioridade_personalizada').val('').attr('placeholder', 'Ex: 49');
+        $('#f_heranca_editoras_personalizadas').val('').attr('placeholder', 'Ex: Editora 34, Companhia das Letras');
+        $('#herancaDicaStatusBadge').text('Sem personalização').attr('class', 'badge bg-secondary-subtle text-secondary border small');
+        $('#btnCopiarDicaPadrao').hide();
+        $('#btnRestaurarDicaOriginal').hide();
         $('#herancaEditDicaContainer').hide().empty();
         clearCoverModal();
         document.getElementById('bookModalLabel').innerText = 'Novo Livro';
@@ -5770,7 +5865,7 @@ service cloud.firestore {
         bookModal.show();
     }
 
-    function editBook(id) {
+    function editBook(id, initialTab = 'tab-basico') {
         currentEditingId = id;
         const form = document.getElementById('bookForm');
         form.classList.remove('was-validated');
@@ -5834,23 +5929,54 @@ service cloud.firestore {
         $('#f_heranca_papelalcalino').prop('checked', !!b.heranca_papelalcalino);
         $('#f_heranca_traducao').prop('checked', !!b.heranca_traducao);
 
-        // Exibe dica curatorial da Fase I no formulário de herança se disponível
-        const editDica = b.heranca_dica_info || (typeof getHerancaFase1Dica === 'function' ? getHerancaFase1Dica(b.title, b.authors) : null);
-        if (editDica) {
-            const edStr = (editDica.editoras_sugeridas && editDica.editoras_sugeridas.length > 0)
-                ? `<strong>Editoras sugeridas:</strong> ${editDica.editoras_sugeridas.join(', ')}`
+        // Campos de Dica Curatorial e Personalização
+        $('#f_heranca_dica_personalizada').val(b.heranca_dica_personalizada || '');
+        $('#f_heranca_prioridade_personalizada').val(b.heranca_prioridade_personalizada || '');
+        $('#f_heranca_editoras_personalizadas').val(b.heranca_editoras_personalizadas || '');
+
+        const defaultDica = (typeof getHerancaFase1Dica === 'function') ? getHerancaFase1Dica(b.title, b.authors) : null;
+        const activeDica = b.heranca_dica_info || (typeof resolveBookHerancaDica === 'function' ? resolveBookHerancaDica(b) : defaultDica);
+
+        if (defaultDica) {
+            $('#f_heranca_dica_personalizada').attr('placeholder', `Padrão da curadoria: ${defaultDica.dica}`);
+            $('#f_heranca_prioridade_personalizada').attr('placeholder', `Padrão: #${defaultDica.prioridade}`);
+            $('#f_heranca_editoras_personalizadas').attr('placeholder', `Padrão: ${(defaultDica.editoras_sugeridas || []).join(', ')}`);
+            $('#btnCopiarDicaPadrao').show();
+        } else {
+            $('#f_heranca_dica_personalizada').attr('placeholder', 'Insira as orientações de tradução, edição especial, capa dura e comentários críticos...');
+            $('#f_heranca_prioridade_personalizada').attr('placeholder', 'Ex: 49');
+            $('#f_heranca_editoras_personalizadas').attr('placeholder', 'Ex: Editora 34, Companhia das Letras');
+            $('#btnCopiarDicaPadrao').hide();
+        }
+
+        if (activeDica && activeDica.is_custom) {
+            $('#herancaDicaStatusBadge').html('<i class="bi bi-pencil-fill me-1"></i>Personalizada pelo Usuário').attr('class', 'badge bg-primary-subtle text-primary border border-primary small');
+            $('#btnRestaurarDicaOriginal').show();
+        } else if (defaultDica) {
+            $('#herancaDicaStatusBadge').html('<i class="bi bi-check-circle me-1"></i>Padrão Fase I (#' + defaultDica.prioridade + ')').attr('class', 'badge bg-warning-subtle text-dark border border-warning small');
+            $('#btnRestaurarDicaOriginal').hide();
+        } else {
+            $('#herancaDicaStatusBadge').text('Não catalogado na Fase I').attr('class', 'badge bg-secondary-subtle text-secondary border small');
+            $('#btnRestaurarDicaOriginal').hide();
+        }
+
+        if (activeDica) {
+            const edStr = (activeDica.editoras_sugeridas && activeDica.editoras_sugeridas.length > 0)
+                ? `<strong>Editoras sugeridas:</strong> ${activeDica.editoras_sugeridas.join(', ')}`
                 : '';
+            const prioBadge = activeDica.prioridade ? `<span class="badge bg-warning text-dark border fw-bold"><i class="bi bi-bullseye text-danger me-1"></i>Prioridade #${activeDica.prioridade} na Fila de Compra</span>` : '';
             $('#herancaEditDicaContainer').html(`
-                <div class="p-3 rounded-3 border" style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border-left: 4px solid #d97706 !important;">
+                <div class="p-3 rounded-3 border mt-2" style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border-left: 4px solid #d97706 !important;">
                     <div class="d-flex justify-content-between align-items-center mb-1 flex-wrap gap-1">
-                        <span class="badge bg-warning text-dark border fw-bold"><i class="bi bi-bullseye text-danger me-1"></i>Prioridade #${editDica.prioridade} na Fila de Compra</span>
-                        <div class="d-flex gap-1">
-                            ${editDica.candidato_luxo ? '<span class="badge bg-warning-subtle text-amber-900 border border-warning">★ Luxo</span>' : ''}
-                            ${editDica.ja_possui_ou_verificar ? '<span class="badge bg-info-subtle text-info-emphasis border border-info">✓ Conferir Acervo</span>' : ''}
-                            ${editDica.integral ? '<span class="badge bg-secondary-subtle text-dark border">Integral</span>' : ''}
+                        ${prioBadge}
+                        <div class="d-flex gap-1 flex-wrap">
+                            ${activeDica.is_custom ? '<span class="badge bg-primary-subtle text-primary border border-primary">✏️ Personalizada</span>' : ''}
+                            ${activeDica.candidato_luxo ? '<span class="badge bg-warning-subtle text-amber-900 border border-warning">★ Luxo</span>' : ''}
+                            ${activeDica.ja_possui_ou_verificar ? '<span class="badge bg-info-subtle text-info-emphasis border border-info">✓ Conferir Acervo</span>' : ''}
+                            ${activeDica.integral ? '<span class="badge bg-secondary-subtle text-dark border">Integral</span>' : ''}
                         </div>
                     </div>
-                    <div class="small text-dark mb-1">${editDica.dica}</div>
+                    <div class="small text-dark mb-1">${activeDica.dica}</div>
                     ${edStr ? `<div class="small text-secondary">${edStr}</div>` : ''}
                 </div>
             `).show();
@@ -5860,7 +5986,11 @@ service cloud.firestore {
 
         updateAllRequiredLabels();
         $('#btnDeleteBookModal').removeClass('d-none');
-        $('#tab-basico-btn').tab('show');
+        if (initialTab === 'heranca' || initialTab === 'tab-heranca') {
+            $('#tab-heranca-btn').tab('show');
+        } else {
+            $('#tab-basico-btn').tab('show');
+        }
         bookModal.show();
     }
 
@@ -5931,6 +6061,43 @@ service cloud.firestore {
         }
     }
 
+    function carregarDicaPadraoParaEdicao() {
+        if (!currentEditingId) {
+            alert('Esta função está disponível durante a edição de um livro.');
+            return;
+        }
+        const b = cachedBooks[currentEditingId];
+        if (!b) return;
+        const defaultDica = (typeof getHerancaFase1Dica === 'function') ? getHerancaFase1Dica(b.title, b.authors) : null;
+        if (!defaultDica) {
+            alert('Este livro não possui uma recomendação padrão catalogada na lista dos 120 livros da Fase I.');
+            return;
+        }
+        $('#f_heranca_dica_personalizada').val(defaultDica.dica);
+        $('#f_heranca_prioridade_personalizada').val(defaultDica.prioridade || '');
+        $('#f_heranca_editoras_personalizadas').val((defaultDica.editoras_sugeridas || []).join(', '));
+        $('#herancaDicaStatusBadge').html('<i class="bi bi-pencil-fill me-1"></i>Pronto para Personalizar').attr('class', 'badge bg-primary-subtle text-primary border border-primary small');
+        $('#btnRestaurarDicaOriginal').show();
+        $('#f_heranca_dica_personalizada').focus();
+    }
+
+    function restaurarDicaOriginalCuradoria() {
+        if (!confirm('Deseja restaurar a recomendação e prioridade originais da curadoria da Fase I para esta obra? O texto customizado será apagado.')) return;
+        $('#f_heranca_dica_personalizada').val('');
+        $('#f_heranca_prioridade_personalizada').val('');
+        $('#f_heranca_editoras_personalizadas').val('');
+        if (currentEditingId && cachedBooks[currentEditingId]) {
+            const b = cachedBooks[currentEditingId];
+            const defaultDica = (typeof getHerancaFase1Dica === 'function') ? getHerancaFase1Dica(b.title, b.authors) : null;
+            if (defaultDica) {
+                $('#herancaDicaStatusBadge').html('<i class="bi bi-check-circle me-1"></i>Padrão Fase I (#' + defaultDica.prioridade + ')').attr('class', 'badge bg-warning-subtle text-dark border border-warning small');
+            } else {
+                $('#herancaDicaStatusBadge').text('Não catalogado na Fase I').attr('class', 'badge bg-secondary-subtle text-secondary border small');
+            }
+        }
+        $('#btnRestaurarDicaOriginal').hide();
+    }
+
     async function saveBook() {
         const form = document.getElementById('bookForm');
         
@@ -5994,6 +6161,17 @@ service cloud.firestore {
             }
         }
 
+        const dicaPersonalizadaVal = document.getElementById('f_heranca_dica_personalizada') ? document.getElementById('f_heranca_dica_personalizada').value.trim() : '';
+        const prioridadePersonalizadaInput = document.getElementById('f_heranca_prioridade_personalizada') ? document.getElementById('f_heranca_prioridade_personalizada').value.trim() : '';
+        let prioridadePersonalizadaNum = '';
+        if (prioridadePersonalizadaInput !== '') {
+            const parsedPrio = parseInt(prioridadePersonalizadaInput, 10);
+            if (!isNaN(parsedPrio)) {
+                prioridadePersonalizadaNum = parsedPrio;
+            }
+        }
+        const editorasPersonalizadasVal = document.getElementById('f_heranca_editoras_personalizadas') ? document.getElementById('f_heranca_editoras_personalizadas').value.trim() : '';
+
         const raw = {
             'Melhores do ano?': document.getElementById('f_melhores').value,
             'Tradutor': getS2Val('#f_tradutor', true),
@@ -6024,7 +6202,10 @@ service cloud.firestore {
             'Capa Dura Herança': $('#f_heranca_capadura').is(':checked'),
             'Costurado Herança': $('#f_heranca_costurado').is(':checked'),
             'Papel Alcalino Herança': $('#f_heranca_papelalcalino').is(':checked'),
-            'Tradução Referência Herança': $('#f_heranca_traducao').is(':checked')
+            'Tradução Referência Herança': $('#f_heranca_traducao').is(':checked'),
+            'Dica de Edição & Curadoria': dicaPersonalizadaVal,
+            'Prioridade na Fila de Compra': prioridadePersonalizadaNum,
+            'Editoras Recomendadas': editorasPersonalizadasVal
         };
 
         const anoCompraVal = document.getElementById('f_ano_compra') ? document.getElementById('f_ano_compra').value.trim() : '';
@@ -6053,6 +6234,9 @@ service cloud.firestore {
             heranca_costurado: $('#f_heranca_costurado').is(':checked'),
             heranca_papelalcalino: $('#f_heranca_papelalcalino').is(':checked'),
             heranca_traducao: $('#f_heranca_traducao').is(':checked'),
+            heranca_dica_personalizada: dicaPersonalizadaVal,
+            heranca_prioridade_personalizada: prioridadePersonalizadaNum,
+            heranca_editoras_personalizadas: editorasPersonalizadasVal,
             raw_data: raw
         };
 
@@ -7325,11 +7509,13 @@ service cloud.firestore {
                 ? `<span class="badge bg-light text-dark border" title="Preço pago"><i class="bi bi-tag-fill text-success me-1"></i>R$ ${pNum.toFixed(2).replace('.', ',')}</span>`
                 : (isAcq ? `<span class="badge bg-light text-muted border" style="cursor: pointer;" onclick="event.stopPropagation(); editBook('${b.id}')" title="Adicionar preço pago"><i class="bi bi-tag me-1"></i>+ Preço</span>` : '');
 
-            const hDica = b.heranca_dica_info || (typeof getHerancaFase1Dica === 'function' ? getHerancaFase1Dica(b.title, b.authors) : null);
+            const hDica = b.heranca_dica_info || (typeof resolveBookHerancaDica === 'function' ? resolveBookHerancaDica(b) : (typeof getHerancaFase1Dica === 'function' ? getHerancaFase1Dica(b.title, b.authors) : null));
             let prioCompraBadge = '';
             let prioDicaBtn = '';
             if (hDica) {
-                prioCompraBadge = `<span class="badge border py-1 px-2 d-inline-flex align-items-center" style="background:#fffbeb; color:#92400e; border-color:#f59e0b !important; font-size:0.70rem; font-weight:700;" title="Ordem de Prioridade de Compra na Fase I: #${hDica.prioridade}"><i class="bi bi-bullseye text-danger me-1"></i>#${hDica.prioridade} Compra</span>`;
+                const prioLabel = hDica.prioridade ? `#${hDica.prioridade} Compra` : 'Curadoria';
+                const customMark = hDica.is_custom ? ' <i class="bi bi-pencil-fill ms-1 text-primary" style="font-size:9px;"></i>' : '';
+                prioCompraBadge = `<span class="badge border py-1 px-2 d-inline-flex align-items-center" style="background:#fffbeb; color:#92400e; border-color:#f59e0b !important; font-size:0.70rem; font-weight:700;" title="Ordem de Prioridade de Compra na Fase I: #${hDica.prioridade || '-'}${hDica.is_custom ? ' (Personalizada)' : ''}"><i class="bi bi-bullseye text-danger me-1"></i>${prioLabel}${customMark}</span>`;
                 prioDicaBtn = `<button class="btn btn-sm btn-outline-warning py-0 px-2 rounded-pill" style="font-size: 0.72rem;" onclick="event.stopPropagation(); openHerancaDicaModal('${b.id}')" title="Ver dica de edição recomendada"><i class="bi bi-lightbulb-fill text-warning me-1"></i>Dica</button>`;
             }
 
