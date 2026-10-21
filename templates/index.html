@@ -978,6 +978,7 @@
                 <select class="form-select form-select-sm" id="sortSelect" onchange="applyFiltersAndRender()">
                     <option value="recentes">Mais recentes (Adição)</option>
                     <option value="antigos">Mais antigos (Adição)</option>
+                    <option value="prioridade_compra">🎯 Ordem de Prioridade de Compra (Fase I: 1 a 120)</option>
                     <option value="heranca_ordem">⏳ Ordem do Plano Herança (1º ao 35º Ano)</option>
                     <option value="melhor_nota">Melhor avaliados (⭐)</option>
                     <option value="ano_compra">Ano de Compra (Mais recentes)</option>
@@ -1333,6 +1334,7 @@
                             <span class="badge bg-warning text-dark border small fw-normal">Livro-Tombo de Família</span>
                         </div>
                     </div>
+                    <div class="col-12" id="herancaEditDicaContainer" style="display: none;"></div>
                     <div class="col-md-4">
                         <label class="form-label fw-semibold" for="f_heranca_fase">Fase do Plano</label>
                         <select class="form-select" id="f_heranca_fase">
@@ -1897,11 +1899,46 @@
   </div>
 </div>
 
+<!-- Modal Rápido: Dica de Edição & Curadoria Herança Fase I -->
+<div class="modal fade" id="herancaDicaQuickModal" tabindex="-1" aria-labelledby="hdqmTitle" aria-hidden="true" style="z-index: 1080;">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border-0 shadow-lg" style="border-radius: 1rem; overflow: hidden;">
+      <div class="modal-header border-bottom py-3 px-4" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);">
+        <div class="d-flex align-items-center gap-3">
+          <div class="rounded-circle d-flex align-items-center justify-content-center bg-white shadow-sm flex-shrink-0" style="width: 44px; height: 44px;">
+            <i class="bi bi-lightbulb-fill text-warning fs-4"></i>
+          </div>
+          <div>
+            <h5 class="modal-title fw-bold text-dark m-0" id="hdqmTitle">Dica de Edição Recomendada</h5>
+            <div class="small text-muted" id="hdqmSubtitle">Biblioteca Herança · Fase I</div>
+          </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body p-4" id="hdqmBody">
+        <!-- Preenchido via JS -->
+      </div>
+      <div class="modal-footer bg-light border-top py-2 px-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <a id="hdqmAmazonSearchBtn" href="#" target="_blank" class="btn btn-sm btn-amazon-sleek shadow-sm px-3">
+          <i class="bi bi-amazon me-1"></i>Buscar Edição Recomendada na Amazon
+        </a>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-sm btn-outline-primary" id="hdqmDetailsBtn">
+            <i class="bi bi-eye me-1"></i>Ver Ficha Completa
+          </button>
+          <button type="button" class="btn btn-sm btn-secondary rounded-pill px-3" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Barcode Scanner (html5-qrcode) -->
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
-<!-- Dados Curados do Plano Herança -->
+<!-- Dados Curados do Plano Herança e Dicas da Fase I -->
 <script src="/static/js/heranca_data.js"></script>
+<script src="/static/js/heranca_fase1_dicas.js"></script>
 
 <script>
     const firebaseConfig = {
@@ -2125,7 +2162,12 @@
                 data: 'title', 
                 defaultContent: '',
                 render: function(data, type, row) {
-                    return `<span style="cursor: pointer; font-weight: 600;" class="text-primary" onclick="showBookDetails('${row.id}')" title="Ver ficha completa">${data}</span>`;
+                    const dica = row.heranca_dica_info || (typeof getHerancaFase1Dica === 'function' ? getHerancaFase1Dica(data, row.authors) : null);
+                    let prioBadge = '';
+                    if (dica) {
+                        prioBadge = ` <span class="badge border ms-1" style="background:#fffbeb; color:#92400e; border-color:#f59e0b !important; font-size:11px; cursor:pointer;" onclick="event.stopPropagation(); openHerancaDicaModal('${row.id}')" title="Fase I — Prioridade #${dica.prioridade} de compra (clique para ver a dica de edição)">#${dica.prioridade}</span>`;
+                    }
+                    return `<span style="cursor: pointer; font-weight: 600;" class="text-primary" onclick="showBookDetails('${row.id}')" title="Ver ficha completa">${data}</span>${prioBadge}`;
                 }
             },
             { data: 'authors', defaultContent: '' },
@@ -2533,6 +2575,19 @@
         const sortVal = $('#sortSelect').val() || 'recentes';
         if (sortVal === 'antigos') {
             filteredBooksData.reverse();
+        } else if (sortVal === 'prioridade_compra') {
+            filteredBooksData.sort((a, b) => {
+                const getPrio = (x) => {
+                    if (x.heranca_prioridade_compra) return parseInt(x.heranca_prioridade_compra, 10);
+                    if (x.heranca_dica_info && x.heranca_dica_info.prioridade) return parseInt(x.heranca_dica_info.prioridade, 10);
+                    const d = typeof getHerancaFase1Dica === 'function' ? getHerancaFase1Dica(x.title, x.authors) : null;
+                    return d ? d.prioridade : 9999;
+                };
+                const pA = getPrio(a);
+                const pB = getPrio(b);
+                if (pA !== pB) return pA - pB;
+                return (a.title || '').localeCompare(b.title || '');
+            });
         } else if (sortVal === 'heranca_ordem') {
             filteredBooksData.sort((a, b) => {
                 const getYearNum = (str) => {
@@ -3263,6 +3318,21 @@
                     `;
                 }
 
+                // Dicas de Edição e Prioridade da Fase I (Herança)
+                const dicaInfo = book.heranca_dica_info || (typeof getHerancaFase1Dica === 'function' ? getHerancaFase1Dica(book.title, book.authors) : null);
+                let herancaPrioBadge = '';
+                let herancaDicaBtn = '';
+                if (dicaInfo) {
+                    herancaPrioBadge = `<span class="badge border shadow-sm d-inline-flex align-items-center" style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); color: #92400e; border-color: #f59e0b !important; font-size: 0.70rem; padding: 2px 7px; font-weight: 700;" title="Fase I — Ordem de Prioridade de Compra: #${dicaInfo.prioridade} (1 a 120)"><i class="bi bi-bullseye text-danger me-1"></i>#${dicaInfo.prioridade} Compra</span>`;
+                    if (dicaInfo.candidato_luxo) {
+                        herancaPrioBadge += ` <span class="badge bg-warning-subtle text-amber-900 border border-warning" style="font-size: 0.68rem; padding: 2px 6px;" title="Candidato a edição especial / luxo"><i class="bi bi-star-fill text-warning me-1"></i>Luxo</span>`;
+                    }
+                    if (dicaInfo.ja_possui_ou_verificar) {
+                        herancaPrioBadge += ` <span class="badge bg-info-subtle text-info-emphasis border border-info" style="font-size: 0.68rem; padding: 2px 6px;" title="Já possui no acervo, está a caminho ou conferir na estante"><i class="bi bi-check-circle-fill text-info me-1"></i>Conferir</span>`;
+                    }
+                    herancaDicaBtn = `<button type="button" class="btn btn-sm py-0 px-2 rounded-pill border shadow-sm d-inline-flex align-items-center gap-1" style="font-size: 0.70rem; background-color: #fffdf5; color: #b45309; border-color: #f59e0b !important;" onclick="event.stopPropagation(); openHerancaDicaModal('${book.id}')" title="Ver dicas de edição e sugestões de editoras"><i class="bi bi-lightbulb-fill text-warning"></i>Dica de Edição</button>`;
+                }
+
                 const card = $(`
                     <div class="col-md-6 col-lg-4">
                         <div class="card theme-pastel-card" style="--card-bg-light: ${pTheme.bgLight}; --card-border-light: ${pTheme.borderLight}; --card-bg-dark: ${pTheme.bgDark}; --card-border-dark: ${pTheme.borderDark};">
@@ -3273,6 +3343,7 @@
                                 <div class="mb-1 d-flex align-items-center gap-1 flex-wrap">
                                     ${book.genre ? `<span class="badge d-inline-block text-truncate" style="background-color: ${pTheme.badgeBg}; color: ${pTheme.badgeText}; font-size: 0.72rem; font-weight: 600; padding: 2px 7px; border: 1px solid ${pTheme.borderLight}; max-width: 100%;" title="Categoria literária: ${book.genre}"><i class="bi bi-bookmark-fill me-1"></i>${book.genre}</span>` : ''}
                                     ${book.heranca_fase ? `<span class="badge bg-warning text-dark border d-inline-flex align-items-center" style="font-size: 0.70rem; padding: 2px 6px;" title="Biblioteca Herança · ${book.heranca_fase} (${book.heranca_ano || ''})"><i class="bi bi-hourglass-split me-1"></i>Herança · ${book.heranca_papel || book.heranca_fase}</span>` : ''}
+                                    ${herancaPrioBadge}
                                     ${ratingBadge}
                                 </div>
                                 <h5 class="card-title" title="${book.title}" onclick="showBookDetails('${book.id}')" style="cursor: pointer;">${book.title}</h5>
@@ -3290,6 +3361,7 @@
                                         ${aquisicaoBadge}
                                         ${precoBadge}
                                         ${anoCompraBadge}
+                                        ${herancaDicaBtn}
                                     </div>
                                     <div class="d-flex align-items-center gap-1">
                                         <button class="btn btn-action-sleek text-success" onclick="event.stopPropagation(); openReadingJournalModal('${book.id}')" title="Diário de Leitura & Gamificação"><i class="bi bi-controller"></i></button>
@@ -3386,10 +3458,12 @@
             }
             
             groups[k].forEach(book => {
+                const dicaInfo = book.heranca_dica_info || (typeof getHerancaFase1Dica === 'function' ? getHerancaFase1Dica(book.title, book.authors) : null);
                 const coverId = 'img-cover-' + Math.random().toString(36).substr(2, 9);
                 const card = $(`
                     <div class="col-6 col-md-4 col-lg-2">
-                        <div class="card" onclick="showBookDetails('${book.id}')" title="${book.title}" style="cursor: pointer;">
+                        <div class="card position-relative" onclick="showBookDetails('${book.id}')" title="${book.title}${dicaInfo ? ' · Prioridade #' + dicaInfo.prioridade : ''}" style="cursor: pointer;">
+                            ${dicaInfo ? `<span class="position-absolute top-0 start-0 m-1 badge bg-dark bg-opacity-75 text-warning border border-warning shadow-sm" style="font-size: 0.68rem; z-index: 2;" title="Prioridade de Compra: #${dicaInfo.prioridade}"><i class="bi bi-bullseye text-danger me-1"></i>#${dicaInfo.prioridade}</span>` : ''}
                             <div class="card-img-container" id="${coverId}">
                                 <div class="spinner-border spinner-border-sm text-secondary m-auto d-block mt-5" role="status"></div>
                             </div>
@@ -5176,9 +5250,10 @@
             $('#detailPersonalCard').hide();
         }
 
-        // Preenchimento do Card da Biblioteca Herança
-        if (book.heranca_fase || book.heranca_ano || book.heranca_motivo) {
-            $('#detailHerancaBadgePapel').text(book.heranca_papel || 'Plano 35 Anos');
+        // Preenchimento do Card da Biblioteca Herança & Curadoria da Fase I
+        const dicaInfo = book.heranca_dica_info || (typeof getHerancaFase1Dica === 'function' ? getHerancaFase1Dica(book.title, book.authors) : null);
+        if (book.heranca_fase || book.heranca_ano || book.heranca_motivo || dicaInfo) {
+            $('#detailHerancaBadgePapel').text(book.heranca_papel || (dicaInfo ? `Fase I · Prioridade #${dicaInfo.prioridade}` : 'Plano 35 Anos'));
             
             let specs = [];
             if (book.heranca_capadura) specs.push('<span class="badge bg-light text-dark border me-1"><i class="bi bi-check-circle-fill text-success me-1"></i>Capa Dura</span>');
@@ -5186,9 +5261,46 @@
             if (book.heranca_papelalcalino) specs.push('<span class="badge bg-light text-dark border me-1"><i class="bi bi-check-circle-fill text-success me-1"></i>Papel Alcalino</span>');
             if (book.heranca_traducao) specs.push('<span class="badge bg-light text-dark border me-1"><i class="bi bi-check-circle-fill text-success me-1"></i>Tradução de Referência</span>');
             
+            let dicaCardHtml = '';
+            if (dicaInfo) {
+                const editorasHtml = (dicaInfo.editoras_sugeridas && dicaInfo.editoras_sugeridas.length > 0)
+                    ? dicaInfo.editoras_sugeridas.map(ed => `
+                        <a href="https://www.amazon.com.br/s?k=${encodeURIComponent((book.title || dicaInfo.titulo) + ' ' + ed)}" target="_blank" class="badge text-decoration-none border shadow-sm py-1 px-2 d-inline-flex align-items-center gap-1" style="background:#f0fdf4; color:#166534; border-color:#bbf7d0 !important; font-size:0.75rem;">
+                            <i class="bi bi-building"></i> ${ed} <i class="bi bi-box-arrow-up-right" style="font-size:0.65rem;"></i>
+                        </a>
+                      `).join(' ')
+                    : '<span class="text-muted small">Consultar edições integrais</span>';
+
+                dicaCardHtml = `
+                    <div class="card border-0 rounded-3 p-3 mt-3 shadow-sm" style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border-left: 4px solid #d97706 !important;">
+                        <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-1">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-warning text-dark border fw-bold" style="font-size: 0.82rem;"><i class="bi bi-bullseye text-danger me-1"></i>Prioridade #${dicaInfo.prioridade} de Compra</span>
+                                <span class="badge bg-light text-secondary border small">${dicaInfo.grupo}</span>
+                            </div>
+                            <div class="d-flex gap-1 flex-wrap">
+                                ${dicaInfo.candidato_luxo ? '<span class="badge bg-warning-subtle text-amber-900 border border-warning">★ Candidato a Edição Especial</span>' : ''}
+                                ${dicaInfo.ja_possui_ou_verificar ? '<span class="badge bg-info-subtle text-info-emphasis border border-info">✓ Verificar Acervo / A Caminho</span>' : ''}
+                                ${dicaInfo.integral ? '<span class="badge bg-secondary-subtle text-dark border">Edição Integral</span>' : ''}
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <span class="small fw-semibold text-secondary d-block mb-1"><i class="bi bi-building text-primary me-1"></i>Editoras Recomendadas na Curadoria:</span>
+                            <div class="d-flex flex-wrap gap-1 align-items-center">
+                                ${editorasHtml}
+                            </div>
+                        </div>
+                        <div class="p-2 rounded bg-white bg-opacity-75 border mt-2">
+                            <strong class="text-amber-900 d-block mb-1 small"><i class="bi bi-lightbulb-fill text-warning me-1"></i>Dica Editorial & Recomendação:</strong>
+                            <div class="text-dark" style="font-size: 0.88rem; line-height: 1.55;">${dicaInfo.dica}</div>
+                        </div>
+                    </div>
+                `;
+            }
+
             let hHtml = `
                 <div class="row g-2 mb-2">
-                    <div class="col-md-6"><strong>Fase:</strong> ${book.heranca_fase || '-'}</div>
+                    <div class="col-md-6"><strong>Fase:</strong> ${book.heranca_fase || (dicaInfo ? 'Fase I — A Pedra Fundamental' : '-')}</div>
                     <div class="col-md-6"><strong>Ano / Meta:</strong> ${book.heranca_ano || '-'} ${book.heranca_ordem ? `(Nº ${book.heranca_ordem} do ano)` : ''}</div>
                 </div>
                 ${specs.length > 0 ? `<div class="mb-2"><strong>Padrão da Edição:</strong> ${specs.join('')}</div>` : ''}
@@ -5198,6 +5310,7 @@
                         <div class="fst-italic text-dark">"${book.heranca_motivo}"</div>
                     </div>
                 ` : ''}
+                ${dicaCardHtml}
             `;
             $('#detailHerancaContent').html(hHtml);
             $('#detailHerancaCard').show();
@@ -5234,6 +5347,78 @@
         $('#bookDetailsModal').data('currentBookId', book.id);
         const modal = new bootstrap.Modal(document.getElementById('bookDetailsModal'));
         modal.show();
+    }
+
+    function openHerancaDicaModal(bookId) {
+        const book = cachedBooks[bookId] || allBooksData.find(b => b.id === bookId);
+        if (!book) return;
+        const dica = book.heranca_dica_info || (typeof getHerancaFase1Dica === 'function' ? getHerancaFase1Dica(book.title, book.authors) : null);
+        if (!dica) {
+            alert('Nenhuma dica de edição ou prioridade registrada para este livro.');
+            return;
+        }
+
+        $('#hdqmTitle').html(`<span class="badge bg-warning text-dark me-2">#${dica.prioridade}</span> ${book.title}`);
+        $('#hdqmSubtitle').text(`Fase I · ${dica.grupo} · ${book.authors || dica.autor || 'Autor Clássico'}`);
+
+        const editorasBadges = (dica.editoras_sugeridas && dica.editoras_sugeridas.length > 0)
+            ? dica.editoras_sugeridas.map(ed => `
+                <a href="https://www.amazon.com.br/s?k=${encodeURIComponent(book.title + ' ' + ed)}" target="_blank" class="badge text-decoration-none border shadow-sm py-2 px-3 d-inline-flex align-items-center gap-1" style="background:#f0fdf4; color:#166534; border-color:#bbf7d0 !important; font-size:0.82rem;">
+                    <i class="bi bi-building"></i> ${ed} <i class="bi bi-box-arrow-up-right ms-1" style="font-size:0.7rem;"></i>
+                </a>
+              `).join('')
+            : '<span class="text-muted small">Qualquer edição integral confiável com boa tradução</span>';
+
+        const badgesTop = `
+            <div class="d-flex flex-wrap gap-2 mb-3">
+                <span class="badge border py-1 px-3 d-inline-flex align-items-center" style="background:#fffbeb; color:#92400e; border-color:#f59e0b !important; font-size:0.82rem; font-weight:700;">
+                    <i class="bi bi-bullseye text-danger me-1"></i>#${dica.prioridade} na Fila de Compra (Fase I: 1 a 120)
+                </span>
+                <span class="badge bg-light text-secondary border py-1 px-2 d-inline-flex align-items-center">
+                    <i class="bi bi-collection me-1"></i>${dica.grupo}
+                </span>
+                ${dica.candidato_luxo ? '<span class="badge bg-warning-subtle text-amber-900 border border-warning py-1 px-2"><i class="bi bi-star-fill text-warning me-1"></i>★ Candidato a Edição Especial / Luxo</span>' : ''}
+                ${dica.ja_possui_ou_verificar ? '<span class="badge bg-info-subtle text-info-emphasis border border-info py-1 px-2"><i class="bi bi-check-circle-fill text-info me-1"></i>✓ Já Possui / Conferir no Acervo</span>' : ''}
+                ${dica.integral ? '<span class="badge bg-secondary-subtle text-dark border py-1 px-2">Edição Integral (sem cortes)</span>' : ''}
+            </div>
+        `;
+
+        const bodyHtml = `
+            ${badgesTop}
+            <div class="mb-3">
+                <label class="form-label fw-bold text-dark small text-uppercase mb-2"><i class="bi bi-building me-1 text-primary"></i>Editoras Recomendadas na Curadoria:</label>
+                <div class="d-flex flex-wrap gap-2">
+                    ${editorasBadges}
+                </div>
+            </div>
+            <div class="p-3 rounded-3 border mb-3" style="background: #fafaf9; border-color: #e7e5e4 !important;">
+                <label class="form-label fw-bold text-dark small text-uppercase mb-2"><i class="bi bi-lightbulb-fill text-warning me-1"></i>Recomendação Editorial & Critério de Compra:</label>
+                <div class="text-secondary" style="font-size: 0.95rem; line-height: 1.6; color: #292524 !important;">
+                    ${dica.dica}
+                </div>
+            </div>
+            <div class="p-2 px-3 rounded bg-light border small text-muted d-flex align-items-center gap-2">
+                <i class="bi bi-info-circle text-primary fs-5"></i>
+                <div>
+                    <strong>Curadoria da Fase I (A Pedra Fundamental):</strong> Foco em permanência, valor familiar e alternância entre leituras densas e fluidas.
+                </div>
+            </div>
+        `;
+
+        $('#hdqmBody').html(bodyHtml);
+        const searchTarget = (dica.editoras_sugeridas && dica.editoras_sugeridas.length > 0)
+            ? `${book.title} ${dica.editoras_sugeridas[0]}`
+            : `${book.title} ${book.authors || ''}`;
+        $('#hdqmAmazonSearchBtn').attr('href', `https://www.amazon.com.br/s?k=${encodeURIComponent(searchTarget)}`);
+
+        $('#hdqmDetailsBtn').off('click').on('click', () => {
+            const qModal = bootstrap.Modal.getInstance(document.getElementById('herancaDicaQuickModal'));
+            if (qModal) qModal.hide();
+            setTimeout(() => showBookDetails(book.id), 250);
+        });
+
+        const quickModal = new bootstrap.Modal(document.getElementById('herancaDicaQuickModal'));
+        quickModal.show();
     }
 
     async function fetchAndSaveSynopsis(bookId) {
@@ -5550,7 +5735,9 @@ service cloud.firestore {
                 heranca_capadura: !!(data.heranca_capadura || getRaw(raw, ['Capa Dura Herança'])),
                 heranca_costurado: !!(data.heranca_costurado || getRaw(raw, ['Costurado Herança'])),
                 heranca_papelalcalino: !!(data.heranca_papelalcalino || getRaw(raw, ['Papel Alcalino Herança'])),
-                heranca_traducao: !!(data.heranca_traducao || getRaw(raw, ['Tradução Referência Herança']))
+                heranca_traducao: !!(data.heranca_traducao || getRaw(raw, ['Tradução Referência Herança'])),
+                heranca_dica_info: typeof getHerancaFase1Dica === 'function' ? getHerancaFase1Dica(data.title || getRaw(raw, ['Título', 'Titulo']) || '', authors) : null,
+                heranca_prioridade_compra: (typeof getHerancaFase1Dica === 'function' && getHerancaFase1Dica(data.title || getRaw(raw, ['Título', 'Titulo']) || '', authors)) ? getHerancaFase1Dica(data.title || getRaw(raw, ['Título', 'Titulo']) || '', authors).prioridade : null
             };
             
             cachedBooks[doc.id] = bookObj;
@@ -5574,6 +5761,7 @@ service cloud.firestore {
         $('.dynamic-select').val(null).trigger('change');
         $('#f_preco').val('');
         $('#f_ano_compra').val('');
+        $('#herancaEditDicaContainer').hide().empty();
         clearCoverModal();
         document.getElementById('bookModalLabel').innerText = 'Novo Livro';
         $('#btnDeleteBookModal').addClass('d-none');
@@ -5645,6 +5833,30 @@ service cloud.firestore {
         $('#f_heranca_costurado').prop('checked', !!b.heranca_costurado);
         $('#f_heranca_papelalcalino').prop('checked', !!b.heranca_papelalcalino);
         $('#f_heranca_traducao').prop('checked', !!b.heranca_traducao);
+
+        // Exibe dica curatorial da Fase I no formulário de herança se disponível
+        const editDica = b.heranca_dica_info || (typeof getHerancaFase1Dica === 'function' ? getHerancaFase1Dica(b.title, b.authors) : null);
+        if (editDica) {
+            const edStr = (editDica.editoras_sugeridas && editDica.editoras_sugeridas.length > 0)
+                ? `<strong>Editoras sugeridas:</strong> ${editDica.editoras_sugeridas.join(', ')}`
+                : '';
+            $('#herancaEditDicaContainer').html(`
+                <div class="p-3 rounded-3 border" style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border-left: 4px solid #d97706 !important;">
+                    <div class="d-flex justify-content-between align-items-center mb-1 flex-wrap gap-1">
+                        <span class="badge bg-warning text-dark border fw-bold"><i class="bi bi-bullseye text-danger me-1"></i>Prioridade #${editDica.prioridade} na Fila de Compra</span>
+                        <div class="d-flex gap-1">
+                            ${editDica.candidato_luxo ? '<span class="badge bg-warning-subtle text-amber-900 border border-warning">★ Luxo</span>' : ''}
+                            ${editDica.ja_possui_ou_verificar ? '<span class="badge bg-info-subtle text-info-emphasis border border-info">✓ Conferir Acervo</span>' : ''}
+                            ${editDica.integral ? '<span class="badge bg-secondary-subtle text-dark border">Integral</span>' : ''}
+                        </div>
+                    </div>
+                    <div class="small text-dark mb-1">${editDica.dica}</div>
+                    ${edStr ? `<div class="small text-secondary">${edStr}</div>` : ''}
+                </div>
+            `).show();
+        } else {
+            $('#herancaEditDicaContainer').hide().empty();
+        }
 
         updateAllRequiredLabels();
         $('#btnDeleteBookModal').removeClass('d-none');
@@ -7113,15 +7325,24 @@ service cloud.firestore {
                 ? `<span class="badge bg-light text-dark border" title="Preço pago"><i class="bi bi-tag-fill text-success me-1"></i>R$ ${pNum.toFixed(2).replace('.', ',')}</span>`
                 : (isAcq ? `<span class="badge bg-light text-muted border" style="cursor: pointer;" onclick="event.stopPropagation(); editBook('${b.id}')" title="Adicionar preço pago"><i class="bi bi-tag me-1"></i>+ Preço</span>` : '');
 
+            const hDica = b.heranca_dica_info || (typeof getHerancaFase1Dica === 'function' ? getHerancaFase1Dica(b.title, b.authors) : null);
+            let prioCompraBadge = '';
+            let prioDicaBtn = '';
+            if (hDica) {
+                prioCompraBadge = `<span class="badge border py-1 px-2 d-inline-flex align-items-center" style="background:#fffbeb; color:#92400e; border-color:#f59e0b !important; font-size:0.70rem; font-weight:700;" title="Ordem de Prioridade de Compra na Fase I: #${hDica.prioridade}"><i class="bi bi-bullseye text-danger me-1"></i>#${hDica.prioridade} Compra</span>`;
+                prioDicaBtn = `<button class="btn btn-sm btn-outline-warning py-0 px-2 rounded-pill" style="font-size: 0.72rem;" onclick="event.stopPropagation(); openHerancaDicaModal('${b.id}')" title="Ver dica de edição recomendada"><i class="bi bi-lightbulb-fill text-warning me-1"></i>Dica</button>`;
+            }
+
             return `
                 <div class="col-md-6 col-xl-4">
                     <div class="p-3 rounded-3 border h-100 d-flex flex-column justify-content-between" style="background: ${isAcq ? 'rgba(16, 185, 129, 0.05)' : 'var(--surface-color)'}; border-color: ${isAcq ? '#a7f3d0' : 'var(--border-color)'} !important;">
                         <div>
                             <div class="d-flex justify-content-between align-items-center mb-2 gap-1 flex-wrap">
-                                <div class="d-flex align-items-center gap-1">
+                                <div class="d-flex align-items-center gap-1 flex-wrap">
                                     <span class="badge ${isAcq ? 'bg-success' : 'bg-secondary'} rounded-pill">#${ordemNum}</span>
                                     ${mesBadge}
                                     ${papelBadge}
+                                    ${prioCompraBadge}
                                 </div>
                                 <div class="d-flex align-items-center gap-1 flex-wrap">
                                     ${precoBadge}
@@ -7141,10 +7362,11 @@ service cloud.firestore {
                             ` : ''}
                         </div>
                         <div class="d-flex justify-content-between align-items-center pt-2 border-top mt-2">
-                            <div class="d-flex gap-1">
+                            <div class="d-flex gap-1 align-items-center flex-wrap">
                                 <a href="https://www.amazon.com.br/s?k=${encodeURIComponent(b.title + ' ' + (b.authors || '') + ' capa dura')}" target="_blank" class="btn btn-sm text-dark border-0" style="background-color: #ff9900; padding: 2px 8px; font-size: 0.75rem;" title="Buscar edição Capa Dura na Amazon">
                                     <i class="bi bi-amazon"></i> Amazon
                                 </a>
+                                ${prioDicaBtn}
                                 ${!isAcq ? `
                                     <button class="btn btn-sm btn-success py-0 px-2" style="font-size: 0.75rem;" onclick="quickMarkHerancaAcquired('${b.id}')" title="Marcar como Adquirido e registrar no Livro-Tombo">
                                         <i class="bi bi-check2"></i> Adquiri!
