@@ -1591,9 +1591,20 @@ function getHerancaFase1Dica(title, authors) {
         const normItemT = normalizeHerancaText(item.titulo);
 
         if (normItemT === 'biblia' && normT.includes('biblia')) return item;
-        if (normItemT === 'inferno' && normT.includes('inferno')) return item;
-        if (normItemT === 'purgatorio' && normT.includes('purgatorio')) return item;
-        if (normItemT === 'paraiso' && normT.includes('paraiso') && !normT.includes('perdido')) return item;
+        
+        // Dante: A Divina Comédia (Inferno, Purgatório, Paraíso) — evitar colisão com Rimbaud ("Uma Temporada no Inferno")
+        if (normItemT === 'inferno') {
+            if (normT.includes('temporada') || normA.includes('rimbaud')) continue;
+            if (normT === 'inferno' || normT.includes('divinacomedia') || normT.includes('dante') || normA.includes('dante')) return item;
+        }
+        if (normItemT === 'purgatorio') {
+            if (normT === 'purgatorio' || normT.includes('purgatorio') || normT.includes('divinacomedia') || normA.includes('dante') || normT.includes('dante')) return item;
+        }
+        if (normItemT === 'paraiso') {
+            if (normT.includes('perdido')) continue; // Paraíso Perdido é John Milton
+            if (normT === 'paraiso' || normT.includes('paraiso') || normT.includes('divinacomedia') || normA.includes('dante') || normT.includes('dante')) return item;
+        }
+
         if (normItemT === 'domquixote' && normT.includes('domquixote')) return item;
         if (normItemT.includes('alienista') && normT.includes('alienista')) return item;
         if (normItemT.includes('continente') && normT.includes('continente')) return item;
@@ -1608,6 +1619,8 @@ function getHerancaFase1Dica(title, authors) {
     const sortedByLen = [...HERANCA_FASE1_DICAS].sort((a, b) => b.titulo.length - a.titulo.length);
     for (const item of sortedByLen) {
         const normItemT = normalizeHerancaText(item.titulo);
+        // Proteção específica contra colisão de 'inferno' com Rimbaud
+        if (normItemT === 'inferno' && (normT.includes('temporada') || normA.includes('rimbaud'))) continue;
         if (normItemT.length >= 5 && (normT.includes(normItemT) || normItemT.includes(normT))) {
             return item;
         }

@@ -1454,11 +1454,11 @@
                                 </label>
                                 <div class="d-flex gap-1 align-items-center flex-wrap">
                                     <span id="herancaDicaStatusBadge" class="badge bg-secondary-subtle text-secondary border small">Original da Curadoria</span>
-                                    <button type="button" class="btn btn-sm btn-outline-primary py-0 px-2 rounded-pill" id="btnCopiarDicaPadrao" onclick="carregarDicaPadraoParaEdicao()" style="font-size: 0.74rem;" title="Carregar texto e prioridade padrão da curadoria para poder editar">
-                                        <i class="bi bi-pencil-square me-1"></i>Preencher com Padrão
+                                    <button type="button" class="btn btn-sm btn-outline-primary py-0 px-2 rounded-pill" id="btnCopiarDicaPadrao" onclick="carregarDicaPadraoParaEdicao()" style="font-size: 0.74rem;" title="Recarregar texto e prioridade padrão da curadoria da Fase I">
+                                        <i class="bi bi-arrow-counterclockwise me-1"></i>Recarregar Padrão
                                     </button>
                                     <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2 rounded-pill" id="btnRestaurarDicaOriginal" onclick="restaurarDicaOriginalCuradoria()" style="font-size: 0.74rem; display: none;" title="Limpar personalizações e restaurar os dados originais da curadoria">
-                                        <i class="bi bi-arrow-counterclockwise me-1"></i>Restaurar Original
+                                        <i class="bi bi-arrow-repeat me-1"></i>Restaurar Original
                                     </button>
                                 </div>
                             </div>
@@ -4665,7 +4665,13 @@
     // Escutar mudanças nas listas
     settingsRef.onSnapshot(snapshot => {
         if (snapshot.exists) {
-            globalDropdownLists = snapshot.data();
+            globalDropdownLists = snapshot.data() || {};
+            // Garantir que a categoria essencial 'Clássico / Herança' esteja nas opções
+            if (!globalDropdownLists['generos_literarios']) globalDropdownLists['generos_literarios'] = [];
+            if (!globalDropdownLists['generos_literarios'].includes('Clássico / Herança')) {
+                globalDropdownLists['generos_literarios'].push('Clássico / Herança');
+                saveNewListOption('generos_literarios', 'Clássico / Herança');
+            }
             updateAllSelectsUI();
             if ($('#listsModal').is(':visible')) {
                 renderListManager();
@@ -4682,11 +4688,30 @@
             element.append(new Option('', '', false, false));
         }
 
+        const existingOptions = new Set();
         if (globalDropdownLists[cat]) {
             const sortedList = [...globalDropdownLists[cat]].sort();
             sortedList.forEach(item => {
+                existingOptions.add(item);
                 element.append(new Option(item, item, false, false));
             });
+        }
+
+        // PRESERVAR VALORES ATUAIS SELECIONADOS NO SELECT MESMO QUE NÃO ESTEJAM NA LISTA GLOBAL (ex: 'Clássico / Herança')
+        if (currentValue) {
+            if (Array.isArray(currentValue)) {
+                currentValue.forEach(v => {
+                    if (v && !existingOptions.has(v)) {
+                        existingOptions.add(v);
+                        element.append(new Option(v, v, true, true));
+                    }
+                });
+            } else if (typeof currentValue === 'string' && currentValue.trim() !== '') {
+                if (!existingOptions.has(currentValue)) {
+                    existingOptions.add(currentValue);
+                    element.append(new Option(currentValue, currentValue, true, true));
+                }
+            }
         }
         
         element.val(currentValue).trigger('change.select2');
@@ -4728,20 +4753,9 @@
             width: '100%'
         });
 
-        // Redimensionar Select2 para 100% ao alternar entre as abas do modal
+        // Garantir que os containers Select2 ocupem 100% de largura ao alternar abas sem reinicializar o Select2 (evita perda de valores e opções)
         $(document).on('shown.bs.tab', '#bookModalTabs button[data-bs-toggle="pill"]', function () {
-            $('#bookModal .dynamic-select').each(function() {
-                if ($(this).data('select2')) {
-                    $(this).select2({
-                        theme: 'bootstrap-5',
-                        tags: true,
-                        dropdownParent: $('#bookModal .modal-content'),
-                        placeholder: 'Selecione ou digite novo...',
-                        allowClear: true,
-                        width: '100%'
-                    });
-                }
-            });
+            $('#bookModal .select2-container').css('width', '100%');
         });
 
         // Quando o usuário digitar algo novo e selecionar, interceptamos para salvar na lista global
@@ -4845,6 +4859,25 @@
             if ((val.length === 10 || val.length === 13) && !$('#f_title').val()) {
                 fetchIsbnMetadata();
             }
+        });
+
+        // Atualizar preview da Dica de Herança em tempo real ao digitar
+        $('#f_heranca_prioridade_personalizada, #f_heranca_editoras_personalizadas, #f_heranca_dica_personalizada').on('input', function() {
+            const prio = $('#f_heranca_prioridade_personalizada').val().trim();
+            const dica = $('#f_heranca_dica_personalizada').val().trim();
+            const ed = $('#f_heranca_editoras_personalizadas').val().trim();
+            const b = currentEditingId ? cachedBooks[currentEditingId] : null;
+            const defaultDica = (b && typeof getHerancaFase1Dica === 'function') ? getHerancaFase1Dica(b.title, b.authors) : null;
+            
+            const isCustom = !defaultDica || (prio !== String(defaultDica.prioridade || '') || dica !== String(defaultDica.dica || '') || ed !== (defaultDica.editoras_sugeridas || []).join(', '));
+            if (isCustom) {
+                $('#herancaDicaStatusBadge').html('<i class="bi bi-pencil-fill me-1"></i>Personalizada pelo Usuário').attr('class', 'badge bg-primary-subtle text-primary border border-primary small');
+                if (defaultDica) $('#btnRestaurarDicaOriginal').show();
+            } else {
+                $('#herancaDicaStatusBadge').html('<i class="bi bi-check-circle me-1"></i>Padrão Fase I (#' + (defaultDica ? defaultDica.prioridade : '') + ')').attr('class', 'badge bg-warning-subtle text-dark border border-warning small');
+                $('#btnRestaurarDicaOriginal').hide();
+            }
+            renderHerancaModalPreview(prio, dica, ed, defaultDica, isCustom);
         });
 
         // Drag-and-drop de imagem de capa no modal de detalhes
@@ -5765,6 +5798,13 @@ service cloud.firestore {
         return '';
     }
 
+    function isHerancaBook(data, raw = {}) {
+        if (!data) return false;
+        if (data.heranca_fase || data.heranca_ano || data.heranca_papel || data.heranca_ordem || data.heranca_motivo) return true;
+        if (raw && (raw['Fase do Plano'] || raw['Papel no Plano'] || raw['Ano do Plano'] || raw['Ordem no Ano'] || raw['Herança Fase'] || raw['Herança Papel'])) return true;
+        return false;
+    }
+
     db.collection('books').orderBy('addedAt', 'desc').onSnapshot(snapshot => {
         let booksData = [];
         cachedBooks = {};
@@ -5775,6 +5815,16 @@ service cloud.firestore {
             if (Array.isArray(authors)) authors = authors.join(', ');
             
             let raw = data.raw_data || {};
+            const isHeranca = isHerancaBook(data, raw);
+
+            let bookGenre = data.genre || getRaw(raw, ['Categoria literária', 'Categoria literaria', 'Categoria', 'Gênero', 'Genero', 'genre']) || '';
+            if (!bookGenre && isHeranca) {
+                bookGenre = 'Clássico / Herança';
+                // Auto-correção silenciosa para livros do acervo Herança que possam ter tido o gênero limpo
+                if (doc.id && !data.genre) {
+                    db.collection('books').doc(doc.id).update({ genre: 'Clássico / Herança' }).catch(() => {});
+                }
+            }
 
             const bookObj = {
                 id: doc.id,
@@ -5788,7 +5838,7 @@ service cloud.firestore {
                 selo: getRaw(raw, ['Selo']),
                 grupo: getRaw(raw, ['Grupo editorial', 'Grupo']),
                 colecao: data.colecao || getRaw(raw, ['Coleção', 'Colecao', 'Coleções']) || '',
-                genre: data.genre || '',
+                genre: bookGenre,
                 formato: getRaw(raw, ['Formato']),
                 status: data.status || getRaw(raw, ['Status']) || '',
                 pages: data.pages || '',
@@ -5907,7 +5957,12 @@ service cloud.firestore {
         setSelect2Val('#f_selo', b.selo, false);
         setSelect2Val('#f_grupo', b.grupo, false);
         setSelect2Val('#f_colecao', b.colecao, false);
-        setSelect2Val('#f_genre', b.genre, false);
+
+        let genreToSet = b.genre;
+        if (!genreToSet && isHerancaBook(b, b.raw_data)) {
+            genreToSet = 'Clássico / Herança';
+        }
+        setSelect2Val('#f_genre', genreToSet, false);
         setSelect2Val('#f_formato', b.formato, false);
         setSelect2Val('#f_status', b.status, false);
         setSelect2Val('#f_genero_autor', b.genero_autor, false);
@@ -5929,13 +5984,24 @@ service cloud.firestore {
         $('#f_heranca_papelalcalino').prop('checked', !!b.heranca_papelalcalino);
         $('#f_heranca_traducao').prop('checked', !!b.heranca_traducao);
 
-        // Campos de Dica Curatorial e Personalização
-        $('#f_heranca_dica_personalizada').val(b.heranca_dica_personalizada || '');
-        $('#f_heranca_prioridade_personalizada').val(b.heranca_prioridade_personalizada || '');
-        $('#f_heranca_editoras_personalizadas').val(b.heranca_editoras_personalizadas || '');
-
         const defaultDica = (typeof getHerancaFase1Dica === 'function') ? getHerancaFase1Dica(b.title, b.authors) : null;
         const activeDica = b.heranca_dica_info || (typeof resolveBookHerancaDica === 'function' ? resolveBookHerancaDica(b) : defaultDica);
+
+        // Preencher os inputs de prioridade, editoras e dica com os valores ativos (nunca deixar em branco na edição)
+        const effectivePrio = (b.heranca_prioridade_personalizada !== undefined && b.heranca_prioridade_personalizada !== null && b.heranca_prioridade_personalizada !== '')
+            ? b.heranca_prioridade_personalizada
+            : (activeDica && activeDica.prioridade ? activeDica.prioridade : (defaultDica && defaultDica.prioridade ? defaultDica.prioridade : ''));
+        $('#f_heranca_prioridade_personalizada').val(effectivePrio);
+
+        const effectiveEditoras = (b.heranca_editoras_personalizadas !== undefined && b.heranca_editoras_personalizadas !== null && b.heranca_editoras_personalizadas !== '')
+            ? (Array.isArray(b.heranca_editoras_personalizadas) ? b.heranca_editoras_personalizadas.join(', ') : b.heranca_editoras_personalizadas)
+            : (activeDica && activeDica.editoras_sugeridas && activeDica.editoras_sugeridas.length > 0 ? activeDica.editoras_sugeridas.join(', ') : (defaultDica && defaultDica.editoras_sugeridas ? defaultDica.editoras_sugeridas.join(', ') : ''));
+        $('#f_heranca_editoras_personalizadas').val(effectiveEditoras);
+
+        const effectiveDica = (b.heranca_dica_personalizada !== undefined && b.heranca_dica_personalizada !== null && b.heranca_dica_personalizada !== '')
+            ? b.heranca_dica_personalizada
+            : (activeDica && activeDica.dica ? activeDica.dica : (defaultDica && defaultDica.dica ? defaultDica.dica : ''));
+        $('#f_heranca_dica_personalizada').val(effectiveDica);
 
         if (defaultDica) {
             $('#f_heranca_dica_personalizada').attr('placeholder', `Padrão da curadoria: ${defaultDica.dica}`);
@@ -5949,9 +6015,11 @@ service cloud.firestore {
             $('#btnCopiarDicaPadrao').hide();
         }
 
-        if (activeDica && activeDica.is_custom) {
+        const isCustom = !defaultDica || (String(effectivePrio) !== String(defaultDica.prioridade || '') || String(effectiveDica) !== String(defaultDica.dica || '') || String(effectiveEditoras) !== (defaultDica.editoras_sugeridas || []).join(', '));
+        if (isCustom) {
             $('#herancaDicaStatusBadge').html('<i class="bi bi-pencil-fill me-1"></i>Personalizada pelo Usuário').attr('class', 'badge bg-primary-subtle text-primary border border-primary small');
-            $('#btnRestaurarDicaOriginal').show();
+            if (defaultDica) $('#btnRestaurarDicaOriginal').show();
+            else $('#btnRestaurarDicaOriginal').hide();
         } else if (defaultDica) {
             $('#herancaDicaStatusBadge').html('<i class="bi bi-check-circle me-1"></i>Padrão Fase I (#' + defaultDica.prioridade + ')').attr('class', 'badge bg-warning-subtle text-dark border border-warning small');
             $('#btnRestaurarDicaOriginal').hide();
@@ -5960,29 +6028,7 @@ service cloud.firestore {
             $('#btnRestaurarDicaOriginal').hide();
         }
 
-        if (activeDica) {
-            const edStr = (activeDica.editoras_sugeridas && activeDica.editoras_sugeridas.length > 0)
-                ? `<strong>Editoras sugeridas:</strong> ${activeDica.editoras_sugeridas.join(', ')}`
-                : '';
-            const prioBadge = activeDica.prioridade ? `<span class="badge bg-warning text-dark border fw-bold"><i class="bi bi-bullseye text-danger me-1"></i>Prioridade #${activeDica.prioridade} na Fila de Compra</span>` : '';
-            $('#herancaEditDicaContainer').html(`
-                <div class="p-3 rounded-3 border mt-2" style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border-left: 4px solid #d97706 !important;">
-                    <div class="d-flex justify-content-between align-items-center mb-1 flex-wrap gap-1">
-                        ${prioBadge}
-                        <div class="d-flex gap-1 flex-wrap">
-                            ${activeDica.is_custom ? '<span class="badge bg-primary-subtle text-primary border border-primary">✏️ Personalizada</span>' : ''}
-                            ${activeDica.candidato_luxo ? '<span class="badge bg-warning-subtle text-amber-900 border border-warning">★ Luxo</span>' : ''}
-                            ${activeDica.ja_possui_ou_verificar ? '<span class="badge bg-info-subtle text-info-emphasis border border-info">✓ Conferir Acervo</span>' : ''}
-                            ${activeDica.integral ? '<span class="badge bg-secondary-subtle text-dark border">Integral</span>' : ''}
-                        </div>
-                    </div>
-                    <div class="small text-dark mb-1">${activeDica.dica}</div>
-                    ${edStr ? `<div class="small text-secondary">${edStr}</div>` : ''}
-                </div>
-            `).show();
-        } else {
-            $('#herancaEditDicaContainer').hide().empty();
-        }
+        renderHerancaModalPreview(effectivePrio, effectiveDica, effectiveEditoras, defaultDica, isCustom);
 
         updateAllRequiredLabels();
         $('#btnDeleteBookModal').removeClass('d-none');
@@ -5994,7 +6040,33 @@ service cloud.firestore {
         bookModal.show();
     }
 
-    // Auxiliar para popular o Select2 dinamicamente
+    function renderHerancaModalPreview(prio, dicaText, editorasText, baseDica, isCustom) {
+        if (!dicaText && !prio && !editorasText && !baseDica) {
+            $('#herancaEditDicaContainer').hide().empty();
+            return;
+        }
+        const edArr = editorasText ? (Array.isArray(editorasText) ? editorasText : String(editorasText).split(',').map(s => s.trim()).filter(Boolean)) : [];
+        const edStr = (edArr.length > 0) ? `<strong>Editoras sugeridas:</strong> ${edArr.join(', ')}` : '';
+        const prioBadge = prio ? `<span class="badge bg-warning text-dark border fw-bold"><i class="bi bi-bullseye text-danger me-1"></i>Prioridade #${prio} na Fila de Compra</span>` : '';
+        
+        $('#herancaEditDicaContainer').html(`
+            <div class="p-3 rounded-3 border mt-2" style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border-left: 4px solid #d97706 !important;">
+                <div class="d-flex justify-content-between align-items-center mb-1 flex-wrap gap-1">
+                    ${prioBadge}
+                    <div class="d-flex gap-1 flex-wrap">
+                        ${isCustom ? '<span class="badge bg-primary-subtle text-primary border border-primary">✏️ Personalizada</span>' : '<span class="badge bg-warning-subtle text-dark border border-warning">Padrão da Curadoria</span>'}
+                        ${baseDica && baseDica.candidato_luxo ? '<span class="badge bg-warning-subtle text-amber-900 border border-warning">★ Luxo</span>' : ''}
+                        ${baseDica && baseDica.ja_possui_ou_verificar ? '<span class="badge bg-info-subtle text-info-emphasis border border-info">✓ Conferir Acervo</span>' : ''}
+                        ${baseDica && baseDica.integral ? '<span class="badge bg-secondary-subtle text-dark border">Integral</span>' : ''}
+                    </div>
+                </div>
+                <div class="small text-dark mb-1">${dicaText || (baseDica ? baseDica.dica : '')}</div>
+                ${edStr ? `<div class="small text-secondary">${edStr}</div>` : ''}
+            </div>
+        `).show();
+    }
+
+    // Auxiliar para popular o Select2 dinamicamente de forma segura
     function setSelect2Val(selector, valStr, isMultiple) {
         const el = $(selector);
         if (!valStr) {
@@ -6002,11 +6074,21 @@ service cloud.firestore {
             return;
         }
 
-        let values = isMultiple ? String(valStr).split(',').map(s => s.trim()) : [String(valStr).trim()];
-        
+        let values = isMultiple ? String(valStr).split(',').map(s => s.trim()).filter(Boolean) : [String(valStr).trim()];
+        if (values.length === 0) {
+            el.val(null).trigger('change');
+            return;
+        }
+
         values.forEach(v => {
-            if (v && el.find("option[value='" + v + "']").length === 0) {
-                // Adiciona opção provisória se ainda não existir na lista geral
+            let exists = false;
+            el.find('option').each(function() {
+                if ($(this).val() === v) {
+                    exists = true;
+                    return false;
+                }
+            });
+            if (!exists) {
                 el.append(new Option(v, v, true, true));
             }
         });
@@ -6073,29 +6155,18 @@ service cloud.firestore {
             alert('Este livro não possui uma recomendação padrão catalogada na lista dos 120 livros da Fase I.');
             return;
         }
-        $('#f_heranca_dica_personalizada').val(defaultDica.dica);
         $('#f_heranca_prioridade_personalizada').val(defaultDica.prioridade || '');
         $('#f_heranca_editoras_personalizadas').val((defaultDica.editoras_sugeridas || []).join(', '));
-        $('#herancaDicaStatusBadge').html('<i class="bi bi-pencil-fill me-1"></i>Pronto para Personalizar').attr('class', 'badge bg-primary-subtle text-primary border border-primary small');
-        $('#btnRestaurarDicaOriginal').show();
+        $('#f_heranca_dica_personalizada').val(defaultDica.dica);
+        $('#herancaDicaStatusBadge').html('<i class="bi bi-check-circle me-1"></i>Padrão Fase I (#' + defaultDica.prioridade + ')').attr('class', 'badge bg-warning-subtle text-dark border border-warning small');
+        $('#btnRestaurarDicaOriginal').hide();
+        renderHerancaModalPreview(defaultDica.prioridade, defaultDica.dica, (defaultDica.editoras_sugeridas || []).join(', '), defaultDica, false);
         $('#f_heranca_dica_personalizada').focus();
     }
 
     function restaurarDicaOriginalCuradoria() {
-        if (!confirm('Deseja restaurar a recomendação e prioridade originais da curadoria da Fase I para esta obra? O texto customizado será apagado.')) return;
-        $('#f_heranca_dica_personalizada').val('');
-        $('#f_heranca_prioridade_personalizada').val('');
-        $('#f_heranca_editoras_personalizadas').val('');
-        if (currentEditingId && cachedBooks[currentEditingId]) {
-            const b = cachedBooks[currentEditingId];
-            const defaultDica = (typeof getHerancaFase1Dica === 'function') ? getHerancaFase1Dica(b.title, b.authors) : null;
-            if (defaultDica) {
-                $('#herancaDicaStatusBadge').html('<i class="bi bi-check-circle me-1"></i>Padrão Fase I (#' + defaultDica.prioridade + ')').attr('class', 'badge bg-warning-subtle text-dark border border-warning small');
-            } else {
-                $('#herancaDicaStatusBadge').text('Não catalogado na Fase I').attr('class', 'badge bg-secondary-subtle text-secondary border small');
-            }
-        }
-        $('#btnRestaurarDicaOriginal').hide();
+        if (!confirm('Deseja restaurar a recomendação e prioridade originais da curadoria da Fase I para esta obra? As alterações feitas serão revertidas para o padrão.')) return;
+        carregarDicaPadraoParaEdicao();
     }
 
     async function saveBook() {
@@ -6121,10 +6192,18 @@ service cloud.firestore {
         const formato = getS2Val('#f_formato');
         const aquisicao = getS2Val('#f_aquisicao');
 
-        if (!title || !isbn || !pages || !authors || !grupo || !selo || !colecao || !formato || !aquisicao) {
-            if (!isbn || !title || !authors || !aquisicao) {
+        const isHerancaOrWish = ($('#f_heranca_fase').val() || $('#f_heranca_ano').val() || $('#f_heranca_papel').val() || aquisicao === 'Desejo' || aquisicao === 'Wishlist' || (currentEditingId && cachedBooks[currentEditingId] && isHerancaBook(cachedBooks[currentEditingId])));
+
+        if (!title || !authors || !aquisicao) {
+            $('#tab-basico-btn').tab('show');
+            alert('Por favor, preencha os campos obrigatórios (*) na aba Informações Básicas (Título, Autor e Situação no Acervo).');
+            return;
+        }
+
+        if (!isHerancaOrWish) {
+            if (!isbn) {
                 $('#tab-basico-btn').tab('show');
-                alert('Por favor, preencha todos os campos obrigatórios (*) na aba Informações Básicas.');
+                alert('Por favor, preencha o ISBN na aba Informações Básicas.');
                 return;
             }
             if (!grupo || !selo || !colecao || !pages) {
@@ -6137,8 +6216,6 @@ service cloud.firestore {
                 alert('Por favor, selecione o Formato (*) na aba Classificação.');
                 return;
             }
-            alert('Por favor, preencha todos os campos obrigatórios (marcados com *).');
-            return;
         }
 
         const isbnToCheck = isbn.trim();
@@ -6172,6 +6249,14 @@ service cloud.firestore {
         }
         const editorasPersonalizadasVal = document.getElementById('f_heranca_editoras_personalizadas') ? document.getElementById('f_heranca_editoras_personalizadas').value.trim() : '';
 
+        let genreVal = getS2Val('#f_genre');
+        if (!genreVal && currentEditingId && cachedBooks[currentEditingId] && cachedBooks[currentEditingId].genre) {
+            genreVal = cachedBooks[currentEditingId].genre;
+        }
+        if (!genreVal && ($('#f_heranca_fase').val() || $('#f_heranca_ano').val() || $('#f_heranca_papel').val() || (currentEditingId && cachedBooks[currentEditingId] && isHerancaBook(cachedBooks[currentEditingId])))) {
+            genreVal = 'Clássico / Herança';
+        }
+
         const raw = {
             'Melhores do ano?': document.getElementById('f_melhores').value,
             'Tradutor': getS2Val('#f_tradutor', true),
@@ -6194,6 +6279,8 @@ service cloud.firestore {
             'Releitura?': document.getElementById('f_releitura').value,
             'Nota': notaVal,
             'Sinopse': synopsisVal,
+            'Categoria literária': genreVal,
+            'Gênero': genreVal,
             'Fase do Plano': $('#f_heranca_fase').val(),
             'Ano do Plano': normalizeHerancaAno($('#f_heranca_ano').val()),
             'Papel no Plano': $('#f_heranca_papel').val(),
@@ -6214,7 +6301,7 @@ service cloud.firestore {
             title: title,
             isbn: document.getElementById('f_isbn').value,
             authors: getS2Val('#f_authors', true),
-            genre: getS2Val('#f_genre'),
+            genre: genreVal,
             publisher: getS2Val('#f_grupo') || getS2Val('#f_selo'),
             colecao: getS2Val('#f_colecao'),
             pages: document.getElementById('f_pages').value,
