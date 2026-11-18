@@ -865,6 +865,21 @@
             letter-spacing: 0.3px;
         }
 
+        /* Estilos de Bandeiras e Países */
+        .country-flag-badge {
+            background-color: var(--surface-color) !important;
+            color: var(--text-main) !important;
+            border: 1px solid var(--border-color) !important;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+            font-weight: 500;
+        }
+        .country-flag-img {
+            box-shadow: 0 1px 2px rgba(0,0,0,0.12);
+        }
+        .country-flag-wrapper {
+            line-height: 1;
+        }
+
         /* Theme Toggle */
         .theme-toggle { 
             cursor: pointer; 
@@ -987,6 +1002,7 @@
                     <option value="pub_antiga">Mais antigos (Publicação)</option>
                     <option value="az">A-Z (Título)</option>
                     <option value="za">Z-A (Título)</option>
+                    <option value="pais">🌍 País de Origem (A-Z)</option>
                     <option value="mais_paginas">Mais páginas</option>
                     <option value="menos_paginas">Menos páginas</option>
                 </select>
@@ -995,6 +1011,7 @@
                 <i class="bi bi-collection me-1 text-muted" title="Agrupar por"></i>
                 <select class="form-select form-select-sm" id="groupSelect" onchange="applyFiltersAndRender()">
                     <option value="none">Sem Agrupamento</option>
+                    <option value="pais">🌍 País de Origem</option>
                     <option value="heranca_fase">⏳ Fase do Plano Herança</option>
                     <option value="heranca_ano">⏳ Ano do Plano Herança</option>
                     <option value="heranca_papel">🏛️ Papel na Herança</option>
@@ -1057,8 +1074,13 @@
                     </li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
+                        <a class="dropdown-item fw-semibold text-primary" href="javascript:void(0)" onclick="syncWithUpdatedCSV()">
+                            <i class="bi bi-cloud-arrow-down-fill me-2 text-primary"></i> Sincronizar Base Atualizada (com Países)
+                        </a>
+                    </li>
+                    <li>
                         <a class="dropdown-item" href="javascript:void(0)" onclick="document.getElementById('csvFileInput').click()">
-                            <i class="bi bi-arrow-clockwise me-2 text-warning"></i> Atualizar via CSV
+                            <i class="bi bi-arrow-clockwise me-2 text-warning"></i> Atualizar via Arquivo CSV
                         </a>
                     </li>
                     <li><hr class="dropdown-divider"></li>
@@ -1986,9 +2008,10 @@
 <!-- Barcode Scanner (html5-qrcode) -->
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
-<!-- Dados Curados do Plano Herança e Dicas da Fase I -->
+<!-- Dados Curados do Plano Herança, Dicas da Fase I e Mapeamento de Países -->
 <script src="/static/js/heranca_data.js"></script>
 <script src="/static/js/heranca_fase1_dicas.js"></script>
+<script src="/static/js/paises_data.js"></script>
 
 <script>
     const firebaseConfig = {
@@ -2223,7 +2246,14 @@
             },
             { data: 'authors', defaultContent: '' },
             { data: 'tradutor', defaultContent: '' },
-            { data: 'pais', defaultContent: '' },
+            { 
+                data: 'pais', 
+                defaultContent: '',
+                render: function(data) {
+                    if (!data) return '';
+                    return (typeof getCountryBadgeHtml === 'function') ? getCountryBadgeHtml(data, true) : data;
+                }
+            },
             { data: 'ano_pub', defaultContent: '' },
             { data: 'selo', defaultContent: '' },
             { data: 'grupo', defaultContent: '' },
@@ -2398,6 +2428,7 @@
         anos_compra: [],
         heranca_fases: [],
         heranca_papeis: [],
+        paises: [],
         selos: [],
         autores: []
     };
@@ -2407,7 +2438,7 @@
     let coverCache = {};
 
     function clearSidebarFilters() {
-        sidebarState = { status: [], aquisicao: [], anos_compra: [], heranca_fases: [], heranca_papeis: [], selos: [], autores: [] };
+        sidebarState = { status: [], aquisicao: [], anos_compra: [], heranca_fases: [], heranca_papeis: [], paises: [], selos: [], autores: [] };
         $('.sidebar-filter-checkbox').prop('checked', false);
         applyFiltersAndRender();
     }
@@ -2423,6 +2454,21 @@
         }
         let uAnosCompra = [...new Set(allBooksData.map(b => b.ano_compra).filter(Boolean))].sort((a, b) => b - a);
         const uSelos = [...new Set(allBooksData.map(b => b.selo).filter(Boolean))].sort();
+
+        // Extrair países únicos ordenados alfabeticamente
+        const uPaises = [...new Set(allBooksData.map(b => (b.pais || '').trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+        if (allBooksData.some(b => !b.pais)) {
+            uPaises.push('Não informado');
+        }
+        const paisLabels = {};
+        uPaises.forEach(p => {
+            if (p === 'Não informado') {
+                paisLabels[p] = '❓ Não informado';
+            } else {
+                const info = (typeof getCountryFlagInfo === 'function') ? getCountryFlagInfo(p) : null;
+                paisLabels[p] = info ? `${getCountryFlagImgHtml(info)} ${p}` : p;
+            }
+        });
         
         let allAuthors = new Set();
         allBooksData.forEach(b => {
@@ -2448,6 +2494,7 @@
                 else if (key === 'anos_compra') count = allBooksData.filter(b => String(b.ano_compra) === String(item)).length;
                 else if (key === 'heranca_fases') count = allBooksData.filter(b => b.heranca_fase === item).length;
                 else if (key === 'heranca_papeis') count = allBooksData.filter(b => b.heranca_papel === item).length;
+                else if (key === 'paises') count = allBooksData.filter(b => (item === 'Não informado' ? !b.pais : b.pais === item)).length;
                 else if (key === 'selos') count = allBooksData.filter(b => b.selo === item).length;
                 else if (key === 'autores') count = allBooksData.filter(b => (b.authors || '').includes(item)).length;
 
@@ -2517,6 +2564,9 @@
             contentHtml += buildCheckboxes('🏛️ Papel na Herança', uHerancaPapeis, 'heranca_papeis', papelIcons);
         }
 
+        if (uPaises.length > 0) {
+            contentHtml += buildCheckboxes('🌍 País de Origem', uPaises, 'paises', paisLabels);
+        }
         contentHtml += buildCheckboxes('Selos/Editoras', uSelos, 'selos');
         contentHtml += buildCheckboxes('Autores', uAutores, 'autores');
 
@@ -2596,6 +2646,12 @@
                                 (b.ano_compra && sidebarState.anos_compra.map(String).includes(String(b.ano_compra)));
             let passSelo = sidebarState.selos.length === 0 || sidebarState.selos.includes(b.selo);
             
+            // Filtro por País de Origem
+            let passPais = true;
+            if (sidebarState.paises && sidebarState.paises.length > 0) {
+                passPais = sidebarState.paises.includes(b.pais) || (!b.pais && sidebarState.paises.includes('Não informado'));
+            }
+
             // Filtro de Fase do Plano Herança
             let passHeranca = true;
             if (sidebarState.heranca_fases && sidebarState.heranca_fases.length > 0) {
@@ -2617,10 +2673,12 @@
             if (searchText) {
                 let title = (b.title || '').toLowerCase();
                 let isbn = (b.isbn || '').toLowerCase();
-                passSearch = title.includes(searchText) || isbn.includes(searchText);
+                let pais = (b.pais || '').toLowerCase();
+                let authors = (b.authors || '').toLowerCase();
+                passSearch = title.includes(searchText) || isbn.includes(searchText) || pais.includes(searchText) || authors.includes(searchText);
             }
             
-            return passFormat && passQuickStatus && passStatus && passAq && passAnoCompra && passSelo && passHeranca && passHerancaPapel && passAutor && passSearch;
+            return passFormat && passQuickStatus && passStatus && passAq && passAnoCompra && passPais && passSelo && passHeranca && passHerancaPapel && passAutor && passSearch;
         });
 
         const sortVal = $('#sortSelect').val() || 'recentes';
@@ -2700,6 +2758,14 @@
             filteredBooksData.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
         } else if (sortVal === 'za') {
             filteredBooksData.sort((a, b) => (b.title || '').localeCompare(a.title || ''));
+        } else if (sortVal === 'pais') {
+            filteredBooksData.sort((a, b) => {
+                const pA = a.pais || 'ZZZ';
+                const pB = b.pais || 'ZZZ';
+                const cmp = pA.localeCompare(pB);
+                if (cmp !== 0) return cmp;
+                return (a.title || '').localeCompare(b.title || '');
+            });
         } else if (sortVal === 'mais_paginas') {
             filteredBooksData.sort((a, b) => {
                 let pA = parseInt(String(a.pages).match(/\d+/) || [0], 10) || 0;
@@ -3268,7 +3334,14 @@
                 const groupId = 'group-cards-' + idx;
                 const isCollapsed = collapsedGroupKeys.has(k);
                 let groupLabel = k;
-                if (groupField === 'heranca_papel') {
+                if (groupField === 'pais') {
+                    if (k && k !== 'Não Informado' && k !== 'Não informado') {
+                        const info = (typeof getCountryFlagInfo === 'function') ? getCountryFlagInfo(k) : null;
+                        groupLabel = info ? `${getCountryFlagImgHtml(info)} ${k}` : k;
+                    } else {
+                        groupLabel = '❓ Não Informado';
+                    }
+                } else if (groupField === 'heranca_papel') {
                     const papelIcons = {
                         'Pilar': '🏛️ Pilar',
                         'Prazer': '☕ Prazer',
@@ -3389,6 +3462,9 @@
                     herancaDicaBtn = `<button type="button" class="btn btn-sm py-0 px-2 rounded-pill border shadow-sm d-inline-flex align-items-center gap-1" style="font-size: 0.70rem; background-color: #fffdf5; color: #b45309; border-color: #f59e0b !important;" onclick="event.stopPropagation(); openHerancaDicaModal('${book.id}')" title="Ver dicas de edição e sugestões de editoras"><i class="bi bi-lightbulb-fill text-warning"></i>Dica de Edição</button>`;
                 }
 
+                // Badge do País de Origem com bandeira
+                const countryBadge = (typeof getCountryBadgeHtml === 'function') ? getCountryBadgeHtml(book.pais) : '';
+
                 const card = $(`
                     <div class="col-md-6 col-lg-4">
                         <div class="card theme-pastel-card" style="--card-bg-light: ${pTheme.bgLight}; --card-border-light: ${pTheme.borderLight}; --card-bg-dark: ${pTheme.bgDark}; --card-border-dark: ${pTheme.borderDark};">
@@ -3398,6 +3474,7 @@
                             <div class="card-body d-flex flex-column">
                                 <div class="mb-1 d-flex align-items-center gap-1 flex-wrap">
                                     ${book.genre ? `<span class="badge d-inline-block text-truncate" style="background-color: ${pTheme.badgeBg}; color: ${pTheme.badgeText}; font-size: 0.72rem; font-weight: 600; padding: 2px 7px; border: 1px solid ${pTheme.borderLight}; max-width: 100%;" title="Categoria literária: ${book.genre}"><i class="bi bi-bookmark-fill me-1"></i>${book.genre}</span>` : ''}
+                                    ${countryBadge}
                                     ${book.heranca_fase ? `<span class="badge bg-warning text-dark border d-inline-flex align-items-center" style="font-size: 0.70rem; padding: 2px 6px;" title="Biblioteca Herança · ${book.heranca_fase} (${book.heranca_ano || ''})"><i class="bi bi-hourglass-split me-1"></i>Herança · ${book.heranca_papel || book.heranca_fase}</span>` : ''}
                                     ${herancaPrioBadge}
                                     ${ratingBadge}
@@ -3474,7 +3551,14 @@
                 const groupId = 'group-covers-' + idx;
                 const isCollapsed = collapsedGroupKeys.has(k);
                 let groupLabel = k;
-                if (groupField === 'heranca_papel') {
+                if (groupField === 'pais') {
+                    if (k && k !== 'Não Informado' && k !== 'Não informado') {
+                        const info = (typeof getCountryFlagInfo === 'function') ? getCountryFlagInfo(k) : null;
+                        groupLabel = info ? `${getCountryFlagImgHtml(info)} ${k}` : k;
+                    } else {
+                        groupLabel = '❓ Não Informado';
+                    }
+                } else if (groupField === 'heranca_papel') {
                     const papelIcons = {
                         'Pilar': '🏛️ Pilar',
                         'Prazer': '☕ Prazer',
@@ -3518,10 +3602,12 @@
                 const coverId = 'img-cover-' + Math.random().toString(36).substr(2, 9);
                 const prioTitle = dicaInfo ? (dicaInfo.prioridade ? ' · Prioridade #' + dicaInfo.prioridade : ' · Dica Curadoria') : '';
                 const prioBadge = (dicaInfo && (dicaInfo.prioridade || dicaInfo.is_custom)) ? `<span class="position-absolute top-0 start-0 m-1 badge bg-dark bg-opacity-75 text-warning border border-warning shadow-sm" style="font-size: 0.68rem; z-index: 2;" title="Prioridade de Compra: #${dicaInfo.prioridade || '-'}${dicaInfo.is_custom ? ' (Personalizada)' : ''}"><i class="bi bi-bullseye text-danger me-1"></i>#${dicaInfo.prioridade || '-'}${dicaInfo.is_custom ? ' *' : ''}</span>` : '';
+                const flagMini = book.pais ? `<span class="position-absolute top-0 end-0 m-1 badge bg-light bg-opacity-90 border shadow-xs" style="padding: 2px 4px; z-index: 2;" title="País: ${book.pais}">${(typeof getCountryFlagImgHtml === 'function') ? getCountryFlagImgHtml(book.pais) : ''}</span>` : '';
                 const card = $(`
                     <div class="col-6 col-md-4 col-lg-2">
                         <div class="card position-relative" onclick="showBookDetails('${book.id}')" title="${book.title}${prioTitle}" style="cursor: pointer;">
                             ${prioBadge}
+                            ${flagMini}
                             <div class="card-img-container" id="${coverId}">
                                 <div class="spinner-border spinner-border-sm text-secondary m-auto d-block mt-5" role="status"></div>
                             </div>
@@ -5267,6 +5353,10 @@
             badgesHtml += `<span class="badge bg-light text-dark border"><i class="bi bi-book me-1"></i>${book.formato}</span>`;
         }
 
+        if (book.pais && typeof getCountryBadgeHtml === 'function') {
+            badgesHtml += getCountryBadgeHtml(book.pais);
+        }
+
         if (book.status) {
             let stClass = 'bg-info-subtle text-info border border-info';
             if (book.status === 'Lido') stClass = 'bg-success-subtle text-success border border-success';
@@ -5298,7 +5388,7 @@
             <div class="col-6"><strong>Coleção:</strong> ${book.colecao || '-'}</div>
             <div class="col-6"><strong>Páginas:</strong> ${book.pages || '-'}</div>
             <div class="col-6"><strong>Ano Publicação:</strong> ${book.ano_pub || book.raw_data?.['Ano de Publicação'] || '-'}</div>
-            <div class="col-6"><strong>País de Origem:</strong> ${book.pais || book.raw_data?.['País de publicação da obra original'] || '-'}</div>
+            <div class="col-6"><strong>País de Origem:</strong> ${(typeof getCountryBadgeHtml === 'function' && (book.pais || book.raw_data?.['País de publicação da obra original'])) ? getCountryBadgeHtml(book.pais || book.raw_data?.['País de publicação da obra original']) : (book.pais || book.raw_data?.['País de publicação da obra original'] || '-')}</div>
             <div class="col-6"><strong>Tradutor(a):</strong> ${book.tradutor || book.raw_data?.['Tradutor'] || '-'}</div>
             <div class="col-12"><strong>ISBN:</strong> ${book.isbn || '-'}</div>
         `;
@@ -5826,6 +5916,10 @@ service cloud.firestore {
                 }
             }
 
+            const preloadedPais = (typeof PRELOADED_BOOK_PAIS !== 'undefined' && PRELOADED_BOOK_PAIS[doc.id]) || '';
+            const rawPais = data.pais || getRaw(raw, ['País de publicação da obra original', 'País', 'pais', 'Pais']) || preloadedPais || '';
+            const normalizedPais = (typeof normalizeCountryName === 'function') ? normalizeCountryName(rawPais) : rawPais;
+
             const bookObj = {
                 id: doc.id,
                 melhores: getRaw(raw, ['Melhores do ano?', 'Melhores do ano']),
@@ -5833,7 +5927,7 @@ service cloud.firestore {
                 isbn: data.isbn || '',
                 authors: authors,
                 tradutor: getRaw(raw, ['Tradutor', 'Tradutor(e)']),
-                pais: getRaw(raw, ['País de publicação da obra original', 'País']),
+                pais: normalizedPais,
                 ano_pub: getRaw(raw, ['Ano de Publicação', 'Ano']),
                 selo: getRaw(raw, ['Selo']),
                 grupo: getRaw(raw, ['Grupo editorial', 'Grupo']),
@@ -6260,6 +6354,7 @@ service cloud.firestore {
         const raw = {
             'Melhores do ano?': document.getElementById('f_melhores').value,
             'Tradutor': getS2Val('#f_tradutor', true),
+            'País': getS2Val('#f_pais'),
             'País de publicação da obra original': getS2Val('#f_pais'),
             'Ano de Publicação': document.getElementById('f_ano_pub').value,
             'Selo': getS2Val('#f_selo'),
@@ -6300,6 +6395,7 @@ service cloud.firestore {
         const payload = {
             title: title,
             isbn: document.getElementById('f_isbn').value,
+            pais: (typeof normalizeCountryName === 'function') ? normalizeCountryName(getS2Val('#f_pais')) : getS2Val('#f_pais'),
             authors: getS2Val('#f_authors', true),
             genre: genreVal,
             publisher: getS2Val('#f_grupo') || getS2Val('#f_selo'),
@@ -6551,6 +6647,238 @@ service cloud.firestore {
         return ret;
     }
 
+    async function executeBatchUpdateFromCSV(csvText) {
+        if (!csvText || !csvText.trim()) {
+            alert('Conteúdo CSV vazio.');
+            return;
+        }
+
+        const lines = csvText.split(/\r?\n/).filter(l => l.trim().length > 0);
+        if (lines.length < 2) {
+            alert('O CSV deve conter pelo menos o cabeçalho e uma linha de dados.');
+            return;
+        }
+
+        const delimiter = lines[0].includes(';') ? ';' : ',';
+
+        function parseCSVLine(line) {
+            let ret = [], inQuote = false, value = '';
+            for (let i = 0; i < line.length; i++) {
+                let c = line[i];
+                if (inQuote) {
+                    if (c === '"') {
+                        if (i + 1 < line.length && line[i + 1] === '"') {
+                            value += '"';
+                            i++;
+                        } else {
+                            inQuote = false;
+                        }
+                    } else {
+                        value += c;
+                    }
+                } else {
+                    if (c === '"') {
+                        inQuote = true;
+                    } else if (c === delimiter) {
+                        ret.push(value);
+                        value = '';
+                    } else {
+                        value += c;
+                    }
+                }
+            }
+            ret.push(value);
+            return ret;
+        }
+
+        const headerCols = parseCSVLine(lines[0].replace(/^\uFEFF/, '').trim());
+        const headerMap = {};
+        headerCols.forEach((h, idx) => {
+            const clean = h.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            headerMap[clean] = idx;
+        });
+
+        const getCol = (cols, keys) => {
+            for (const k of keys) {
+                const cleanKey = k.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+                if (headerMap[cleanKey] !== undefined && cols[headerMap[cleanKey]] !== undefined) {
+                    return String(cols[headerMap[cleanKey]]).trim();
+                }
+            }
+            return '';
+        };
+
+        const updateList = [];
+        for (let i = 1; i < lines.length; i++) {
+            const cols = parseCSVLine(lines[i].trim());
+            if (cols.length < 2) continue;
+
+            let id = getCol(cols, ['id']);
+            const isbn = getCol(cols, ['isbn']);
+            const title = getCol(cols, ['título', 'titulo', 'title']);
+            const authors = getCol(cols, ['autor(es)', 'autores', 'autor', 'authors']);
+            const tradutor = getCol(cols, ['tradutor(es)', 'tradutor', 'tradutores']);
+            const rawPais = getCol(cols, ['país', 'pais', 'país de publicação da obra original', 'pais de publicacao da obra original']);
+            const anoPub = getCol(cols, ['ano de publicação', 'ano de publicacao', 'ano']);
+            const selo = getCol(cols, ['selo']);
+            const grupo = getCol(cols, ['grupo editorial', 'grupo']);
+            const colecao = getCol(cols, ['coleção', 'colecao']);
+            const genre = getCol(cols, ['gênero literário', 'genero literario', 'categoria literária', 'categoria literaria', 'gênero', 'genero']);
+            const formato = getCol(cols, ['formato']);
+            const status = getCol(cols, ['status']);
+            const aquisicao = getCol(cols, ['aquisição', 'aquisicao']);
+            const preco = getCol(cols, ['preço pago', 'preco pago', 'preço', 'preco', 'valor']);
+            const anoCompra = getCol(cols, ['ano de compra', 'ano compra', 'ano de aquisição', 'ano aquisicao']);
+            const paginasLidas = getCol(cols, ['páginas lidas', 'paginas lidas']);
+            const generoAutor = getCol(cols, ['gênero do autor', 'genero do autor', 'gênero d(e) autor(e)']);
+            const indicacao = getCol(cols, ['indicação', 'indicacao']);
+            const porqueLi = getCol(cols, ['por que li?', 'por que li', 'porque li']);
+            const comoAdquiri = getCol(cols, ['como adquiri']);
+            const mesLeitura = getCol(cols, ['mês de leitura', 'mes de leitura']);
+            const anoLeitura = getCol(cols, ['ano de leitura', 'ano leitura']);
+            const releitura = getCol(cols, ['releitura?', 'releitura']);
+            const nota = getCol(cols, ['nota']);
+            const pages = getCol(cols, ['páginas', 'paginas', 'pages']);
+            const herancaFase = getCol(cols, ['herança fase', 'heranca fase', 'fase do plano']);
+            const herancaAno = getCol(cols, ['herança ano', 'heranca ano', 'ano do plano']);
+            const herancaPapel = getCol(cols, ['herança papel', 'heranca papel', 'papel no plano']);
+            const herancaOrdem = getCol(cols, ['herança ordem', 'heranca ordem', 'ordem no ano']);
+            const herancaMotivo = getCol(cols, ['herança livro-tombo motivo', 'heranca livro-tombo motivo', 'livro-tombo', 'motivo herança', 'por que entrou na herança?']);
+
+            if (!id && allBooksData && allBooksData.length > 0) {
+                const match = allBooksData.find(b => {
+                    if (isbn && b.isbn && b.isbn === isbn) return true;
+                    if (title && b.title && b.title.trim().toLowerCase() === title.toLowerCase()) return true;
+                    return false;
+                });
+                if (match) id = match.id;
+            }
+
+            if (!id) continue;
+
+            const normPais = (typeof normalizeCountryName === 'function') ? normalizeCountryName(rawPais) : rawPais;
+            let precoNum = '';
+            if (preco) {
+                const pParsed = parseFloat(String(preco).replace('R$', '').replace(/\s/g, '').replace(',', '.'));
+                if (!isNaN(pParsed)) precoNum = pParsed;
+            }
+
+            const rawUpdate = {
+                'País': normPais || '',
+                'País de publicação da obra original': normPais || '',
+                'Tradutor': tradutor || '',
+                'Ano de Publicação': anoPub || '',
+                'Selo': selo || '',
+                'Grupo editorial': grupo || '',
+                'Coleção': colecao || '',
+                'Formato': formato || '',
+                'Status': status || '',
+                'Aquisição': aquisicao || '',
+                'Gênero do autor': generoAutor || '',
+                'Indicação': indicacao || '',
+                'Por que li?': porqueLi || '',
+                'Como adquiri': comoAdquiri || '',
+                'Mês de leitura': mesLeitura || '',
+                'Ano de Leitura': anoLeitura || '',
+                'Releitura?': releitura || '',
+                'Nota': nota || ''
+            };
+
+            const payload = {
+                pais: normPais || '',
+                title: title || 'Sem Título',
+                authors: authors || '',
+                isbn: isbn || '',
+                pages: pages || '',
+                status: status || '',
+                genre: genre || '',
+                publisher: grupo || selo || '',
+                colecao: colecao || '',
+                aquisicao: aquisicao || '',
+                raw_data: rawUpdate
+            };
+
+            if (precoNum !== '') {
+                payload.preco = precoNum;
+                rawUpdate['Preço Pago'] = precoNum;
+            }
+            if (anoCompra) {
+                const aCompNum = parseInt(anoCompra, 10);
+                payload.ano_compra = !isNaN(aCompNum) ? aCompNum : anoCompra;
+                rawUpdate['Ano de Compra'] = payload.ano_compra;
+            }
+            if (paginasLidas) {
+                const pLidasNum = parseInt(paginasLidas, 10);
+                payload.paginas_lidas = !isNaN(pLidasNum) ? pLidasNum : 0;
+                rawUpdate['Páginas Lidas'] = payload.paginas_lidas;
+            }
+            if (herancaFase) {
+                payload.heranca_fase = herancaFase;
+                rawUpdate['Fase do Plano'] = herancaFase;
+                rawUpdate['Herança Fase'] = herancaFase;
+            }
+            if (herancaAno) {
+                const normAno = (typeof normalizeHerancaAno === 'function') ? normalizeHerancaAno(herancaAno) : herancaAno;
+                payload.heranca_ano = normAno;
+                rawUpdate['Ano do Plano'] = normAno;
+                rawUpdate['Herança Ano'] = normAno;
+            }
+            if (herancaPapel) {
+                payload.heranca_papel = herancaPapel;
+                rawUpdate['Papel no Plano'] = herancaPapel;
+                rawUpdate['Herança Papel'] = herancaPapel;
+            }
+            if (herancaOrdem) {
+                payload.heranca_ordem = herancaOrdem;
+                rawUpdate['Ordem no Ano'] = herancaOrdem;
+                rawUpdate['Herança Ordem'] = herancaOrdem;
+            }
+            if (herancaMotivo) {
+                payload.heranca_motivo = herancaMotivo;
+                rawUpdate['Por que entrou na herança?'] = herancaMotivo;
+                rawUpdate['Herança Livro-Tombo Motivo'] = herancaMotivo;
+            }
+
+            updateList.push({ id, payload });
+        }
+
+        if (updateList.length === 0) {
+            alert('Nenhum livro válido encontrado para atualizar no CSV.');
+            return;
+        }
+
+        const batchSize = 400;
+        let committedCount = 0;
+        
+        for (let b = 0; b < updateList.length; b += batchSize) {
+            const chunk = updateList.slice(b, b + batchSize);
+            const batch = db.batch();
+            chunk.forEach(item => {
+                const docRef = db.collection('books').doc(item.id);
+                batch.set(docRef, item.payload, { merge: true });
+            });
+            await batch.commit();
+            committedCount += chunk.length;
+        }
+
+        alert(`Sucesso! ${committedCount} livros foram atualizados no Firestore com o novo campo País e bandeiras correspondentes.`);
+    }
+
+    async function syncWithUpdatedCSV() {
+        if (!confirm('Deseja sincronizar todos os 900 livros da biblioteca com o CSV atualizado (adicionando os 51 países de origem, bandeiras e metadados)?')) {
+            return;
+        }
+        try {
+            const resp = await fetch('/static/minha_biblioteca_atualizada.csv');
+            if (!resp.ok) throw new Error('Não foi possível carregar o arquivo CSV do servidor.');
+            const csvText = await resp.text();
+            await executeBatchUpdateFromCSV(csvText);
+        } catch(err) {
+            console.error('Erro na sincronização:', err);
+            alert('Erro ao sincronizar com o CSV: ' + err.message);
+        }
+    }
+
     function processCSVUpdate() {
         const fileInput = document.getElementById('csvFileInput');
         const file = fileInput.files[0];
@@ -6558,171 +6886,15 @@ service cloud.firestore {
 
         const reader = new FileReader();
         reader.onload = async function(e) {
-            const text = e.target.result;
-            const lines = text.split('\n');
-            let updatedCount = 0;
-            
-            let delimiter = lines[0].includes(';') ? ';' : ',';
-
-            function parseCSV(t) {
-                let ret = [], inQuote = false, value = '';
-                for (let i = 0; i < t.length; i++) {
-                    let c = t[i];
-                    if (inQuote) {
-                        if (c === '"') {
-                            if (i + 1 < t.length && t[i + 1] === '"') {
-                                value += '"';
-                                i++;
-                            } else {
-                                inQuote = false;
-                            }
-                        } else {
-                            value += c;
-                        }
-                    } else {
-                        if (c === '"') {
-                            inQuote = true;
-                        } else if (c === delimiter) {
-                            ret.push(value);
-                            value = '';
-                        } else {
-                            value += c;
-                        }
-                    }
-                }
-                ret.push(value);
-                return ret;
+            try {
+                await executeBatchUpdateFromCSV(e.target.result);
+            } catch(err) {
+                console.error('Erro ao processar CSV:', err);
+                alert('Erro ao processar arquivo CSV: ' + err.message);
+            } finally {
+                fileInput.value = '';
             }
-
-            alert('Iniciando atualização... Isso pode levar alguns segundos.');
-
-            for (let i = 1; i < lines.length; i++) {
-                if (lines[i].trim() === '') continue;
-                let cols = parseCSV(lines[i].trim());
-                if (cols.length < 2) continue; // Precisa pelo menos ter título
-                
-                // Como não sabemos se é o CSV gerado pelo sistema (com ID) ou um CSV externo,
-                // vamos checar se a primeira coluna é ID ou ISBN.
-                let isSystemCSV = lines[0].toLowerCase().includes('id;');
-                
-                let id = null;
-                let isbn = '', title = '', pages = '', publisher = '', genre = '';
-                let authors = '', status = '', aquisicao = '', colecao = '', raw = {};
-
-                if (isSystemCSV) {
-                    id = cols[0];
-                    if (!id) continue;
-                    isbn = cols[1];
-                    title = cols[2];
-                    authors = cols[3];
-                    pages = cols[22];
-                    status = cols[12];
-                    aquisicao = cols[13];
-                    genre = cols[10];
-                    publisher = cols[8] || cols[7];
-                    colecao = cols[9];
-                    
-                    raw = {
-                        'Tradutor': cols[4] || '',
-                        'País de publicação da obra original': cols[5] || '',
-                        'Ano de Publicação': cols[6] || '',
-                        'Selo': cols[7] || '',
-                        'Grupo editorial': cols[8] || '',
-                        'Coleção': cols[9] || '',
-                        'Formato': cols[11] || '',
-                        'Status': cols[12] || '',
-                        'Aquisição': cols[13] || '',
-                        'Gênero do autor': cols[14] || '',
-                        'Indicação': cols[15] || '',
-                        'Por que li?': cols[16] || '',
-                        'Como adquiri': cols[17] || '',
-                        'Mês de leitura': cols[18] || '',
-                        'Ano de Leitura': cols[19] || '',
-                        'Releitura?': cols[20] || '',
-                        'Nota': cols[21] || ''
-                    };
-                } else {
-                    // Planilha enviada pelo usuário
-                    isbn = cols[0];
-                    title = cols[1];
-                    authors = cols[2];
-                    pages = cols[20];
-                    status = cols[11];
-                    genre = cols[9];
-                    publisher = cols[7] || cols[6];
-                    colecao = cols[8];
-                    
-                    // Achar ID pelo título ou ISBN
-                    let matchedBook = allBooksData.find(b => {
-                        if (!b.title) return false;
-                        let t = b.title.trim().toLowerCase();
-                        let tTarget = (title || '').trim().toLowerCase();
-                        if (t === tTarget) return true;
-                        
-                        // Fallback para recuperar caso o título atual esteja corrompido (duplo enconding)
-                        try {
-                            let fixedTitle = decodeURIComponent(escape(b.title)).trim().toLowerCase();
-                            if (fixedTitle === tTarget) return true;
-                        } catch(e) {}
-                        
-                        return false;
-                    });
-                    if (!matchedBook && isbn) {
-                        matchedBook = allBooksData.find(b => b.isbn === isbn);
-                    }
-                    if (!matchedBook) continue; // Pula se não achar o livro na base
-                    id = matchedBook.id;
-                    
-                    raw = {
-                        'Tradutor': cols[3] || '',
-                        'País de publicação da obra original': cols[4] || '',
-                        'Ano de Publicação': cols[5] || '',
-                        'Selo': cols[6] || '',
-                        'Grupo editorial': cols[7] || '',
-                        'Coleção': cols[8] || '',
-                        'Formato': cols[10] || '',
-                        'Status': cols[11] || '',
-                        'Gênero do autor': cols[12] || '',
-                        'Indicação': cols[13] || '',
-                        'Por que li?': cols[14] || '',
-                        'Como adquiri': cols[15] || '',
-                        'Mês de leitura': cols[16] || '',
-                        'Ano de Leitura': cols[17] || '',
-                        'Releitura?': cols[18] || '',
-                        'Nota': cols[19] || ''
-                    };
-                }
-
-                if (!id) continue;
-                
-                let payload = {
-                    isbn: isbn || '',
-                    title: title || 'Sem Título',
-                    authors: authors || '',
-                    pages: pages || '',
-                    status: status || '',
-                    genre: genre || '',
-                    publisher: publisher || '',
-                    colecao: colecao || '',
-                    raw_data: raw
-                };
-                
-                // Só atualiza aquisição se for CSV do sistema, para evitar quebrar importação externa
-                if (isSystemCSV) {
-                    payload.aquisicao = aquisicao || '';
-                }
-                
-                try {
-                    await db.collection('books').doc(id).update(payload);
-                    updatedCount++;
-                } catch(err) {
-                    console.error("Erro ao atualizar " + id, err);
-                }
-            }
-            alert(updatedCount + ' livros atualizados com sucesso via CSV!');
-            fileInput.value = '';
         };
-        // O Excel CSV geralmente usa UTF-8 agora. Ler como UTF-8 padrão.
         reader.readAsText(file);
     }
 
