@@ -5895,7 +5895,7 @@ service cloud.firestore {
         return false;
     }
 
-    db.collection('books').orderBy('addedAt', 'desc').onSnapshot(snapshot => {
+    db.collection('books').onSnapshot(snapshot => {
         let booksData = [];
         cachedBooks = {};
         
@@ -5973,9 +5973,23 @@ service cloud.firestore {
             bookObj.heranca_dica_info = dicaResolved;
             bookObj.heranca_prioridade_compra = (dicaResolved && dicaResolved.prioridade) ? dicaResolved.prioridade : null;
             
+            bookObj.addedAt = data.addedAt || null;
             cachedBooks[doc.id] = bookObj;
             booksData.push(bookObj);
         });
+
+        // Ordenação padrão por data de adição (mais recentes primeiro), preservando itens sem data no final
+        booksData.sort((a, b) => {
+            const getT = (x) => {
+                if (!x.addedAt) return 0;
+                if (typeof x.addedAt.toMillis === 'function') return x.addedAt.toMillis();
+                if (x.addedAt.seconds) return x.addedAt.seconds * 1000;
+                const d = new Date(x.addedAt).getTime();
+                return isNaN(d) ? 0 : d;
+            };
+            return getT(b) - getT(a);
+        });
+
         allBooksData = booksData;
         renderSidebarFilters();
         applyFiltersAndRender();
@@ -6653,45 +6667,76 @@ service cloud.firestore {
             return;
         }
 
-        const lines = csvText.split(/\r?\n/).filter(l => l.trim().length > 0);
-        if (lines.length < 2) {
-            alert('O CSV deve conter pelo menos o cabeçalho e uma linha de dados.');
+        if (!currentUser) {
+            alert('Atenção: É necessário estar conectado com sua conta Google de administrador (luizfernandho@gmail.com) para gravar no banco de dados Firestore.');
             return;
         }
 
-        const delimiter = lines[0].includes(';') ? ';' : ',';
+        const delimiter = csvText.includes(';') ? ';' : ',';
 
-        function parseCSVLine(line) {
-            let ret = [], inQuote = false, value = '';
-            for (let i = 0; i < line.length; i++) {
-                let c = line[i];
+        function parseFullCSV(text, delim) {
+            const rows = [];
+            let currentRow = [];
+            let currentVal = '';
+            let inQuote = false;
+
+            for (let i = 0; i < text.length; i++) {
+                const c = text[i];
                 if (inQuote) {
                     if (c === '"') {
-                        if (i + 1 < line.length && line[i + 1] === '"') {
-                            value += '"';
+                        if (i + 1 < text.length && text[i + 1] === '"') {
+                            currentVal += '"';
                             i++;
                         } else {
                             inQuote = false;
                         }
                     } else {
-                        value += c;
+                        currentVal += c;
                     }
                 } else {
                     if (c === '"') {
                         inQuote = true;
-                    } else if (c === delimiter) {
-                        ret.push(value);
-                        value = '';
+                    } else if (c === delim) {
+                        currentRow.push(currentVal);
+                        currentVal = '';
+                    } else if (c === '\r') {
+                        if (i + 1 < text.length && text[i + 1] === '\n') {
+                            i++;
+                        }
+                        currentRow.push(currentVal);
+                        currentVal = '';
+                        if (currentRow.length > 1 || (currentRow.length === 1 && currentRow[0].trim() !== '')) {
+                            rows.push(currentRow);
+                        }
+                        currentRow = [];
+                    } else if (c === '\n') {
+                        currentRow.push(currentVal);
+                        currentVal = '';
+                        if (currentRow.length > 1 || (currentRow.length === 1 && currentRow[0].trim() !== '')) {
+                            rows.push(currentRow);
+                        }
+                        currentRow = [];
                     } else {
-                        value += c;
+                        currentVal += c;
                     }
                 }
             }
-            ret.push(value);
-            return ret;
+            if (currentVal || currentRow.length > 0) {
+                currentRow.push(currentVal);
+                if (currentRow.length > 1 || (currentRow.length === 1 && currentRow[0].trim() !== '')) {
+                    rows.push(currentRow);
+                }
+            }
+            return rows;
         }
 
-        const headerCols = parseCSVLine(lines[0].replace(/^\uFEFF/, '').trim());
+        const rows = parseFullCSV(csvText.replace(/^\uFEFF/, ''), delimiter);
+        if (rows.length < 2) {
+            alert('O CSV deve conter pelo menos o cabeçalho e uma linha de dados.');
+            return;
+        }
+
+        const headerCols = rows[0];
         const headerMap = {};
         headerCols.forEach((h, idx) => {
             const clean = h.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -6709,8 +6754,8 @@ service cloud.firestore {
         };
 
         const updateList = [];
-        for (let i = 1; i < lines.length; i++) {
-            const cols = parseCSVLine(lines[i].trim());
+        for (let i = 1; i < rows.length; i++) {
+            const cols = rows[i];
             if (cols.length < 2) continue;
 
             let id = getCol(cols, ['id']);
@@ -6798,6 +6843,11 @@ service cloud.firestore {
                 raw_data: rawUpdate
             };
 
+            // Garantir que addedAt seja registrado se o livro for novo ou ainda não tiver timestamp
+            if (!cachedBooks[id] || !cachedBooks[id].addedAt) {
+                payload.addedAt = firebase.firestore.FieldValue.serverTimestamp();
+            }
+
             if (precoNum !== '') {
                 payload.preco = precoNum;
                 rawUpdate['Preço Pago'] = precoNum;
@@ -6861,11 +6911,15 @@ service cloud.firestore {
             committedCount += chunk.length;
         }
 
-        alert(`Sucesso! ${committedCount} livros foram atualizados no Firestore com o novo campo País e bandeiras correspondentes.`);
+        alert(`Sucesso! ${committedCount} livros foram processados e sincronizados no Firestore com sucesso!`);
     }
 
     async function syncWithUpdatedCSV() {
-        if (!confirm('Deseja sincronizar todos os 900 livros da biblioteca com o CSV atualizado (adicionando os 51 países de origem, bandeiras e metadados)?')) {
+        if (!currentUser) {
+            alert('Atenção: É necessário estar conectado com sua conta Google de administrador (luizfernandho@gmail.com) para sincronizar a base de dados.');
+            return;
+        }
+        if (!confirm('Deseja sincronizar todos os 910 livros da biblioteca com o CSV atualizado (adicionando os 52 países de origem, bandeiras e novos títulos como Paraguai, Itália, etc.)?')) {
             return;
         }
         try {

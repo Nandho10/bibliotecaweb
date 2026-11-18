@@ -160,6 +160,10 @@ const COUNTRY_FLAG_MAP = {
     "code": "nl",
     "emoji": "🇳🇱"
   },
+  "Paraguai": {
+    "code": "py",
+    "emoji": "🇵🇾"
+  },
   "Peru": {
     "code": "pe",
     "emoji": "🇵🇪"
@@ -251,7 +255,8 @@ const COUNTRY_NAME_ALIASES = {
     'islandia': 'Islândia',
     'africa do sul': 'África do Sul',
     'finlandia': 'Finlândia',
-    'republica da coreia': 'Coreia do Sul'
+    'republica da coreia': 'Coreia do Sul',
+    'paraguai': 'Paraguai'
 };
 
 function normalizeCountryName(rawName) {
@@ -395,7 +400,7 @@ const PRELOADED_BOOK_PAIS = {
   "oSU2sKKKVCebwQUt6zvA": "Peru",
   "oLr5dbMqUCraaQGCGBha": "Reino Unido",
   "oFTEIQxhhwEtYM9Q6gud": "Reino Unido",
-  "oCdktnDYxwx8ZdYFdBqw": "Argélia",
+  "oCdktnDYxwx8ZdYFdBqw": "França",
   "oCE3Jg99uykPNN05aduo": "Reino Unido",
   "o8dTwF0VRGcPjDl0OfyE": "Estados Unidos",
   "nrhPIDhdKLu54Q35XOOH": "Brasil",
@@ -717,7 +722,7 @@ const PRELOADED_BOOK_PAIS = {
   "y09FUpXm26boHNzBeUIe": "Suíça",
   "xvKZDQQ3gNngeE5NBluV": "Reino Unido",
   "xVt6Sn3VFaviN19E0yxe": "Reino Unido",
-  "xT8NortxFZXS5AIWliIS": "Argélia",
+  "xT8NortxFZXS5AIWliIS": "França",
   "xSJOCyY0pNPXahVYIGOR": "França",
   "xQnbja4rN8zEMpH7aTNx": "Estados Unidos",
   "xHrGNGpeqp7GqY08ZXSm": "Estados Unidos",
@@ -754,7 +759,7 @@ const PRELOADED_BOOK_PAIS = {
   "q2IOx2a0K4uA9uwzem6S": "Reino Unido",
   "paIkPLMn3m0XWeUtbsmQ": "Estados Unidos",
   "ovDtesLslWPX1c88t3SF": "Estados Unidos",
-  "ov5dAY3fl1izjQPifdgm": "Ucrânia",
+  "ov5dAY3fl1izjQPifdgm": "Rússia",
   "oqMhBKbX81UPrvvLzOF2": "Reino Unido",
   "oWKEpZGHOsVZLMaOWqaA": "Reino Unido",
   "oUgwwLBNHAAOscJMer5T": "Hungria",
@@ -949,7 +954,7 @@ const PRELOADED_BOOK_PAIS = {
   "MZfBl94tjG6VuyHg4JCk": "Estados Unidos",
   "M0e9TmpZnvGmUtu5K7yQ": "Brasil",
   "LWS6rAhblo1T8Rt6nygG": "Áustria",
-  "LVxob0jafc3X3BE4ZxAn": "Argélia",
+  "LVxob0jafc3X3BE4ZxAn": "França",
   "LNyT39emVosWINxeZYBo": "Estados Unidos",
   "LE2wQmdWNCpDICEgdZ1z": "Reino Unido",
   "LBjbsY3khpfiqrafZjTI": "Reino Unido",
@@ -1196,7 +1201,7 @@ const PRELOADED_BOOK_PAIS = {
   "7Up5sAIaRV8cn4WLbfDA": "Estados Unidos",
   "toKgfhXV7yeqb50IRDBs": "Estados Unidos",
   "6eyEHouQgVL4mN3gUmdL": "Brasil",
-  "OpkBHeymTHHDllePLp0P": "Estados Unidos",
+  "OpkBHeymTHHDllePLp0P": "França",
   "J8yC1YPaq7HrKyaWkSNZ": "Áustria",
   "NbrnTP3fAbnFbmOHnKYa": "Suíça",
   "XRvj7uff0LYTH8xIZM1J": "Países Baixos",
@@ -1217,5 +1222,17 @@ const PRELOADED_BOOK_PAIS = {
   "18Y2bTu5X1YqWg21nYCs": "Angola",
   "Xoblu17rNy8H6h8l7qgA": "Austrália",
   "TtLFxJpRa5HSUPwePut0": "Nova Zelândia",
-  "SstzyshA6P3MsHarAJOC": "Nova Zelândia"
+  "SstzyshA6P3MsHarAJOC": "Nova Zelândia",
+  "dfzg3cHu0juupaBfLetB": "Itália",
+  "4fiWb4JqZVvXmLGYtyVF": "Espanha",
+  "QNP3EPxbUlY4OkuyeCJu": "México",
+  "lfMavoGS4N97NoDl9BUc": "Japão",
+  "ilpvqAAgdwfAaHeRz9qD": "China",
+  "UuvN82zSQxoe2dGHjO4W": "China",
+  "yh8GNXxdiPv2T8PsXbG2": "Índia",
+  "FiFHw3vqFmty6emm93mJ": "Nigéria",
+  "ftvH5YHWETWpZJEynFhN": "Paraguai",
+  "3XLERhd1wPAwVvUYl8dz": "Polônia",
+  "FZkIw5hqYt6dygJ7uOqB": "Polônia",
+  "JpQF4r7lbOTDc9i13n1C": "Áustria"
 };
