@@ -1075,7 +1075,7 @@
                     <li><hr class="dropdown-divider"></li>
                     <li>
                         <a class="dropdown-item fw-semibold text-primary" href="javascript:void(0)" onclick="syncWithUpdatedCSV()">
-                            <i class="bi bi-cloud-arrow-down-fill me-2 text-primary"></i> Sincronizar Base Atualizada (com Países)
+                            <i class="bi bi-cloud-arrow-down-fill me-2 text-primary"></i> Sincronizar Base Atualizada (Classificações e Países)
                         </a>
                     </li>
                     <li>
@@ -6890,7 +6890,7 @@ service cloud.firestore {
             const selo = getCol(cols, ['selo']);
             const grupo = getCol(cols, ['grupo editorial', 'grupo']);
             const colecao = getCol(cols, ['coleção', 'colecao']);
-            const genre = getCol(cols, ['gênero literário', 'genero literario', 'categoria literária', 'categoria literaria', 'gênero', 'genero']);
+            const genre = getCol(cols, ['classificação literária', 'classificacao literaria', 'classificação', 'classificacao', 'gênero literário', 'genero literario', 'categoria literária', 'categoria literaria', 'gênero', 'genero']);
             const formato = getCol(cols, ['formato']);
             const status = getCol(cols, ['status']);
             const aquisicao = getCol(cols, ['aquisição', 'aquisicao']);
@@ -6931,6 +6931,9 @@ service cloud.firestore {
             }
 
             const rawUpdate = {
+                'Classificação literária': genre || '',
+                'Categoria literária': genre || '',
+                'Gênero': genre || '',
                 'País': normPais || '',
                 'País de publicação da obra original': normPais || '',
                 'Tradutor': tradutor || '',
@@ -7041,7 +7044,7 @@ service cloud.firestore {
             alert('Atenção: É necessário estar conectado com sua conta Google de administrador (luizfernandho@gmail.com) para sincronizar a base de dados.');
             return;
         }
-        if (!confirm('Deseja sincronizar todos os 910 livros da biblioteca com o CSV atualizado (adicionando os 52 países de origem, bandeiras e novos títulos como Paraguai, Itália, etc.)?')) {
+        if (!confirm('Deseja sincronizar todos os 910 livros da biblioteca com o CSV atualizado (aplicando as classificações literárias padronizadas, países de origem e bandeiras)?')) {
             return;
         }
         try {
