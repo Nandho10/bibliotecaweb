@@ -5456,7 +5456,8 @@
 
         const genre = book.genre || 'Geral';
         const pTheme = getPastelThemeForGenre(genre);
-        $('#detailGenreBadge').text(genre)
+        $('#detailGenreBadge').html(`<i class="bi bi-bookmark-fill me-1"></i>${genre}`)
+            .attr('title', `Classificação literária: ${genre}`)
             .css({
                 'background-color': pTheme.badgeBg,
                 'color': pTheme.badgeText,
@@ -5497,6 +5498,10 @@
             else if (book.status === 'Lendo') stClass = 'bg-warning-subtle text-warning border border-warning';
             badgesHtml += `<span class="badge ${stClass}"><i class="bi bi-bookmark-check me-1"></i>${book.status}</span>`;
         }
+
+        if (book.genre) {
+            badgesHtml += `<span class="badge" style="background-color: ${pTheme.badgeBg}; color: ${pTheme.badgeText}; border: 1px solid ${pTheme.borderLight};" title="Classificação Literária"><i class="bi bi-bookmark-fill me-1"></i>${book.genre}</span>`;
+        }
         $('#detailBadgesRow').html(badgesHtml);
 
         const nota = book.nota || book.raw_data?.['Nota'] || '';
@@ -5517,7 +5522,10 @@
             $('#detailFetchSynopsisBtn').prop('disabled', false).html('<i class="bi bi-arrow-clockwise"></i> Buscar sinopse online').show().off('click').on('click', () => fetchAndSaveSynopsis(book.id));
         }
 
+        const genreBadgeHtml = book.genre ? `<span class="badge" style="background-color: ${pTheme.badgeBg}; color: ${pTheme.badgeText}; border: 1px solid ${pTheme.borderLight}; font-size: 0.78rem; font-weight: 600; padding: 3px 8px;" title="Classificação literária"><i class="bi bi-bookmark-fill me-1"></i>${book.genre}</span>` : '<span class="text-muted">Não classificado</span>';
+
         let techHtml = `
+            <div class="col-12 mb-1"><strong>Classificação Literária:</strong> ${genreBadgeHtml}</div>
             <div class="col-6"><strong>Selo/Editora:</strong> ${book.selo || book.grupo || book.publisher || '-'}</div>
             <div class="col-6"><strong>Coleção:</strong> ${book.colecao || '-'}</div>
             <div class="col-6"><strong>Páginas:</strong> ${book.pages || '-'}</div>
