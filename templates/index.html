@@ -1018,7 +1018,7 @@
                     <option value="authors">Autor</option>
                     <option value="selo">Selo/Editora</option>
                     <option value="colecao">Coleção</option>
-                    <option value="genre">Categoria literária</option>
+                    <option value="genre">Classificação literária</option>
                     <option value="formato">Formato</option>
                 </select>
                 <button type="button" class="btn btn-sm btn-outline-secondary ms-1 py-1 px-2 text-nowrap d-flex align-items-center gap-1 shadow-sm" id="btnToggleAllGroups" onclick="toggleAllGroupSections()" style="display: none; font-size: 0.78rem; height: 31px;" title="Expandir ou recolher todos os grupos">
@@ -1320,7 +1320,7 @@
             <div class="tab-pane fade modal-tab-content-pane" id="tab-classificacao" role="tabpanel" aria-labelledby="tab-classificacao-btn">
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold">Categoria literária</label>
+                        <label class="form-label fw-semibold">Classificação literária</label>
                         <select class="form-select dynamic-select" id="f_genre" data-category="generos_literarios"></select>
                     </div>
                     <div class="col-md-6">
@@ -2429,6 +2429,7 @@
         heranca_fases: [],
         heranca_papeis: [],
         paises: [],
+        generos: [],
         selos: [],
         autores: []
     };
@@ -2438,7 +2439,7 @@
     let coverCache = {};
 
     function clearSidebarFilters() {
-        sidebarState = { status: [], aquisicao: [], anos_compra: [], heranca_fases: [], heranca_papeis: [], paises: [], selos: [], autores: [] };
+        sidebarState = { status: [], aquisicao: [], anos_compra: [], heranca_fases: [], heranca_papeis: [], paises: [], generos: [], selos: [], autores: [] };
         $('.sidebar-filter-checkbox').prop('checked', false);
         applyFiltersAndRender();
     }
@@ -2470,6 +2471,12 @@
             }
         });
         
+        // Extrair classificações literárias únicas
+        const uGeneros = [...new Set(allBooksData.map(b => (b.genre || '').trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+        if (allBooksData.some(b => !b.genre)) {
+            uGeneros.push('Não classificado');
+        }
+
         let allAuthors = new Set();
         allBooksData.forEach(b => {
             if(b.authors) {
@@ -2495,6 +2502,7 @@
                 else if (key === 'heranca_fases') count = allBooksData.filter(b => b.heranca_fase === item).length;
                 else if (key === 'heranca_papeis') count = allBooksData.filter(b => b.heranca_papel === item).length;
                 else if (key === 'paises') count = allBooksData.filter(b => (item === 'Não informado' ? !b.pais : b.pais === item)).length;
+                else if (key === 'generos') count = allBooksData.filter(b => (item === 'Não classificado' ? !b.genre : b.genre === item)).length;
                 else if (key === 'selos') count = allBooksData.filter(b => b.selo === item).length;
                 else if (key === 'autores') count = allBooksData.filter(b => (b.authors || '').includes(item)).length;
 
@@ -2566,6 +2574,9 @@
 
         if (uPaises.length > 0) {
             contentHtml += buildCheckboxes('🌍 País de Origem', uPaises, 'paises', paisLabels);
+        }
+        if (uGeneros.length > 0) {
+            contentHtml += buildCheckboxes('🏷️ Classificação Literária', uGeneros, 'generos');
         }
         contentHtml += buildCheckboxes('Selos/Editoras', uSelos, 'selos');
         contentHtml += buildCheckboxes('Autores', uAutores, 'autores');
@@ -2668,6 +2679,12 @@
             if (sidebarState.autores.length > 0) {
                 passAutor = sidebarState.autores.some(a => (b.authors||'').includes(a));
             }
+
+            // Filtro por Classificação Literária
+            let passGenre = true;
+            if (sidebarState.generos && sidebarState.generos.length > 0) {
+                passGenre = sidebarState.generos.includes(b.genre) || (!b.genre && sidebarState.generos.includes('Não classificado'));
+            }
             
             let passSearch = true;
             if (searchText) {
@@ -2675,10 +2692,11 @@
                 let isbn = (b.isbn || '').toLowerCase();
                 let pais = (b.pais || '').toLowerCase();
                 let authors = (b.authors || '').toLowerCase();
-                passSearch = title.includes(searchText) || isbn.includes(searchText) || pais.includes(searchText) || authors.includes(searchText);
+                let genre = (b.genre || '').toLowerCase();
+                passSearch = title.includes(searchText) || isbn.includes(searchText) || pais.includes(searchText) || authors.includes(searchText) || genre.includes(searchText);
             }
             
-            return passFormat && passQuickStatus && passStatus && passAq && passAnoCompra && passPais && passSelo && passHeranca && passHerancaPapel && passAutor && passSearch;
+            return passFormat && passQuickStatus && passStatus && passAq && passAnoCompra && passPais && passSelo && passHeranca && passHerancaPapel && passAutor && passGenre && passSearch;
         });
 
         const sortVal = $('#sortSelect').val() || 'recentes';
@@ -3276,7 +3294,97 @@
                 badgeText: '#c2410c'
             };
         }
-        if (g.includes('romance') || g.includes('clássico') || g.includes('classico') || g.includes('poesia') || g.includes('literatura')) {
+        if (g.includes('engajada') || g.includes('combate')) {
+            return {
+                bgLight: '#fdf3f2',
+                borderLight: '#f9d2cf',
+                bgDark: '#2c1817',
+                borderDark: '#4a2523',
+                badgeBg: 'rgba(220, 38, 38, 0.12)',
+                badgeText: '#b91c1c'
+            };
+        }
+        if (g.includes('didática') || g.includes('didatica') || g.includes('moralizante') || g.includes('fábula') || g.includes('fabula') || g.includes('parábola') || g.includes('parabola')) {
+            return {
+                bgLight: '#fef9ee',
+                borderLight: '#fcebc2',
+                bgDark: '#292212',
+                borderDark: '#45381a',
+                badgeBg: 'rgba(217, 119, 6, 0.12)',
+                badgeText: '#b45309'
+            };
+        }
+        if (g.includes('confessional') || g.includes('autoficção') || g.includes('autoficcao')) {
+            return {
+                bgLight: '#fdf4f8',
+                borderLight: '#f9d4e5',
+                bgDark: '#291722',
+                borderDark: '#472439',
+                badgeBg: 'rgba(219, 39, 119, 0.12)',
+                badgeText: '#be185d'
+            };
+        }
+        if (g.includes('testemunho')) {
+            return {
+                bgLight: '#f1f5f9',
+                borderLight: '#cbd5e1',
+                bgDark: '#1a222c',
+                borderDark: '#334155',
+                badgeBg: 'rgba(71, 85, 105, 0.14)',
+                badgeText: '#334155'
+            };
+        }
+        if (g.includes('regionalista') || g.includes('viagem')) {
+            return {
+                bgLight: '#f8faf0',
+                borderLight: '#e4ecc8',
+                bgDark: '#1e2413',
+                borderDark: '#354020',
+                badgeBg: 'rgba(101, 163, 13, 0.12)',
+                badgeText: '#4d7c0f'
+            };
+        }
+        if (g.includes('marginal') || g.includes('periférica') || g.includes('periferica')) {
+            return {
+                bgLight: '#faf5ff',
+                borderLight: '#ebd5ff',
+                bgDark: '#23152f',
+                borderDark: '#3e2354',
+                badgeBg: 'rgba(147, 51, 234, 0.12)',
+                badgeText: '#7e22ce'
+            };
+        }
+        if (g.includes('lírico') || g.includes('lirico') || g.includes('poesia')) {
+            return {
+                bgLight: '#faf5ff',
+                borderLight: '#f3e8ff',
+                bgDark: '#23162f',
+                borderDark: '#3d2452',
+                badgeBg: 'rgba(168, 85, 247, 0.12)',
+                badgeText: '#9333ea'
+            };
+        }
+        if (g.includes('épico') || g.includes('epico') || g.includes('epopeia')) {
+            return {
+                bgLight: '#eef2ff',
+                borderLight: '#e0e7ff',
+                bgDark: '#181b30',
+                borderDark: '#2a2f57',
+                badgeBg: 'rgba(79, 70, 229, 0.12)',
+                badgeText: '#4338ca'
+            };
+        }
+        if (g.includes('dramático') || g.includes('dramatico') || g.includes('teatro') || g.includes('tragédia') || g.includes('tragedia') || g.includes('comédia') || g.includes('comedia')) {
+            return {
+                bgLight: '#fff1f2',
+                borderLight: '#ffe4e6',
+                bgDark: '#2b151a',
+                borderDark: '#4d202a',
+                badgeBg: 'rgba(225, 29, 72, 0.12)',
+                badgeText: '#be123c'
+            };
+        }
+        if (g.includes('romance') || g.includes('clássico') || g.includes('classico') || g.includes('literatura') || g.includes('conto') || g.includes('novela') || g.includes('crônica') || g.includes('cronica')) {
             return {
                 bgLight: '#fcf3f7',
                 borderLight: '#f6d9e5',
@@ -4752,12 +4860,38 @@
     settingsRef.onSnapshot(snapshot => {
         if (snapshot.exists) {
             globalDropdownLists = snapshot.data() || {};
-            // Garantir que a categoria essencial 'Clássico / Herança' esteja nas opções
             if (!globalDropdownLists['generos_literarios']) globalDropdownLists['generos_literarios'] = [];
-            if (!globalDropdownLists['generos_literarios'].includes('Clássico / Herança')) {
-                globalDropdownLists['generos_literarios'].push('Clássico / Herança');
-                saveNewListOption('generos_literarios', 'Clássico / Herança');
-            }
+            const padraoClassificacoes = [
+                'Romance',
+                'Contos & Novelas',
+                'Crônica',
+                'Poesia (Lírico)',
+                'Épico & Epopeia',
+                'Teatro & Drama (Tragédia/Comédia)',
+                'Filosofia & Pensamento',
+                'Ensaio & Crítica',
+                'Literatura Fantástica',
+                'Literatura de Ficção Científica',
+                'Literatura de Terror / Gótica',
+                'Literatura Policial / de Mistério',
+                'Literatura Histórica',
+                'Literatura Regionalista',
+                'Literatura de Viagem',
+                'Literatura Engajada (de Combate)',
+                'Literatura Didática / Moralizante (Fábulas)',
+                'Literatura Confessional / Autoficção',
+                'Literatura de Testemunho',
+                'Literatura Infantojuvenil',
+                'Literatura Marginal / Periférica',
+                'Biografia & Memórias',
+                'Acadêmico & Ciências Humanas',
+                'Mitologia & Folclore'
+            ];
+            padraoClassificacoes.forEach(cat => {
+                if (!globalDropdownLists['generos_literarios'].includes(cat)) {
+                    globalDropdownLists['generos_literarios'].push(cat);
+                }
+            });
             updateAllSelectsUI();
             if ($('#listsModal').is(':visible')) {
                 renderListManager();
@@ -5907,14 +6041,7 @@ service cloud.firestore {
             let raw = data.raw_data || {};
             const isHeranca = isHerancaBook(data, raw);
 
-            let bookGenre = data.genre || getRaw(raw, ['Categoria literária', 'Categoria literaria', 'Categoria', 'Gênero', 'Genero', 'genre']) || '';
-            if (!bookGenre && isHeranca) {
-                bookGenre = 'Clássico / Herança';
-                // Auto-correção silenciosa para livros do acervo Herança que possam ter tido o gênero limpo
-                if (doc.id && !data.genre) {
-                    db.collection('books').doc(doc.id).update({ genre: 'Clássico / Herança' }).catch(() => {});
-                }
-            }
+            let bookGenre = data.genre || getRaw(raw, ['Classificação literária', 'Classificação', 'Categoria literária', 'Categoria literaria', 'Categoria', 'Gênero', 'Genero', 'genre']) || '';
 
             const preloadedPais = (typeof PRELOADED_BOOK_PAIS !== 'undefined' && PRELOADED_BOOK_PAIS[doc.id]) || '';
             const rawPais = data.pais || getRaw(raw, ['País de publicação da obra original', 'País', 'pais', 'Pais']) || preloadedPais || '';
@@ -6066,10 +6193,7 @@ service cloud.firestore {
         setSelect2Val('#f_grupo', b.grupo, false);
         setSelect2Val('#f_colecao', b.colecao, false);
 
-        let genreToSet = b.genre;
-        if (!genreToSet && isHerancaBook(b, b.raw_data)) {
-            genreToSet = 'Clássico / Herança';
-        }
+        let genreToSet = b.genre || '';
         setSelect2Val('#f_genre', genreToSet, false);
         setSelect2Val('#f_formato', b.formato, false);
         setSelect2Val('#f_status', b.status, false);
@@ -6361,9 +6485,6 @@ service cloud.firestore {
         if (!genreVal && currentEditingId && cachedBooks[currentEditingId] && cachedBooks[currentEditingId].genre) {
             genreVal = cachedBooks[currentEditingId].genre;
         }
-        if (!genreVal && ($('#f_heranca_fase').val() || $('#f_heranca_ano').val() || $('#f_heranca_papel').val() || (currentEditingId && cachedBooks[currentEditingId] && isHerancaBook(cachedBooks[currentEditingId])))) {
-            genreVal = 'Clássico / Herança';
-        }
 
         const raw = {
             'Melhores do ano?': document.getElementById('f_melhores').value,
@@ -6388,6 +6509,7 @@ service cloud.firestore {
             'Releitura?': document.getElementById('f_releitura').value,
             'Nota': notaVal,
             'Sinopse': synopsisVal,
+            'Classificação literária': genreVal,
             'Categoria literária': genreVal,
             'Gênero': genreVal,
             'Fase do Plano': $('#f_heranca_fase').val(),
@@ -7099,7 +7221,7 @@ service cloud.firestore {
                     title: cleanTitle,
                     isbn: '',
                     authors: item.autor || 'Autor Clássico',
-                    genre: 'Clássico / Herança',
+                    genre: '',
                     publisher: '',
                     colecao: '',
                     pages: '',
